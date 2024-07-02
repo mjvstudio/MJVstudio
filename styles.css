@@ -36,7 +36,6 @@ body {
 html, body, .swiper-container, .swiper-wrapper, .swiper-slide {
     height: 100%;
     width: 100%;
-    overflow: hidden;
 }
 
 @media (max-width: 768px) {
@@ -44,31 +43,6 @@ html, body, .swiper-container, .swiper-wrapper, .swiper-slide {
         overflow: hidden; /* Desactivar todo tipo de desplazamiento en pantallas pequeñas */
         touch-action: none; /* Desactivar gestos de deslizamiento */
         height: 100vh;
-    }
-
-    .swiper-container {
-        height: 100vh;
-    }
-
-    .swiper-slide {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        background-color: #ffffff; /* Fondo blanco */
-        position: relative;
-        height: 100vh; /* Asegura que cada slide ocupe toda la altura de la pantalla */
-    }
-
-    .section-body {
-        flex: 1;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 2vh;
-        background-color: #fff;
-        overflow: hidden;
-        position: relative;
-        height: calc(100vh - 15vh); /* Ajusta la altura restando la altura de los encabezados y pies de página */
     }
 }
 
@@ -169,6 +143,7 @@ p {
     background-color: #fff;
     overflow: hidden;
     position: relative;
+    height: calc(100vh - 15vh); /* Ajusta la altura restando la altura de los encabezados y pies de página */
 }
 
 /* Estilos para la Sección MJV */
@@ -336,18 +311,16 @@ p {
     display: flex;
     justify-content: center;
     align-items: center;
-    max-height: 100%; /* Ajusta la altura máxima para evitar desbordamiento */
 }
 
 .team-image img {
-    height: auto;
-    width: 100%;
-    max-height: 80vh; /* Asegura que la imagen no desborde verticalmente */
+    height: 80vh;
+    width: auto;
 }
 
 .team-description {
     flex: 0 0 26vw;
-    max-height: 80vh; /* Ajusta la altura máxima para evitar desbordamiento */
+    max-height: 100vh;
     text-align: justify;
     margin: 0;
     padding: 0;
@@ -391,13 +364,11 @@ p {
     .team-content {
         flex-direction: column;
         overflow-y: auto;
-        height: 100vh; /* Ajusta la altura máxima para pantallas pequeñas */
     }
 
     .team-image, .team-description {
         margin: 2vh 0;
         max-width: 100%;
-        height: auto; /* Ajusta la altura para pantallas pequeñas */
     }
 }
 
