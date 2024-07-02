@@ -362,13 +362,64 @@ p {
 
 @media (max-width: 768px) {
     .team-content {
-        flex-direction: column;
-        overflow-y: auto;
+        flex-direction: column; /* Cambiar a columna para móviles */
+        justify-content: flex-start; /* Asegurar que el contenido comience desde la parte superior */
+        align-items: center;
+        height: calc(100vh - 10vh); /* Ajustar la altura para evitar el espacio grande */
+        overflow-y: hidden;
+        padding-top: 2vh; /* Subir la imagen del equipo */
     }
 
-    .team-image, .team-description {
-        margin: 2vh 0;
-        max-width: 100%;
+    .team-image {
+        width: 100%;
+        height: 45vw; /* Hacer la imagen cuadrada */
+        margin-bottom: 0vh; /* Disminuir el espacio entre la imagen y la descripción */
+    }
+
+    .team-image img {
+        width: 80%;
+        height: 100%;
+        object-fit: cover; /* Mantener la proporción de la imagen */
+        content: url('team/team_photo_media.png'); /* Cambiar la imagen para móviles */
+    }
+
+    .team-description {
+        width: 80%;
+        height: 100%; /* Ajustar la altura de la descripción para móviles */
+        max-height: 100vh;
+        overflow-y: auto;
+        padding: 15vh; /* Disminuir el padding */
+    }
+
+    .team-description h2 {
+        font-size: 3vw;
+    }
+
+    .team-description p {
+        font-size: 2vw;
+    }
+
+    .team-description h3 {
+        font-size: 2vw;
+    }
+
+    .team-description h4 {
+        font-size: 2vw;
+    }
+
+    /* Ajustar el tamaño del header y el footer para móviles */
+    .section-header, .section-footer {
+        flex: 0 0 5vh; /* Reducir el tamaño del header y footer */
+        padding: 0.5vh; /* Reducir el padding */
+        padding-left: 5vh; /* Ajustar la distancia del padding-left según sea necesario */
+    }
+
+    .section-header h1 {
+        font-size: 2.5vh; /* Ajustar el tamaño del texto del header */
+    }
+
+    .section-footer img {
+        height: 2.5vh; /* Ajustar la altura de la imagen del footer */
     }
 }
 
