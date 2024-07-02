@@ -40,13 +40,14 @@ html, body, .swiper-container, .swiper-wrapper, .swiper-slide {
 
 @media (max-width: 768px) {
     body {
-        overflow-x: hidden; /* Desactivar desplazamiento horizontal también */
+        overflow: hidden; /* Desactivar todo tipo de desplazamiento en pantallas pequeñas */
+        touch-action: none; /* Desactivar gestos de deslizamiento */
     }
+}
 
     .swiper-container {
         height: 100vh;
     }
-}
 
 .custom-cursor {
     position: absolute;
@@ -248,7 +249,6 @@ p {
         grid-template-rows: repeat(8, 1fr);
         gap: 1vh;
         width: 90%;
-        height: 80%;
     }
 
     .project-title {
