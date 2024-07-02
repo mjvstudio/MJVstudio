@@ -1,0 +1,532 @@
+@font-face {
+    font-family: 'Fuente_titulo';
+    src: url('site/Fonts/Fuente_titulo.woff2') format('woff2'),
+         url('site/Fonts/Fuente_titulo.woff') format('woff'),
+         url('site/Fonts/Fuente_titulo.ttf') format('truetype'),
+         url('site/Fonts/Fuente_titulo.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Fuente_texto';
+    src: url('site/Fonts/Fuente_texto.woff2') format('woff2'),
+         url('site/Fonts/Fuente_texto.woff') format('woff'),
+         url('site/Fonts/Fuente_texto.ttf') format('truetype'),
+         url('site/Fonts/Fuente_texto.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Fuente_titulo2';
+    src: url('site/Fonts/Fuente_titulo2.woff2') format('woff2'),
+         url('site/Fonts/Fuente_titulo2.woff') format('woff'),
+         url('site/Fonts/Fuente_titulo2.ttf') format('truetype'),
+         url('site/Fonts/Fuente_titulo2.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* Aplicar las fuentes */
+body {
+    font-family: 'Fuente_texto', sans-serif;
+    cursor: none; /* Ocultar el cursor predeterminado */
+    overflow: hidden; /* Desactivar desplazamiento vertical */
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    height: 100vh;
+    background-color: #ffffff; /* Fondo blanco */
+}
+
+html, body, .swiper-container, .swiper-wrapper, .swiper-slide {
+    height: 100%;
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    body {
+        overflow-x: hidden; /* Desactivar desplazamiento horizontal también */
+    }
+
+    .swiper-container {
+        height: 100vh;
+    }
+}
+
+.custom-cursor {
+    position: absolute;
+    width: 20px; /* Tamaño del círculo */
+    height: 20px; /* Tamaño del círculo */
+    background-color: black; /* Color del círculo */
+    border-radius: 50%; /* Hacer el círculo */
+    pointer-events: none; /* No interferir con los eventos del mouse */
+    z-index: 10000; /* Asegurarse de que esté por encima de otros elementos */
+}
+
+a, button, img {
+    cursor: none; /* Ocultar el cursor predeterminado */
+}
+
+/* Otros estilos */
+h1, h2 {
+    font-family: 'Fuente_titulo', sans-serif;
+}
+
+h3 {
+    font-family: 'Fuente_titulo2', sans-serif;
+}
+
+h4 {
+    font-family: 'Fuente_texto', sans-serif;
+}
+
+p {
+    font-family: 'Fuente_texto', sans-serif;
+}
+
+.swiper-container {
+    width: 100vw;
+    height: 100vh;
+}
+
+.swiper-slide {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: #ffffff; /* Fondo blanco */
+    position: relative;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}
+
+.section-header, .section-footer {
+    flex: 0 0 7.5vh;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Para alinear el título a la izquierda y el botón a la derecha */
+    padding: 1vh;
+    background-color: #ffffff;
+    color: #000000;
+    padding-left: 10vh; /* Ajustar esta distancia según sea necesario */
+}
+
+.section-header h1 {
+    margin: 0;
+    text-align: left; /* Título a la izquierda */
+}
+
+.section-footer {
+    position: relative;
+}
+
+.section-footer .dropdown,
+.section-footer .refresh-button {
+    position: absolute;
+    right: 10vh; /* Posiciona los botones a 10vh del margen derecho */
+}
+
+.section-footer img {
+    cursor: none; /* Ocultar el cursor predeterminado */
+    height: 3vh; /* Ajusta esta altura según sea necesario */
+    width: auto;
+    transition: transform 0.3s; /* Añadir transición suave */
+}
+
+.section-footer img:hover {
+    transform: scale(1.1); /* Agrandar imagen al pasar el cursor */
+}
+
+.section-body {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2vh;
+    background-color: #fff;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Estilos para la Sección MJV */
+.mjv-logo {
+    width: 75%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    margin: auto; /* Centrar el video horizontalmente */
+}
+
+.mjv-logo video {
+    width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+}
+
+/* Estilos para la Galería de Proyectos */
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1vh;
+    justify-content: center;
+    align-items: center;
+    width: 60%;
+    height: auto;
+    max-width: 1200px;
+    margin: auto; /* Centrar la galería horizontalmente */
+    padding: 1vh;
+}
+
+@media (max-width: 768px) {
+    .gallery {
+        width: 90%;
+        height: 80%;
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (orientation: portrait) {
+    .gallery {
+        width: 90%;
+        height: 80%;
+    }
+}
+
+.gallery-item {
+    position: relative;
+    width: 100%;
+    padding-top: 56.25%; /* Mantener proporción apaisada 16:9 */
+    overflow: hidden;
+    transition: transform 0.3s, filter 0.3s, box-shadow 0.3s; /* Animación suave */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombreado suave */
+}
+
+.gallery-item img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: translate(-50%, -50%);
+    filter: grayscale(100%); /* Blanco y negro */
+    transition: filter 0.3s, transform 0.3s; /* Animación suave */
+}
+
+.gallery-item:hover {
+    transform: scale(1.1); /* Agranda la imagen */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Sombreado más intenso */
+}
+
+.gallery-item:hover img {
+    filter: grayscale(0); /* A color */
+}
+
+.project-title {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    color: white;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0)); /* Fondo degradado */
+    padding: 0.5vh 1vh;
+    font-size: 2vh; /* Puedes modificar este valor manualmente */
+    opacity: 0; /* Oculto por defecto */
+    transition: opacity 0.3s; /* Animación suave */
+    text-align: center;
+    font-family: 'Fuente_titulo2', sans-serif; /* Fuente del título */
+}
+
+.gallery-item:hover .project-title {
+    opacity: 1; /* Muestra el título */
+}
+
+/* Media Queries para dispositivos móviles en orientación vertical */
+@media (max-width: 768px) and (orientation: portrait) {
+    .gallery {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(8, 1fr);
+        gap: 1vh;
+    }
+
+    .project-title {
+        font-size: 1.5vh;
+    }
+}
+
+/* Media Queries para dispositivos móviles en orientación horizontal */
+@media (max-width: 768px) and (orientation: landscape) {
+    .gallery {
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: repeat(4, 1fr);
+        gap: 1vh;
+    }
+
+    .project-title {
+        font-size: 1.5vh;
+    }
+}
+
+/* Media Queries para pantallas muy pequeñas en orientación vertical */
+@media (max-width: 375px) and (orientation: portrait) {
+    .gallery {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(8, 1fr);
+        gap: 0.5vh;
+    }
+
+    .project-title {
+        font-size: 1vh;
+    }
+}
+
+/* Media Queries para pantallas muy pequeñas en orientación horizontal */
+@media (max-width: 375px) and (orientation: landscape) {
+    .gallery {
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: repeat(4, 1fr);
+        gap: 0.5vh;
+    }
+
+    .project-title {
+        font-size: 1vh;
+    }
+}
+
+/* Estilos para la Sección Team */
+.team-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+    width: 100vw;
+    padding: 0;
+    margin: auto; /* Centrar la sección horizontalmente */
+}
+
+.team-image {
+    flex: 0 0 auto;
+    margin-right: 2vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.team-image img {
+    height: 80vh;
+    width: auto;
+}
+
+.team-description {
+    flex: 0 0 26vw;
+    max-height: 100vh;
+    text-align: justify;
+    margin: 0;
+    padding: 0;
+    white-space: pre-wrap;
+    line-height: 0.6;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-size: 1vw;
+    overflow: hidden;
+}
+
+.team-description h2,
+.team-description p,
+.team-description h3,
+.team-description h4 {
+    margin: 0;
+    padding: 0;
+    line-height: 1.2;
+}
+
+.team-description h2 {
+    font-size: clamp(2vw, 2.5vh, 1.5rem);
+}
+
+.team-description p {
+    font-size: clamp(0.75vw, 1.5vh, 1rem);
+}
+
+.team-description h3 {
+    font-size: clamp(0.75vw, 2vh, 1.25rem);
+}
+
+.team-description h4 {
+    font-size: clamp(0.75vw, 1.5vh, 1rem);
+    font-weight: 400;
+    color: #757575;
+}
+
+@media (max-width: 768px) {
+    .team-content {
+        flex-direction: column;
+        overflow-y: auto;
+    }
+
+    .team-image, .team-description {
+        margin: 2vh 0;
+        max-width: 100%;
+    }
+}
+
+/* Estilos para los menús desplegables */
+.dropdown {
+    position: relative;
+    display: inline-block;
+    transition: transform 0.3s;
+}
+
+.dropdown:hover {
+    transform: scale(1.1);
+}
+
+.dropdown-content {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    bottom: 4vh;
+    background-color: rgba(255, 255, 255, 0.9);
+    z-index: 1;
+    padding: 1vh;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(100%);
+    transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out, transform 0.5s ease-in-out;
+    right: 0;
+}
+
+.dropdown-content a, .dropdown-content img {
+    color: black;
+    text-decoration: none;
+    display: block;
+    padding: 1vh;
+    transition: transform 0.3s ease-in-out, background-color 0.3s ease-in-out, color 0.3s ease-in-out, text-shadow 0.3s ease-in-out;
+    width: 100%;
+    height: auto;
+    text-align: right;
+}
+
+.dropdown-content a:hover, .dropdown-content img:hover {
+    background-color: #f0f0f0;
+    color: #333;
+    transform: scale(1.05);
+}
+
+.dropdown:hover .dropdown-content {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+}
+
+.dropdown:hover .dropdown-content a, .dropdown:hover .dropdown-content img {
+    transform: translateX(0);
+}
+
+/* Lightbox Styles */
+.lightbox {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    justify-content: center;
+    align-items: center;
+    left: 40%;
+    top: 0%;
+}
+
+.lightbox.show {
+    display: flex;
+    right: 0;
+}
+
+.lightbox-content {
+    padding: 20px;
+    width: 90%;
+    height: 90%;
+    max-width: 45vh;
+    max-height: 95vh;
+    border-radius: 10px;
+    background: white;
+    transform: scale(0);
+    transition: transform 0.5s ease-in-out;
+}
+
+.lightbox.show .lightbox-content {
+    transform: scale(1);
+}
+
+.close {
+    color: #aaa;
+    float: left;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.iframe-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.iframe-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform: scale(0.9);
+    transform-origin: top left;
+}
+
+.lightbox-content form {
+    display: flex;
+    flex-direction: column;
+}
+
+.lightbox-content label {
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.lightbox-content input,
+.lightbox-content textarea {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.lightbox-content button {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.lightbox-content button:hover {
+    background-color: #45a049;
+}

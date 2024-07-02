@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MJV Studio</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+    <link rel="icon" href="site/images/logo_up.png" type="image/png">
+</head>
+<body>
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+            <!-- Sección MJV -->
+            <section id="mjv" class="swiper-slide">
+                <div class="content">
+                    <main class="section-body mjv-content">
+                        <div class="mjv-logo">
+                            <video id="mjv-video" src="mjv/logo.mp4" autoplay muted></video>
+                    </main>
+                </div>
+            </section>
+            <!-- Sección Projects -->
+            <section id="projects" class="swiper-slide">
+                <div class="content">
+                    <header class="section-header">
+                        <h1>Projects</h1>
+                    </header>
+                    <main class="section-body projects-content">
+                        <div class="gallery">
+                            <!-- Agregar los 16 elementos de galería con categorías -->
+                            <div class="gallery-item salud comercial" data-project="project1">
+                                <img src="projects/project1/project1_main.jpg" alt="Edificio LL">
+                                <div class="project-title">Edificio LL</div>
+                            </div>
+                            <div class="gallery-item residencial" data-project="project2">
+                                <img src="projects/project2/project2_main.jpg" alt="Casa Mburucujá">
+                                <div class="project-title">Casa Mburucujá</div>
+                            </div>
+                            <div class="gallery-item residencial" data-project="project3">
+                                <img src="projects/project3/project3_main.jpg" alt="Casa Mbarete Porã">
+                                <div class="project-title">Casa Mbarete Porã</div>
+                            </div>
+                            <div class="gallery-item residencial remodelaciones" data-project="project4">
+                                <img src="projects/project4/project4_main.jpg" alt="Casa Gini Vera">
+                                <div class="project-title">Casa Gini Vera</div>
+                            </div>
+                            <div class="gallery-item deportivo entretenimiento" data-project="project5">
+                                <img src="projects/project5/project5_main.jpg" alt="Camp Fire">
+                                <div class="project-title">Camp Fire</div>
+                            </div>
+                            <div class="gallery-item residencial" data-project="project6">
+                                <img src="projects/project6/project6_main.jpg" alt="Casa GJ">
+                                <div class="project-title">Casa GJ</div>
+                            </div>
+                            <div class="gallery-item deportivo" data-project="project7">
+                                <img src="projects/project7/project7_main.jpg" alt="Padel Center Rimini">
+                                <div class="project-title">Padel Center Rimini</div>
+                            </div>
+                            <div class="gallery-item residencial" data-project="project8">
+                                <img src="projects/project8/project8_main.jpg" alt="Casa Asunción">
+                                <div class="project-title">Casa Asunción</div>
+                            </div>
+                            <div class="gallery-item interiorismo" data-project="project9">
+                                <img src="projects/project9/project9_main.jpg" alt="Oficina Ejecutiva KP">
+                                <div class="project-title">Oficina Ejecutiva KP</div>
+                            </div>
+                            <div class="gallery-item residencial" data-project="project10">
+                                <img src="projects/project10/project10_main.jpg" alt="Casa 6:40">
+                                <div class="project-title">Casa 6:40</div>
+                            </div>
+                            <div class="gallery-item gastronomico remodelaciones" data-project="project11">
+                                <img src="projects/project11/project11_main.jpg" alt="Reforma Vikinga">
+                                <div class="project-title">Reforma Vikinga</div>
+                            </div>
+                            <div class="gallery-item residencial" data-project="project12">
+                                <img src="projects/project12/project12_main.jpg" alt="Casa RA">
+                                <div class="project-title">Casa RA</div>
+                            </div>
+                            <div class="gallery-item residencial remodelaciones" data-project="project13">
+                                <img src="projects/project13/project13_main.jpg" alt="Reforma LM1">
+                                <div class="project-title">Reforma LM1</div>
+                            </div>
+                            <div class="gallery-item cultural" data-project="project14">
+                                <img src="projects/project14/project14_main.jpg" alt="Ovy">
+                                <div class="project-title">Ovy</div>
+                            </div>
+                            <div class="gallery-item comercial remodelaciones" data-project="project15">
+                                <img src="projects/project15/project15_main.jpg" alt="Fachada Andes">
+                                <div class="project-title">Fachada Andes</div>
+                            </div>
+                            <div class="gallery-item remodelaciones comercial" data-project="project16">
+                                <img src="projects/project16/project16_main.jpg" alt="Fachada Aldito">
+                                <div class="project-title">Fachada Aldito</div>
+                            </div>
+                        </div>
+                    </main>
+                    <footer class="section-footer">
+                        <div class="dropdown">
+                            <img id="categories-button" src="projects/categories.png" alt="Categorías">
+                            <div class="dropdown-content" id="categories-dropdown">
+                                <a href="#" class="filter" data-filter="all">Todos</a>
+                                <a href="#" class="filter" data-filter="entretenimiento">Entretenimiento</a>
+                                <a href="#" class="filter" data-filter="residencial">Residencial</a>
+                                <a href="#" class="filter" data-filter="comercial">Comercial</a>
+                                <a href="#" class="filter" data-filter="cultural">Cultural</a>
+                                <a href="#" class="filter" data-filter="deportivo">Deportivo</a>
+                                <a href="#" class="filter" data-filter="gastronomico">Gastronómico</a>
+                                <a href="#" class="filter" data-filter="remodelaciones">Remodelaciones</a>
+                                <a href="#" class="filter" data-filter="interiorismo">Interiorismo</a>
+                            </div>
+                        </div>
+                    </footer>
+                </div>
+            </section>
+            <!-- Sección Team -->
+            <section id="team" class="swiper-slide">
+                <div class="content">
+                    <header class="section-header">
+                        <h1>Team</h1>
+                    </header>
+                    <main class="section-body team-content">
+                        <div class="team-image">
+                            <img id="team-image" src="team/team_photo.png" alt="Foto del equipo de arquitectura" class="no-interaction">
+                        </div>
+                        <div class="team-description">
+                            <h2>Hola!</h2>
+                            <div id="team-description">
+                                <p>Nuestro equipo de arquitectos está conformado por profesionales jóvenes altamente capacitados y apasionados por la arquitectura, la sostenibilidad y la innovación tecnológica. Nuestro enfoque en estos valores se ve reflejado en cada proyecto que realizamos, donde siempre buscamos integrar soluciones sostenibles y tecnológicas para crear espacios funcionales, estéticos y respetuosos con el medio ambiente.<br> Cada uno de los miembros del equipo tiene una formación sólida en arquitectura, así como habilidades particulares que aportan a la sinergia del equipo. Trabajamos en colaboración para lograr los mejores resultados, siempre buscando la excelencia en cada proyecto.<br> Nuestros proyectos más destacados son una muestra de nuestra filosofía de trabajo, donde hemos logrado integrar tecnologías avanzadas y materiales sostenibles en proyectos de distintas escalas, desde pequeñas remodelaciones hasta edificios de mayor escala.<br> Para nosotros, la sostenibilidad y la innovación tecnológica son fundamentales en cada uno de nuestros proyectos, pero también entendemos que la arquitectura es una disciplina que va más allá de la construcción de edificios, sino que busca crear espacios habitables y agradables que mejoren la calidad de vida de las personas.</p>
+                                <h3>Arq. María José Vera Scavenius</h3>
+                                <h4>Nació el 1 de Mayo de 1996 en Encarnación, Paraguay<br>Arquitecta de la Universidad Católica Nuestra Señora de la Asunción Campus Itapúa – Año 2023</h4>
+                                <h3>Arq. Martín José Villalba Lovera</h3>
+                                <h4>Nació el 18 de Julio de 1996 en Encarnación, Paraguay<br>Arquitecto de la Universidad Católica Nuestra Señora de la Asunción Campus Itapúa – Año 2021</h4>
+                            </div>
+                            <div class="additional-info" id="team-additional">
+                                <!-- Aquí iría contenido adicional si fuera necesario -->
+                            </div>
+                        </div>
+                    </main>
+                    <footer class="section-footer">
+                        <div class="dropdown">
+                            <img id="contact-button" src="team/contact.png" alt="Contáctanos">
+                            <div class="dropdown-content" id="contact-dropdown">
+                                <a href="https://www.instagram.com/mjvstudio.py/" target="_blank"><img src="team/instagram.png" alt="Instagram"></a>
+                                <a href="https://wa.me/595985107042" target="_blank"><img src="team/whatsapp.png" alt="Whatsapp"></a>
+                                <a href="#" id="email-button"><img src="team/email.png" alt="Email"></a>
+                            </div>
+                        </div>
+                    </footer>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Lightbox para el formulario de contacto -->
+    <div id="contact-lightbox" class="lightbox">
+        <div class="lightbox-content">
+            <span class="close">&times;</span>
+            <!-- Google Forms iframe -->
+            <div class="iframe-container">
+                <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdWb1vWzBPZAj8aeIvEw0cPny6yp2w_xGxrdPgkZJMiHV9r7w/viewform?embedded=true" frameborder="0" marginheight="0" marginwidth="0">Cargando…</iframe>
+            </div>
+        </div>
+    </div>
+
+    <div class="swiper-pagination"></div> <!-- Contenedor de paginación independiente -->
+
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyecto</title>
+    <link rel="stylesheet" href="project.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+    <link rel="icon" href="../site/images/logo.png" type="image/png"> <!-- Ajuste la ruta del logo -->
+</head>
+<body>
+    <div class="project-header">
+        <h1 id="project-title">Proyecto</h1>
+        <img class="back-button" src="back.png" alt="Volver"> <!-- Imagen dentro de projects -->
+    </div>
+    <div class="project-body">
+        <div class="swiper-container project-swiper-container">
+            <div class="swiper-wrapper" id="project-carousel">
+                <!-- Swiper slides will be injected here -->
+            </div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-pagination"></div>
+        </div>
+    </div>
+    <div class="project-footer">
+        <img class="more-info-button" src="more_info.png" alt="Más Información"> <!-- Imagen dentro de projects -->
+    </div>
+    <div id="info-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="info-content"></div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script src="project.js"></script>
+</body>
+</html>
