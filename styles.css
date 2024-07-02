@@ -248,9 +248,10 @@ p {
         grid-template-rows: repeat(8, 1fr);
         gap: 0.5vh;
         padding-top: 2vh; /* Ajustar el padding superior para mover la grilla hacia arriba */
-        padding-bottom: 2vh; /* Ajustar el padding inferior si es necesario */
-        margin-top: -5vh; /* Usar margen negativo para mover la grilla hacia arriba */
-        height: calc(100vh - 10vh); /* Ajustar la altura de la grilla */
+        padding-bottom: 0vh; /* Ajustar el padding inferior si es necesario */
+        margin-top: 0vh; /* Usar margen negativo para mover la grilla hacia arriba */
+        height: 70vh; /* Ajustar la altura de la grilla */
+        width: 70vw;
     }
 
     .project-title {
