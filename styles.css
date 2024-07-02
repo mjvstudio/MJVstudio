@@ -371,9 +371,9 @@ p {
     }
 
     .team-image {
-        width: 100%;
-        height: 45vw; /* Hacer la imagen cuadrada */
-        margin-bottom: 0vh; /* Disminuir el espacio entre la imagen y la descripción */
+        width: 80%;
+        height: 80vw; /* Hacer la imagen cuadrada */
+        margin-bottom: 1vh; /* Disminuir el espacio entre la imagen y la descripción */
     }
 
     .team-image img {
@@ -384,27 +384,27 @@ p {
     }
 
     .team-description {
-        width: 80%;
-        height: 100%; /* Ajustar la altura de la descripción para móviles */
-        max-height: 100vh;
-        overflow-y: auto;
+        width: 80vw;
+        height: auto; /* Ajustar la altura de la descripción para móviles */
+        max-height: calc(100vh - 55vw); /* Ajustar para evitar desplazamiento */
+        overflow: hidden; /* Evitar desplazamiento vertical */
         padding: 15vh; /* Disminuir el padding */
     }
 
     .team-description h2 {
-        font-size: 3vw;
+        font-size: 4vw; /* Ajustar tamaño del texto */
     }
 
     .team-description p {
-        font-size: 2vw;
+        font-size: 3vw; /* Ajustar tamaño del texto */
     }
 
     .team-description h3 {
-        font-size: 2vw;
+        font-size: 3.5vw; /* Ajustar tamaño del texto */
     }
 
     .team-description h4 {
-        font-size: 2vw;
+        font-size: 3vw; /* Ajustar tamaño del texto */
     }
 
     /* Ajustar el tamaño del header y el footer para móviles */
