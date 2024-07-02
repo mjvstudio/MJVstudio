@@ -36,6 +36,7 @@ body {
 html, body, .swiper-container, .swiper-wrapper, .swiper-slide {
     height: 100%;
     width: 100%;
+    overflow: hidden;
 }
 
 @media (max-width: 768px) {
@@ -43,6 +44,31 @@ html, body, .swiper-container, .swiper-wrapper, .swiper-slide {
         overflow: hidden; /* Desactivar todo tipo de desplazamiento en pantallas pequeñas */
         touch-action: none; /* Desactivar gestos de deslizamiento */
         height: 100vh;
+    }
+
+    .swiper-container {
+        height: 100vh;
+    }
+
+    .swiper-slide {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        background-color: #ffffff; /* Fondo blanco */
+        position: relative;
+        height: 100vh; /* Asegura que cada slide ocupe toda la altura de la pantalla */
+    }
+
+    .section-body {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2vh;
+        background-color: #fff;
+        overflow: hidden;
+        position: relative;
+        height: calc(100vh - 15vh); /* Ajusta la altura restando la altura de los encabezados y pies de página */
     }
 }
 
@@ -143,7 +169,6 @@ p {
     background-color: #fff;
     overflow: hidden;
     position: relative;
-    height: calc(100vh - 15vh); /* Ajusta la altura restando la altura de los encabezados y pies de página */
 }
 
 /* Estilos para la Sección MJV */
