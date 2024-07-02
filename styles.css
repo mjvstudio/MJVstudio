@@ -1,28 +1,21 @@
 @font-face {
     font-family: 'fuente_titulo';
-    src: url('site/fonts/fuente_titulo.woff2') format('woff2'),
-         url('site/fonts/fuente_texto.otf') format('woff'),
-         url('site/fonts/fuente_titulo.ttf') format('truetype'),
-         url('site/fonts/fuente_titulo.otf') format('opentype');
+    src: url('site/fonts/fuente_titulo1.ttf') format('ttf'),
+         url('site/fonts/fuente_titulo1.otf') format('otf');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'fuente_texto';
-    src: url('site/fonts/fuente_texto.otf') format('woff2'),
-         url('site/fonts/fuente_titulo.otf') format('woff'),
-         url('site/fonts/fuente_texto.ttf') format('truetype'),
-         url('site/fonts/fuente_texto.otf') format('opentype');
+    src: url('site/fonts/fuente_texto.otf') format('otf');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'fuente_titulo2';
-    src: url('site/fonts/fuente_titulo2.woff2') format('woff2'),
-         url('site/fonts/fuente_titulo2.woff') format('woff'),
-         url('site/fonts/fuente_titulo2.ttf') format('truetype'),
+    src: url('site/fonts/fuente_titulo2.ttf') format('truetype'),
          url('site/fonts/fuente_titulo2.otf') format('opentype');
     font-weight: normal;
     font-style: normal;
@@ -71,7 +64,7 @@ a, button, img {
 
 /* Otros estilos */
 h1, h2 {
-    font-family: 'fuente_titulo', sans-serif;
+    font-family: 'fuente_titulo1', sans-serif;
 }
 
 h3 {
