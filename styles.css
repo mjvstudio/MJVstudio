@@ -247,6 +247,8 @@ p {
         grid-template-columns: repeat(2, 1fr);
         grid-template-rows: repeat(8, 1fr);
         gap: 1vh;
+        width: 90%;
+        height: 80%;
     }
 
     .project-title {
