@@ -161,6 +161,39 @@ p {
     max-height: 100%;
     object-fit: cover;
 }
+@media (max-width: 768px) {
+    .mjv-logo {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%; /* Hacer el video más grande */
+        margin: 5vh auto 0 auto; /* Mover el video más arriba */
+    }
+
+    .mjv-logo video {
+        width: 100%;
+        max-height: 100%;
+        object-fit: cover;
+    }
+}
+
+@media (max-width: 375px) {
+    .mjv-logo {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 85%; /* Hacer el video más grande */
+        margin: 3vh auto 0 auto; /* Mover el video más arriba */
+    }
+
+    .mjv-logo video {
+        width: 100%;
+        max-height: 100%;
+        object-fit: cover;
+    }
+}
 
 /* Estilos para la Galería de Proyectos */
 .gallery {
