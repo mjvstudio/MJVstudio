@@ -241,42 +241,54 @@ p {
 }
 
 /* Media Queries para dispositivos móviles en orientación vertical */
-@media (max-width: 768px) and (orientation: portrait) {
-    .gallery {
-        grid-template-columns: repeat(2, 1fr);
-        grid-template-rows: repeat(8, 1fr);
-        gap: 1vh;
-        width: 90%;
-    }
-
-    .project-title {
-        font-size: 1.5vh;
-    }
-}
-
-/* Media Queries para dispositivos móviles en orientación horizontal */
-@media (max-width: 768px) and (orientation: landscape) {
-    .gallery {
-        grid-template-columns: repeat(4, 1fr);
-        grid-template-rows: repeat(4, 1fr);
-        gap: 1vh;
-    }
-
-    .project-title {
-        font-size: 1.5vh;
-    }
-}
-
-/* Media Queries para pantallas muy pequeñas en orientación vertical */
 @media (max-width: 375px) and (orientation: portrait) {
     .gallery {
+        display: grid;
         grid-template-columns: repeat(2, 1fr);
         grid-template-rows: repeat(8, 1fr);
         gap: 0.5vh;
+        padding-top: 2vh; /* Ajustar el padding superior para mover la grilla hacia arriba */
+        padding-bottom: 2vh; /* Ajustar el padding inferior si es necesario */
+        margin-top: -5vh; /* Usar margen negativo para mover la grilla hacia arriba */
+        height: calc(100vh - 10vh); /* Ajustar la altura de la grilla */
     }
 
     .project-title {
         font-size: 1vh;
+    }
+}
+
+@media (max-width: 768px) {
+    .gallery {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(8, 1fr);
+        gap: 0.5vh;
+        padding-top: 1vh; /* Ajustar el padding superior */
+        padding-bottom: 3vh; /* Ajustar el padding inferior si es necesario */
+        margin-top: -5vh; /* Usar margen negativo para mover la grilla hacia arriba */
+        height: calc(100vh - 10vh); /* Ajustar la altura de la grilla */
+    }
+
+    .project-title {
+        font-size: 1.5vh;
+    }
+}
+
+@media (max-width: 1024px) {
+    .gallery {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(8, 1fr);
+        gap: 0.5vh;
+        padding-top: 2vh; /* Ajustar el padding superior */
+        padding-bottom: 4vh; /* Ajustar el padding inferior si es necesario */
+        margin-top: -5vh; /* Usar margen negativo para mover la grilla hacia arriba */
+        height: calc(100vh - 10vh); /* Ajustar la altura de la grilla */
+    }
+
+    .project-title {
+        font-size: 2vh;
     }
 }
 
