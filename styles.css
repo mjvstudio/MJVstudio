@@ -1,36 +1,36 @@
 @font-face {
-    font-family: 'Fuente_titulo';
-    src: url('site/Fonts/Fuente_titulo.woff2') format('woff2'),
-         url('site/Fonts/Fuente_titulo.woff') format('woff'),
-         url('site/Fonts/Fuente_titulo.ttf') format('truetype'),
-         url('site/Fonts/Fuente_titulo.otf') format('opentype');
+    font-family: 'fuente_titulo';
+    src: url('site/fonts/fuente_titulo.woff2') format('woff2'),
+         url('site/fonts/fuente_texto.otf') format('woff'),
+         url('site/fonts/fuente_titulo.ttf') format('truetype'),
+         url('site/fonts/fuente_titulo.otf') format('opentype');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
-    font-family: 'Fuente_texto';
-    src: url('site/Fonts/Fuente_texto.woff2') format('woff2'),
-         url('site/Fonts/Fuente_texto.woff') format('woff'),
-         url('site/Fonts/Fuente_texto.ttf') format('truetype'),
-         url('site/Fonts/Fuente_texto.otf') format('opentype');
+    font-family: 'fuente_texto';
+    src: url('site/fonts/fuente_texto.otf') format('woff2'),
+         url('site/fonts/fuente_titulo.otf') format('woff'),
+         url('site/fonts/fuente_texto.ttf') format('truetype'),
+         url('site/fonts/fuente_texto.otf') format('opentype');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
-    font-family: 'Fuente_titulo2';
-    src: url('site/Fonts/Fuente_titulo2.woff2') format('woff2'),
-         url('site/Fonts/Fuente_titulo2.woff') format('woff'),
-         url('site/Fonts/Fuente_titulo2.ttf') format('truetype'),
-         url('site/Fonts/Fuente_titulo2.otf') format('opentype');
+    font-family: 'fuente_titulo2';
+    src: url('site/fonts/fuente_titulo2.woff2') format('woff2'),
+         url('site/fonts/fuente_titulo2.woff') format('woff'),
+         url('site/fonts/fuente_titulo2.ttf') format('truetype'),
+         url('site/fonts/fuente_titulo2.otf') format('opentype');
     font-weight: normal;
     font-style: normal;
 }
 
 /* Aplicar las fuentes */
 body {
-    font-family: 'Fuente_texto', sans-serif;
+    font-family: 'fuente_texto', sans-serif;
     cursor: none; /* Ocultar el cursor predeterminado */
     overflow: hidden; /* Desactivar desplazamiento vertical */
     margin: 0;
@@ -71,19 +71,19 @@ a, button, img {
 
 /* Otros estilos */
 h1, h2 {
-    font-family: 'Fuente_titulo', sans-serif;
+    font-family: 'fuente_titulo', sans-serif;
 }
 
 h3 {
-    font-family: 'Fuente_titulo2', sans-serif;
+    font-family: 'fuente_titulo2', sans-serif;
 }
 
 h4 {
-    font-family: 'Fuente_texto', sans-serif;
+    font-family: 'fuente_texto', sans-serif;
 }
 
 p {
-    font-family: 'Fuente_texto', sans-serif;
+    font-family: 'fuente_texto', sans-serif;
 }
 
 .swiper-container {
@@ -241,7 +241,7 @@ p {
     opacity: 0; /* Oculto por defecto */
     transition: opacity 0.3s; /* Animación suave */
     text-align: center;
-    font-family: 'Fuente_titulo2', sans-serif; /* Fuente del título */
+    font-family: 'fuente_titulo2', sans-serif; /* fuente del título */
 }
 
 .gallery-item:hover .project-title {
