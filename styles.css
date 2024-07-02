@@ -360,12 +360,12 @@ p {
 }
 
 .team-image img {
-    height: 80vh;
+    height: 68vh;
     width: auto;
 }
 
 .team-description {
-    flex: 0 0 26vw;
+    flex: 0 0 20vw;
     max-height: 100vh;
     text-align: justify;
     margin: 0;
