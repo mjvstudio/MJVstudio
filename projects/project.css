@@ -1,36 +1,36 @@
 @font-face {
-    font-family: 'Fuente_titulo';
-    src: url('Fonts/Fuente_titulo.woff2') format('woff2'),
-         url('Fonts/Fuente_titulo.woff') format('woff'),
-         url('Fonts/Fuente_titulo.ttf') format('truetype'),
-         url('Fonts/Fuente_titulo.otf') format('opentype');
+    font-family: 'fuente_titulo';
+    src: url('Fonts/fuente_texto.otf') format('woff2'),
+         url('Fonts/fuente_titulo.woff') format('woff'),
+         url('Fonts/fuente_titulo.ttf') format('truetype'),
+         url('Fonts/fuente_titulo.otf') format('opentype');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
-    font-family: 'Fuente_texto';
-    src: url('Fonts/Fuente_texto.woff2') format('woff2'),
-         url('Fonts/Fuente_texto.woff') format('woff'),
-         url('Fonts/Fuente_texto.ttf') format('truetype'),
-         url('Fonts/Fuente_texto.otf') format('opentype');
+    font-family: 'fuente_texto';
+    src: url('fonts/fuente_texto.woff2') format('woff2'),
+         url('fonts/fuente_texto.woff') format('woff'),
+         url('fonts/fuente_texto.ttf') format('truetype'),
+         url('fonts/fuente_texto.otf') format('opentype');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
-    font-family: 'Fuente_titulo2';
-    src: url('Fonts/Fuente_titulo2.woff2') format('woff2'),
-         url('Fonts/Fuente_titulo2.woff') format('woff'),
-         url('Fonts/Fuente_titulo2.ttf') format('truetype'),
-         url('Fonts/Fuente_titulo2.otf') format('opentype');
+    font-family: 'fuente_titulo2';
+    src: url('fonts/fuente_titulo2.woff2') format('woff2'),
+         url('fonts/fuente_titulo2.woff') format('woff'),
+         url('fonts/fuente_titulo2.ttf') format('truetype'),
+         url('fonts/fuente_titulo2.otf') format('opentype');
     font-weight: normal;
     font-style: normal;
 }
 
 /* Aplicar las fuentes */
 body {
-    font-family: 'Fuente_texto', sans-serif;
+    font-family: 'fuente_texto', sans-serif;
     cursor: none; /* Ocultar el cursor predeterminado */
     margin: 0;
     padding: 0;
@@ -56,7 +56,7 @@ body, a, button, img {
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-family: 'Fuente_titulo2', sans-serif;
+    font-family: 'fuente_titulo2', sans-serif;
 }
 
 /* Otros estilos existentes */
