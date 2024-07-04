@@ -1,0 +1,14 @@
+<h3>Memoria Descriptiva</h3>
+<p>La vivienda GJ fue diseñada para una familia joven de cuatro personas, ubicada en un terreno elevado en San Juan del Paraná con una vista espectacular a la puesta de sol. El programa cuenta con tres habitaciones, un lavadero, una cocina, una sala comedora, un quincho con baño y depósito, una piscina y una terraza con espacio para prender una fogata. El diseño maximiza la integración entre las áreas sociales y los espacios exteriores, asegurando una buena conexión y flujo entre ellos, mientras se mantiene una clara separación con los espacios privados.<br>
+La sala, comedor, integrada con la cocina, se abre hacia el jardín a través de grandes ventanales que permiten la entrada de luz natural y ofrecen vistas al jardín, la piscina y el quincho. La habitación principal cuenta con un baño en suite y vestidor, mientras que las dos habitaciones secundarias, diseñadas para las niñas, comparten un baño completo. El lavadero se encuentra cerca de las habitaciones para mantener la zona de ropas dentro del área privada. El quincho está cubierto por una pérgola, equipado con parrilla, baño y un deposito, la piscina en el jardín conecta el área social interior con el área social exterior, volviéndose un lugar seguro para los niños.<br> 
+La seguridad y privacidad se garantizan mediante una fachada cerrada hacia la calle, utilizando ladrillo visto, como también un muro de cribado de ladrillos para una estética cálida y contemporánea. La conexión entre los espacios interiores y exteriores se logra con grandes ventanales y puertas corredizas, permitiendo una transición fluida. Los materiales y acabados combinan funcionalidad y estética, con interiores de alta calidad y exteriores antideslizantes, armonizando con el entorno natural. La vivienda fue pensada para favorecer la convivencia familiar y la conexión con la naturaleza, creando un hogar acogedor y funcional con vistas espectaculares.</p>
+
+<h3>Ubicación</h3>
+<p>San Juan del Paraná - Itapúa - Paraguay</p>
+<h3>Superficie</h3>
+<p>370m2</p>
+<h3>Año</h3>
+<p>2023</p>
+<h3>Proyectistas</h3>
+<p>Arq. Martín José Villalba Lovera</p>
+<p>Arq. María José Vera Scavenius</p>

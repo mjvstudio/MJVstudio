@@ -1,0 +1,14 @@
+<h3>Memoria Descriptiva</h3>
+<p>El proyecto se trata de una reforma y ampliación de una vivienda unifamiliar, enfocada en reorganizar y optimizar los espacios existentes, así como en mejorar su funcionalidad y estética. La intervención principal consistió en ampliar el programa de la vivienda, se buscó aumentar el número y tamaño de las aberturas para mejorar la ventilación cruzada. Además, se incorporaron pequeños jardines interiores, con el objetivo de ambientar los espacios y aportar una sensación de frescura y conexión con la naturaleza.<br>
+Dado que la vivienda contaba con dimensiones muy ajustadas, se buscó crear una sensación de amplitud a través del uso de materiales como la madera y colores claros en el interior. La iluminación, tanto natural como artificial, se diseñó cuidadosamente para realzar esta percepción de espacio y calidez. Las nuevas aberturas permiten la entrada de luz natural durante todo el día, disminuyendo la necesidad de luz artificial y creando un ambiente más acogedor y energéticamente eficiente.<br>
+La reorganización de los espacios implicó una considerable cantidad de demolición, más que de reconstrucción, para permitir una redistribución eficiente de los ambientes. Se optó por la construcción en seco para el área íntima, lo que otorgó mayor flexibilidad a esos espacios y una estética más ligera y moderna. Esta técnica también implica una mayor rapidez en la ejecución de la obra y una menor generación de escombros, contribuyendo a un enfoque más sostenible del proyecto.</p>
+
+<h3>Ubicación</h3>
+<p>Encarnación - Itapúa - Paraguay</p>
+<h3>Superficie</h3>
+<p>118m2</p>
+<h3>Año</h3>
+<p>2021</p>
+<h3>Proyectistas</h3>
+<p>Arq. Martín José Villalba Lovera</p>
+<p>Arq. María José Vera Scavenius</p>
