@@ -27,21 +27,40 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('project-title').textContent = projectTitle;
 
     // Cargar el carrusel de imágenes del proyecto
-    for (let i = 1; i <= 3; i++) {
-        const image = `${projectId}/${projectId}_${i}.jpg`;
-        const slide = document.createElement('div');
-        slide.classList.add('swiper-slide');
-        slide.innerHTML = `<img src="${image}" alt="Imagen del proyecto ${projectId}">`;
-        document.getElementById('project-carousel').appendChild(slide);
-    }
+    let imageIndex = 1;
+    const carouselContainer = document.getElementById('project-carousel');
 
-    const projectSwiper = new Swiper('.project-swiper-container', {
-        loop: true,
-        pagination: { el: '.swiper-pagination', clickable: true },
-        navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
-        keyboard: { enabled: true },
-        mousewheel: { invert: false, sensitivity: 0.5 },
-    });
+    const loadImages = async () => {
+        while (true) {
+            const image = `${projectId}/${projectId}_${imageIndex}.jpg`;
+            try {
+                const response = await fetch(image);
+                if (response.ok) {
+                    const slide = document.createElement('div');
+                    slide.classList.add('swiper-slide');
+                    slide.innerHTML = `<img src="${image}" alt="Imagen del proyecto ${projectId}">`;
+                    carouselContainer.appendChild(slide);
+                    imageIndex++;
+                } else {
+                    break; // Sale del bucle si no encuentra más imágenes
+                }
+            } catch (error) {
+                console.error('Error al cargar la imagen:', error);
+                break;
+            }
+        }
+
+        // Inicializar Swiper después de cargar las imágenes
+        const projectSwiper = new Swiper('.project-swiper-container', {
+            loop: true,
+            pagination: { el: '.swiper-pagination', clickable: true },
+            navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+            keyboard: { enabled: true },
+            mousewheel: { invert: false, sensitivity: 0.5 },
+        });
+    };
+
+    loadImages();
 
     const infoModal = document.getElementById('info-modal');
     const infoContent = document.getElementById('info-content');
