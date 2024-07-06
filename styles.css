@@ -50,19 +50,19 @@ html, body, .swiper-container, .swiper-wrapper, .swiper-slide {
     position: absolute;
     width: 15px; /* Tamaño del círculo */
     height: 15px; /* Tamaño del círculo */
-    background-color: rgba(0, 0, 0, 0.555); /* Color del círculo */
+    background-color: rgb(70, 70, 70); /* Color del círculo */
     border-radius: 20%; /* Hacer el círculo */
     pointer-events: none; /* No interferir con los eventos del mouse */
     z-index: 10000; /* Asegurarse de que esté por encima de otros elementos */
 }
-
+site/fonts
 a, button, img {
     cursor: none; /* Ocultar el cursor predeterminado */
 }
 
 /* Otros estilos */
 h1,h2 {
-    font-family: 'fuente_titulo2', sans-serif;
+    font-family: 'fuente_titulo1', sans-serif;
 }
 
 h3 {
