@@ -101,17 +101,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    document.querySelector('.more-info-button').addEventListener('click', () => {
-        fetch(`${projectId}/${projectId}_info.txt`)
-            .then(response => response.text())
-            .then(data => {
-                infoContent.innerHTML = data;
-                infoModal.style.display = 'block';
-            })
-            .catch(error => {
-                console.error('Error al cargar el archivo de información:', error);
-                alert('No se pudo cargar la información del proyecto.');
-            });
+    document.querySelectorAll('.more-info-button').forEach(button => {
+        button.addEventListener('click', (e) => {
+            const project = e.currentTarget.dataset.project;
+            fetch(`${project}/${project}_info.txt`)
+                .then(response => response.text())
+                .then(data => {
+                    infoContent.innerHTML = data;
+                    infoModal.style.display = 'block';
+                })
+                .catch(error => {
+                    console.error('Error al cargar el archivo de información:', error);
+                    alert('No se pudo cargar la información del proyecto.');
+                });
+        });
     });
 
     closeModal.addEventListener('click', () => {

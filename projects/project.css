@@ -43,10 +43,10 @@ body {
 
 .custom-cursor {
     position: absolute;
-    width: 15px; /* Tamaño del círculo */
-    height: 15px; /* Tamaño del círculo */
-    background-color: rgba(0, 0, 0, 0.555); /* Color del círculo */
-    border-radius: 20%; /* Hacer el círculo */
+    width: 20px; /* Tamaño del círculo */
+    height: 20px; /* Tamaño del círculo */
+    background-color: black; /* Color del círculo */
+    border-radius: 50%; /* Hacer el círculo */
     pointer-events: none; /* No interferir con los eventos del mouse */
     z-index: 10000; /* Asegurarse de que esté por encima de otros elementos */
 }
