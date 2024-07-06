@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeModal = document.querySelector('.close');
 
     const goBack = () => {
-        window.history.back();
+        window.location.href = '../index.html#projects'; // Redirigir a la sección de Projects
     };
     document.querySelector('.back-button').addEventListener('click', goBack);
 
@@ -116,14 +116,5 @@ document.addEventListener('DOMContentLoaded', () => {
             hoverSound.currentTime = 0;
             hoverSound.play();
         });
-    });
-});
-document.addEventListener('DOMContentLoaded', () => {
-    const loaderContainer = document.getElementById('loader-container');
-    const contentContainer = document.body;
-
-    window.addEventListener('load', () => {
-        loaderContainer.style.display = 'none';
-        contentContainer.style.display = 'block';
     });
 });
