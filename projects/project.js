@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const hoverSound = new Audio('../site/Sounds/Menu.mp3');
-    hoverSound.volume = 0.075;
+    hoverSound.volume = 0.01;
     const interactiveElements = document.querySelectorAll('.back-button, .more-info-button');
 
     interactiveElements.forEach(element => {

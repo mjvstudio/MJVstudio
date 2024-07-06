@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Agregar sonido al pasar el cursor sobre los menús desplegables, opciones y galería de proyectos
     const hoverSound = new Audio('site/sounds/menu.mp3');
-    hoverSound.volume = 0.5; // Ajustar el volumen si es necesario
+    hoverSound.volume = 0.01; // Ajustar el volumen si es necesario
 
     document.querySelectorAll('a, button, img').forEach(item => {
         item.addEventListener('mouseover', () => {
