@@ -107,3 +107,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+document.addEventListener('DOMContentLoaded', () => {
+    const loaderContainer = document.getElementById('loader-container');
+    const contentContainer = document.querySelector('.swiper-container');
+
+    window.addEventListener('load', () => {
+        loaderContainer.style.display = 'none';
+        contentContainer.style.display = 'block';
+    });
+});
