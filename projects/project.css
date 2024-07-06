@@ -43,10 +43,10 @@ body {
 
 .custom-cursor {
     position: absolute;
-    width: 20px; /* Tamaño del círculo */
-    height: 20px; /* Tamaño del círculo */
-    background-color: black; /* Color del círculo */
-    border-radius: 50%; /* Hacer el círculo */
+    width: 15px; /* Tamaño del círculo */
+    height: 15px; /* Tamaño del círculo */
+    background-color: rgba(0, 0, 0, 0.555); /* Color del círculo */
+    border-radius: 20%; /* Hacer el círculo */
     pointer-events: none; /* No interferir con los eventos del mouse */
     z-index: 10000; /* Asegurarse de que esté por encima de otros elementos */
 }
@@ -162,20 +162,23 @@ h1, h2, h3, h4, h5, h6 {
     text-decoration: none;
     cursor: pointer;
 }
-#loader-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #fff;
-    z-index: 1000;
+
+/* Loader individual para imágenes */
+.image-container {
+    position: relative;
+    display: inline-block;
 }
 
-#loader {
-    width: 50px;
-    height: 50px;
+.image-loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50px; /* Ajusta el tamaño del loader según tus necesidades */
+    height: 50px; /* Ajusta el tamaño del loader según tus necesidades */
+    z-index: 1;
+}
+
+img {
+    display: none; /* Ocultar las imágenes por defecto hasta que se carguen */
 }

@@ -38,7 +38,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (response.ok) {
                     const slide = document.createElement('div');
                     slide.classList.add('swiper-slide');
-                    slide.innerHTML = `<img src="${image}" alt="Imagen del proyecto ${projectId}">`;
+
+                    const imageContainer = document.createElement('div');
+                    imageContainer.classList.add('image-container');
+
+                    const img = document.createElement('img');
+                    img.src = image;
+                    img.alt = `Imagen del proyecto ${projectId}`;
+
+                    const loader = document.createElement('img');
+                    loader.src = '../site/loader.gif';
+                    loader.classList.add('image-loader');
+
+                    imageContainer.appendChild(loader);
+                    imageContainer.appendChild(img);
+                    slide.appendChild(imageContainer);
+
+                    img.onload = () => {
+                        loader.style.display = 'none';
+                        img.style.display = 'block';
+                    };
+
                     carouselContainer.appendChild(slide);
                     imageIndex++;
                 } else {
@@ -108,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const hoverSound = new Audio('../site/Sounds/Menu.mp3');
-    hoverSound.volume = 0.01;
+    hoverSound.volume = 0.075;
     const interactiveElements = document.querySelectorAll('.back-button, .more-info-button');
 
     interactiveElements.forEach(element => {

@@ -48,8 +48,8 @@ html, body, .swiper-container, .swiper-wrapper, .swiper-slide {
 
 .custom-cursor {
     position: absolute;
-    width: 10px; /* Tamaño del círculo */
-    height: 10px; /* Tamaño del círculo */
+    width: 15px; /* Tamaño del círculo */
+    height: 15px; /* Tamaño del círculo */
     background-color: rgba(0, 0, 0, 0.555); /* Color del círculo */
     border-radius: 20%; /* Hacer el círculo */
     pointer-events: none; /* No interferir con los eventos del mouse */
