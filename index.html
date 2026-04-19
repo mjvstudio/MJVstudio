@@ -1,175 +1,242 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- METADATOS -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MJV Studio</title>
+    <link rel="icon" type="image/png" href="assets/logo_2.png">
+    
+    <!-- ESTILOS -->
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
-    <link rel="icon" href="site/images/logo_up.png" type="image/png">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"/>
 </head>
+
 <body>
+    <!-- CONTENEDOR PRINCIPAL SWIPER -->
     <div class="swiper-container">
         <div class="swiper-wrapper">
-            <!-- Sección MJV -->
-            <section id="mjv" class="swiper-slide">
-                <div class="content">
-                    <main class="section-body mjv-content">
-                        <div class="mjv-logo">
-                            <video id="mjv-video" src="mjv/logo.mp4" autoplay muted></video>
-                    </main>
-                </div>
-            </section>
-            <!-- Sección Projects -->
-            <section id="projects" class="swiper-slide">
-                <div class="content">
-                    <header class="section-header">
-                        <h1>Projects</h1>
-                    </header>
-                    <main class="section-body projects-content">
-                        <div class="gallery">
-                            <!-- Agregar los 16 elementos de galería con categorías -->
-                            <div class="gallery-item salud comercial" data-project="project1">
-                                <img src="projects/project1/project1_main.jpg" alt="Edificio LL">
-                                <div class="project-title">Edificio LL</div>
-                            </div>
-                            <div class="gallery-item residencial" data-project="project2">
-                                <img src="projects/project2/project2_main.jpg" alt="Casa Mburucujá">
-                                <div class="project-title">Casa Mburucujá</div>
-                            </div>
-                            <div class="gallery-item residencial" data-project="project3">
-                                <img src="projects/project3/project3_main.jpg" alt="Casa Mbarete Porã">
-                                <div class="project-title">Casa Mbarete Porã</div>
-                            </div>
-                            <div class="gallery-item residencial remodelaciones" data-project="project4">
-                                <img src="projects/project4/project4_main.jpg" alt="Casa GV">
-                                <div class="project-title">Casa GV</div>
-                            </div>
-                            <div class="gallery-item deportivo entretenimiento" data-project="project5">
-                                <img src="projects/project5/project5_main.jpg" alt="Camp Fire">
-                                <div class="project-title">Camp Fire</div>
-                            </div>
-                            <div class="gallery-item residencial" data-project="project6">
-                                <img src="projects/project6/project6_main.jpg" alt="Casa GJ">
-                                <div class="project-title">Casa GJ</div>
-                            </div>
-                            <div class="gallery-item deportivo" data-project="project7">
-                                <img src="projects/project7/project7_main.jpg" alt="Padel Center Rimini">
-                                <div class="project-title">Padel Center Rimini</div>
-                            </div>
-                            <div class="gallery-item residencial" data-project="project8">
-                                <img src="projects/project8/project8_main.jpg" alt="Casa Asunción">
-                                <div class="project-title">Casa Asunción</div>
-                            </div>
-                            <div class="gallery-item interiorismo" data-project="project9">
-                                <img src="projects/project9/project9_main.jpg" alt="Oficina Ejecutiva KP">
-                                <div class="project-title">Oficina Ejecutiva KP</div>
-                            </div>
-                            <div class="gallery-item residencial" data-project="project10">
-                                <img src="projects/project10/project10_main.jpg" alt="Casa 6:40">
-                                <div class="project-title">Casa 6:40</div>
-                            </div>
-                            <div class="gallery-item gastronomico remodelaciones" data-project="project11">
-                                <img src="projects/project11/project11_main.jpg" alt="Reforma Vikinga">
-                                <div class="project-title">Reforma Vikinga</div>
-                            </div>
-                            <div class="gallery-item residencial" data-project="project12">
-                                <img src="projects/project12/project12_main.jpg" alt="Casa RA">
-                                <div class="project-title">Casa RA</div>
-                            </div>
-                            <div class="gallery-item residencial remodelaciones" data-project="project13">
-                                <img src="projects/project13/project13_main.jpg" alt="Reforma LM1">
-                                <div class="project-title">Reforma LM1</div>
-                            </div>
-                            <div class="gallery-item cultural" data-project="project14">
-                                <img src="projects/project14/project14_main.jpg" alt="Ovy">
-                                <div class="project-title">Ovy</div>
-                            </div>
-                            <div class="gallery-item comercial remodelaciones" data-project="project15">
-                                <img src="projects/project15/project15_main.jpg" alt="Fachada Andes">
-                                <div class="project-title">Fachada Andes</div>
-                            </div>
-                            <div class="gallery-item remodelaciones comercial" data-project="project16">
-                                <img src="projects/project16/project16_main.jpg" alt="Fachada Aldito">
-                                <div class="project-title">Fachada Aldito</div>
-                            </div>
-                        </div>
-                    </main>
-                    <footer class="section-footer">
-                        <div class="dropdown">
-                            <img id="categories-button" src="projects/categories.png" alt="Categorías">
-                            <div class="dropdown-content" id="categories-dropdown">
-                                <a href="#" class="filter" data-filter="all">Todos</a>
-                                <a href="#" class="filter" data-filter="entretenimiento">Entretenimiento</a>
-                                <a href="#" class="filter" data-filter="residencial">Residencial</a>
-                                <a href="#" class="filter" data-filter="comercial">Comercial</a>
-                                <a href="#" class="filter" data-filter="cultural">Cultural</a>
-                                <a href="#" class="filter" data-filter="deportivo">Deportivo</a>
-                                <a href="#" class="filter" data-filter="gastronomico">Gastronómico</a>
-                                <a href="#" class="filter" data-filter="remodelaciones">Remodelaciones</a>
-                                <a href="#" class="filter" data-filter="interiorismo">Interiorismo</a>
-                            </div>
-                        </div>
-                    </footer>
-                </div>
-            </section>
-            <!-- Sección Team -->
-            <section id="team" class="swiper-slide">
-                <div class="content">
-                    <header class="section-header">
-                        <h1>Team</h1>
-                    </header>
-                    <main class="section-body team-content">
-                        <div class="team-image">
-                            <img id="team-image" src="team/team_photo.png" alt="Foto del equipo de arquitectura" class="no-interaction">
-                        </div>
-                        <div class="team-description">
-                            <h2>Hola!</h2>
-                            <div id="team-description">
-                                <p>   Somos un equipo de arquitectos jóvenes apasionados por crear espacios únicos y significativos.<br>Nuestro estudio se caracteriza por la búsqueda permanente de integración armoniosa de la arquitectura con el paisaje, también creemos en la fuerza de la simplicidad y la síntesis, filtrando nuestras ideas hasta su esencia para lograr una arquitectura clara y contundente.<br>Diseñar edificios con personalidad, que cuenten una historia propia, infundiendo carácter y vida en cada proyecto para quienes los habitan y visitan es nuestra misión principal.<br>Además, nos apasiona la investigación y la experimentación, constantemente explorando y probando nuevas ideas y técnicas para encontrar formas innovadoras de abordar la arquitectura.</p>
-                                <h3>Arq. María José Vera Scavenius</h3>
-                                <h4>Nació el 1 de Mayo de 1996 en Encarnación, Paraguay<br>Arquitecta de la Universidad Católica Nuestra Señora de la Asunción Campus Itapúa – Año 2023</h4>
-                                <h3>Arq. Martín José Villalba Lovera</h3>
-                                <h4>Nació el 18 de Julio de 1996 en Encarnación, Paraguay<br>Arquitecto de la Universidad Católica Nuestra Señora de la Asunción Campus Itapúa – Año 2021</h4>
-                            </div>
-                            <div class="additional-info" id="team-additional">
-                                <!-- Aquí iría contenido adicional si fuera necesario -->
-                            </div>
-                        </div>
-                    </main>
-                    <footer class="section-footer">
-                        <div class="dropdown">
-                            <img id="contact-button" src="team/contact.png" alt="Contáctanos">
-                            <div class="dropdown-content" id="contact-dropdown">
-                                <a href="https://www.instagram.com/mjvstudio.py/" target="_blank"><img src="team/instagram.png" alt="Instagram"></a>
-                                <a href="https://wa.me/595985107042" target="_blank"><img src="team/whatsapp.png" alt="Whatsapp"></a>
-                                <a href="#" id="email-button"><img src="team/email.png" alt="Email"></a>
-                            </div>
-                        </div>
-                    </footer>
-                </div>
-            </section>
-        </div>
-    </div>
 
-    <!-- Lightbox para el formulario de contacto -->
-    <div id="contact-lightbox" class="lightbox">
-        <div class="lightbox-content">
-            <span class="close">&times;</span>
-            <!-- Google Forms iframe -->
-            <div class="iframe-container">
-                <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdWb1vWzBPZAj8aeIvEw0cPny6yp2w_xGxrdPgkZJMiHV9r7w/viewform?embedded=true" frameborder="0" marginheight="0" marginwidth="0">Cargando…</iframe>
+            <!-- SECCIÓN 1: LOGO PRINCIPAL -->
+            <div class="swiper-slide">
+                <header></header>
+                <main class="center-logo">
+                    <img src="assets/logo_1.png" alt="Logo MJV Studio" class="logo-main">
+                </main>
+                <footer></footer>
+            </div>
+
+            <!-- SECCIÓN 2: ARCHITECTURE -->
+            <div class="swiper-slide">
+                <header>Architecture</header>
+                <main>
+                    <div class="gallery">
+                        <!-- PROYECTO 20 -->
+                        <a href="projects/project20/project20.html" class="project comercial">
+                            <img src="projects/project20/project20_main.jpg" alt="Vazquez Automotores">
+                            <span>Vazquez Automotores</span>
+                        </a>
+
+                        <!-- PROYECTO 19 -->
+                        <a href="projects/project19/project19.html" class="project remodelaciones">
+                            <img src="projects/project19/project19_main.jpg" alt="Reforma Cáceres">
+                            <span>Reforma Cáceres</span>
+                        </a>
+
+                        <!-- PROYECTO 18 -->
+                        <a href="projects/project18/project18.html" class="project remodelaciones">
+                            <img src="projects/project18/project18_main.jpg" alt="Reforma Scavenius">
+                            <span>Reforma Scavenius</span>
+                        </a>
+
+                        <!-- PROYECTO 17 -->
+                        <a href="projects/project17/project17.html" class="project patrimonial">
+                            <img src="projects/project17/project17_main.jpg" alt="Puerto Concepción">
+                            <span>Puerto Concepción</span>
+                        </a>
+
+                        <!-- PROYECTO 16 -->
+                        <a href="projects/project16/project16.html" class="project remodelaciones">
+                            <img src="projects/project16/project16_main.jpg" alt="Edificio LL">
+                            <span>Edificio LL</span>
+                        </a>
+
+                        <!-- PROYECTO 15 -->
+                        <a href="projects/project15/project15.html" class="project residencial">
+                            <img src="projects/project15/project15_main.jpg" alt="Casa Murucujá">
+                            <span>Casa Murucujá</span>
+                        </a>
+
+                        <!-- PROYECTO 14 -->
+                        <a href="projects/project14/project14.html" class="project residencial">
+                            <img src="projects/project14/project14_main.jpg" alt="Casa Mbarete Porã">
+                            <span>Casa Mbarete Porã</span>
+                        </a>
+
+                        <!-- PROYECTO 13 -->
+                        <a href="projects/project13/project13.html" class="project remodelaciones">
+                            <img src="projects/project13/project13_main.jpg" alt="Reforma Gini">
+                            <span>Reforma Gini</span>
+                        </a>
+
+                        <!-- PROYECTO 12 -->
+                        <a href="projects/project12/project12.html" class="project entretenimiento">
+                            <img src="projects/project12/project12_main.jpg" alt="Camp Fire">
+                            <span>Camp Fire</span>
+                        </a>
+
+                        <!-- PROYECTO 11 -->
+                        <a href="projects/project11/project11.html" class="project residencial">
+                            <img src="projects/project11/project11_main.jpg" alt="Casa GJ">
+                            <span>Casa GJ</span>
+                        </a>
+
+                        <!-- PROYECTO 10 -->
+                        <a href="projects/project10/project10.html" class="project deportivo">
+                            <img src="projects/project10/project10_main.jpg" alt="Padel Center Remini">
+                            <span>Padel Center Remini</span>
+                        </a>
+
+                        <!-- PROYECTO 9 -->
+                        <a href="projects/project9/project9.html" class="project residencial">
+                            <img src="projects/project9/project9_main.jpg" alt="Casa Asunción">
+                            <span>Casa Asunción</span>
+                        </a>
+
+                        <!-- PROYECTO 8 -->
+                        <a href="projects/project8/project8.html" class="project interiorismo">
+                            <img src="projects/project8/project8_main.jpg" alt="Oficina Ejecutiva KP">
+                            <span>Oficina Ejecutiva KP</span>
+                        </a>
+
+                        <!-- PROYECTO 7 -->
+                        <a href="projects/project7/project7.html" class="project residencial">
+                            <img src="projects/project7/project7_main.jpg" alt="Casa 6:40">
+                            <span>Casa 6:40</span>
+                        </a>
+
+                        <!-- PROYECTO 6 -->
+                        <a href="projects/project6/project6.html" class="project gastronómico">
+                            <img src="projects/project6/project6_main.jpg" alt="Reforma Vikinga">
+                            <span>Reforma Vikinga</span>
+                        </a>
+
+                        <!-- PROYECTO 5 -->
+                        <a href="projects/project5/project5.html" class="project residencial">
+                            <img src="projects/project5/project5_main.jpg" alt="Casa RA">
+                            <span>Casa RA</span>
+                        </a>
+
+                        <!-- PROYECTO 4 -->
+                        <a href="projects/project4/project4.html" class="project remodelaciones">
+                            <img src="projects/project4/project4_main.jpg" alt="Reforma LM1">
+                            <span>Reforma LM1</span>
+                        </a>
+
+                        <!-- PROYECTO 3 -->
+                        <a href="projects/project3/project3.html" class="project cultural">
+                            <img src="projects/project3/project3_main.jpg" alt="Ovy">
+                            <span>Ovy</span>
+                        </a>
+
+                        <!-- PROYECTO 2 -->
+                        <a href="projects/project2/project2.html" class="project remodelaciones">
+                            <img src="projects/project2/project2_main.jpg" alt="Fachada Andes">
+                            <span>Fachada Andes</span>
+                        </a>
+
+                        <!-- PROYECTO 1 -->
+                        <a href="projects/project1/project1.html" class="project remodelaciones">
+                            <img src="projects/project1/project1_main.jpg" alt="Fachada Andes">
+                            <span>Fachada Andes</span>
+                        </a>
+                    </div>
+                </main>
+                
+                <!-- FILTRO DE CATEGORÍAS -->
+                <footer class="section-footer">
+                    <div class="dropdown">
+                        <img id="categories-button" src="assets/categories.png" alt="Categorías" class="categories-icon">
+                        <div class="dropdown-content" id="categories-dropdown">
+                            <a href="#" class="filter" data-filter="interiorismo" style="--i: 8;">Interiorismo</a>
+                            <a href="#" class="filter" data-filter="remodelaciones" style="--i: 7;">Remodelaciones</a>
+                            <a href="#" class="filter" data-filter="gastronómico" style="--i: 6;">Gastronómico</a>
+                            <a href="#" class="filter" data-filter="deportivo" style="--i: 5;">Deportivo</a>
+                            <a href="#" class="filter" data-filter="cultural" style="--i: 4;">Cultural</a>
+                            <a href="#" class="filter" data-filter="comercial" style="--i: 3;">Comercial</a>
+                            <a href="#" class="filter" data-filter="residencial" style="--i: 2;">Residencial</a>
+                            <a href="#" class="filter" data-filter="entretenimiento" style="--i: 1;">Entretenimiento</a>
+                            <a href="#" class="filter" data-filter="all" style="--i: 0;">Todos</a>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+
+            <!-- SECCIÓN 3: STUDIO -->
+            <div class="swiper-slide">
+                <header>Studio</header>
+                <main>
+                    <div class="subsections">
+                        <!-- CARRUSEL DE IMÁGENES -->
+                        <div class="subsection left">
+                            <div class="team-carousel">
+                                <div class="team-slide active" data-member="studio-1">
+                                    <img src="assets/team1_photo.png" alt="Miembro 1" class="team-photo">
+                                </div>
+                                <div class="team-slide" data-member="studio-2">
+                                    <img src="assets/team2_photo.png" alt="Miembro 2" class="team-photo">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- CARRUSEL DE INFORMACIÓN -->
+                        <div class="subsection right">
+                            <div class="info-carousel">
+                                <div class="info-slide active" data-member="studio-1">
+                                    <div class="team-info-content"></div>
+                                </div>
+                                <div class="info-slide" data-member="studio-2">
+                                    <div class="team-info-content"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- BOTONES DE NAVEGACIÓN -->
+                            <div class="button-container">
+                                <button id="studio-prev-btn" class="nav-button">
+                                    <img src="assets/atras.jpg" alt="Atrás" class="nav-icon">
+                                </button>
+                                <button id="studio-next-btn" class="nav-button">
+                                    <img src="assets/adelante.jpg" alt="Adelante" class="nav-icon">
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+                <footer class="section-footer">
+                    <div class="contact-dropdown">
+                        <img id="studio-contact-button" src="assets/contact.png" alt="Contacto" class="contact-icon">
+                        <div class="contact-dropdown-content" id="studio-contact-dropdown">
+                            <a href="mailto:tucorreo@example.com" style="--i: 0;">
+                                <img src="assets/email.png" alt="Email">
+                            </a>
+                            <a href="https://wa.me/595985107042" target="_blank" style="--i: 1;">
+                                <img src="assets/whatsapp.png" alt="WhatsApp">
+                            </a>
+                            <a href="https://www.instagram.com/mjvstudio.py?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" style="--i: 2;">
+                                <img src="assets/instagram.png" alt="Instagram">
+                            </a>
+                        </div>
+                    </div>
+                </footer>
             </div>
         </div>
+
+        <!-- PAGINACIÓN SWIPER -->
+        <div class="swiper-pagination"></div>
     </div>
 
-    <div class="swiper-pagination"></div> <!-- Contenedor de paginación independiente -->
-
+    <!-- SCRIPTS -->
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-    <script src="script.js"></script>
+    <script src="scripts.js"></script>
 </body>
 </html>
-<div id="loader-container">
-    <img id="loader" src="site/loader.gif" alt="Loading...">
-</div>
