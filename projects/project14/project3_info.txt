@@ -1,0 +1,16 @@
+<h3>Memoria Descriptiva</h3>
+<p>El proyecto de la casa de campo denominada Mbarete Porã se encuentra emplazado en medio de un frondoso bosque en la localidad de Tomas Romero Pereira, también conocida como María Auxiliadora, a orillas de un pequeño arroyo que alberga una piscina natural construida por los propietarios. El diseño se centró en crear una conexión profunda con el entorno natural, destacando la naturaleza como protagonista y definiendo los espacios de la casa.<br> 
+Para lograr este vínculo entre lo natural y lo construido, se incorporaron amplios ventanales y terrazas que permiten disfrutar de las vistas y el ambiente natural en todo momento.<br>
+Se optó por utilizar materiales tradicionales como el ladrillo y la madera, con un enfoque en la sofisticación de la arquitectura vernácula de la zona. Este enfoque busca poner en valor la materialidad y con un diseño simple y sintético, al mismo tiempo, le otorga al lugar un aspecto contemporáneo.<br>
+El proyecto busca integrarse plenamente con la naturaleza y aprovechar sus recursos, especialmente la ventilación y el asoleamiento. Para lograr esto, la vivienda cuenta con ventilación cruzada en casi todos sus espacios, lo que permite una circulación constante de aire fresco. Además, el diseño permite la entrada de luz natural durante la mayor parte del día, reduciendo significativamente la necesidad de utilizar energía eléctrica, exceptuando las horas nocturnas. Esta estrategia no solo optimiza el confort dentro de la casa, sino que también contribuye a la sostenibilidad y eficiencia energética del hogar.
+</p>
+
+<h3>Ubicación</h3>
+<p>Tomás Romero Pereira - Itapúa - Paraguay</p>
+<h3>Superficie</h3>
+<p>170m2</p>
+<h3>Año</h3>
+<p>2021</p>
+<h3>Proyectistas</h3>
+<p>Arq. Martín José Villalba Lovera</p>
+<p>Arq. María José Vera Scavenius</p>

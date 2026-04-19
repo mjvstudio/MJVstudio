@@ -1,0 +1,634 @@
+/*-------- Fuentes personalizadas --------*/
+@font-face {
+    font-family: 'titulos';
+    src: url('../../assets/fonts/titulos/titulos.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'texto';
+    src: url('../../assets/fonts/texto/texto.otf') format('opentype');
+}
+
+/*-------- Estilos de texto --------*/
+h1, h2, h3 {
+    font-family: 'titulos', sans-serif;
+}
+
+p, span, a {
+    font-family: 'texto', sans-serif;
+}
+
+/*-------- Swiper Container --------*/
+.swiper-container {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    padding-top: 80px;
+}
+
+.swiper-slide main {
+    display: flex;
+    height: calc(100vh - 160px);
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    width: 90%;
+    max-width: 1400px;
+}
+
+/*-------- Scrollbar --------*/
+html, body, .swiper-slide, .gallery {
+    overflow: hidden !important;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+/*-------- Paginación --------*/
+.swiper-pagination {
+    bottom: 10px !important;
+}
+
+.swiper-pagination-bullet {
+    width: 15px !important;
+    height: 2px !important;
+    background: rgba(0,0,0,0.3) !important;
+    border-radius: 0 !important;
+    opacity: 1 !important;
+    transition: all 0.3s !important;
+}
+
+.swiper-pagination-bullet-active {
+    background: #000 !important;
+    transform: scaleX(1.5) !important;
+}
+
+/*-------- Sub-secciones --------*/
+.sub-section-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 90%;
+    max-width: 1400px;
+    margin: 0 auto;
+    height: auto;
+}
+
+.sub-section {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 75vh;
+}
+
+/*-------- Subsección (Memoria) --------*/
+.sub-section.left.memoria {
+    flex: 0 0 auto;
+    position: relative;
+}
+
+.sub-section.left.memoria img {
+    height: 75vh;
+    width: auto;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+}
+
+.sub-section.right.memoria {
+    width: 16vw;
+    overflow-y: auto;
+    text-align: justify;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    font-size: 0.75rem; /* Tamaño de fuente unificado */
+    line-height: 1.5; /* Espaciado entre líneas */
+    overflow-wrap: break-word; /* Evita que el texto se salga del contenedor */
+    word-wrap: break-word; /* Compatibilidad con navegadores más antiguos */
+    hyphens: auto; /* Agrega guiones automáticamente para palabras largas */
+}
+
+.sub-section.right.memoria p {
+    margin-top: auto;
+    color: #333; /* Color de texto diferente */
+    font-size: inherit; /* Hereda el tamaño de fuente del contenedor */
+    margin: 0; /* Elimina el margen predeterminado del párrafo */
+    padding: 0 10px; /* Añade un poco de padding para que el texto no toque los bordes */
+}
+
+.sub-section.right.memoria p {
+    margin-top: auto;
+    color: #333; /* Color de texto diferente */
+}
+
+/*-------- Subsección (Detalles técnicos) --------*/
+.sub-section.left.detalles {
+    flex: 0 0 auto;
+    position: relative;
+}
+
+.sub-section.left.detalles img {
+    height: 75vh;
+    width: auto;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+}
+
+.sub-section.right.detalles {
+    width: 18.5vw;
+    overflow-y: auto;
+    text-align: justify;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-bottom: 25px;
+}
+
+.sub-section.right.detalles p {
+    margin-top: auto;
+}
+
+/*-------- Galería --------*/
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    grid-template-areas:
+        "img01 img01 img01 img02 img03"
+        "img01 img01 img01 img04 img05"
+        "img01 img01 img01 img06 img07"
+        "img01 img01 img01 img08 img09";
+    gap: 10px;
+    padding: 20px;
+    width: 60vw;
+    height: 75vh;
+    margin: auto;
+    place-items: stretch;
+}
+
+.gallery-item {
+    background-color: white;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
+    position: relative;
+    z-index: 1;
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(100%);
+    transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+.gallery-item span {
+    display: none;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.568), rgba(0, 0, 0, 0.13), transparent);
+    color: white;
+    padding: 10px;
+    text-align: center;
+    transition: all 0.3s ease;
+    font-size: 0.8rem;
+}
+
+.gallery-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 2;
+}
+
+.gallery-item:hover img {
+    filter: grayscale(0%);
+}
+
+.gallery-item:hover span {
+    display: block;
+    transform: translateY(0);
+}
+
+.img01 { grid-area: img01; }
+.img02 { grid-area: img02; }
+.img03 { grid-area: img03; }
+.img04 { grid-area: img04; }
+.img05 { grid-area: img05; }
+.img06 { grid-area: img06; }
+.img07 { grid-area: img07; }
+.img08 { grid-area: img08; }
+.img09 { grid-area: img09; }
+
+/*-------- Media Queries --------*/
+@media (max-width: 1200px) {
+    .sub-section-container {
+        flex-direction: column;
+        width: 100%;
+        gap: 30px;
+        padding: 40px 20px;
+        min-height: 90vh;
+    }
+    
+    .sub-section.left, 
+    .sub-section.right {
+        width: 100% !important;
+    }
+    
+    .sub-section.left img {
+        max-height: 50vh;
+    }
+    
+    .sub-section.right {
+        padding: 20px 0;
+        justify-content: flex-start;
+    }
+
+    .sub-section.right p {
+        margin-top: 0;
+    }
+
+    .gallery-grid {
+        width: 90vw;
+        height: auto;
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "img01"
+            "img02"
+            "img03"
+            "img04"
+            "img05"
+            "img06"
+            "img07"
+            "img08"
+            "img09";
+    }
+
+    .gallery-item {
+        aspect-ratio: 1;
+        max-width: 100%;
+        height: auto;
+    }
+    
+    .gallery-item img {
+        object-fit: contain;
+    }
+}
+
+/*-------- Título del proyecto --------*/
+.title-header-container {
+    position: fixed;
+    top: 0;
+    left: 35%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 1400px;
+    z-index: 1000;
+    padding: 1.5rem 0;
+}
+
+.project-title h1 {
+    font-family: 'titulos', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 1px;
+    margin: 0 0 0 25px;
+    color: #1a1a1a;
+    text-transform: uppercase;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+@media (min-width: 768px) {
+    .project-title h1 {
+        margin-left: 40px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .project-title h1 {
+        margin-left: 60px;
+    }
+}
+
+/*-------- Lightbox --------*/
+.lightbox {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgb(255, 255, 255);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.lightbox.active {
+    display: flex;
+}
+
+.lightbox-content {
+    width: 100%;
+    max-width: 1400px;
+    height: 100%;
+    position: relative;
+}
+
+.close-btn {
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    color: white;
+    font-size: 40px;
+    cursor: pointer;
+    z-index: 10000;
+    transition: opacity 0.3s;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.close-btn:hover {
+    opacity: 0.8;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.lightbox-swiper {
+    width: 100%;
+    height: 100%;
+    padding: 40px 0;
+}
+
+.lightbox-swiper .swiper-slide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: calc(100vh - 80px);
+    padding: 20px;
+}
+
+.lightbox-swiper img {
+    max-width: 85%;
+    max-height: 85%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 5px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    margin: auto;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+    color: white !important;
+    background: rgba(255, 255, 255, 0.15);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    backdrop-filter: blur(8px);
+    transition: all 0.3s;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: 0 20px;
+    opacity: 0.9;
+}
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-50%) scale(1.15);
+    opacity: 1;
+}
+
+.swiper-button-next:after,
+.swiper-button-prev:after {
+    font-size: 28px !important;
+    font-weight: bold;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+@media (max-width: 768px) {
+    .lightbox {
+        padding: 10px;
+    }
+    
+    .close-btn {
+        top: 15px;
+        right: 15px;
+        font-size: 30px;
+        width: 40px;
+        height: 40px;
+    }
+    
+    .lightbox-swiper .swiper-slide {
+        height: calc(100vh - 40px);
+    }
+    
+    .swiper-button-next,
+    .swiper-button-prev {
+        width: 45px;
+        height: 45px;
+        margin: 0 10px;
+    }
+    
+    .swiper-button-next:after,
+    .swiper-button-prev:after {
+        font-size: 22px !important;
+    }
+}
+
+/*-------- Carrusel --------*/
+/* Carrusel técnico */
+/* --------------- SECCIÓN TÉCNICA (CARRUSEL IDÉNTICO A EQUIPO) --------------- */
+.subsections {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 90vw;
+    margin: 0 auto;
+}
+
+/* Contenedor del carrusel */
+.team-carousel, .info-carousel {
+    position: relative;
+    width: 100%;
+    height: 70vh;
+}
+
+/* Slides individuales */
+.team-slide, .info-slide {
+    display: none;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.team-slide.active, .info-slide.active {
+    display: block;
+    opacity: 1;
+}
+
+/* Subsección izquierda (imágenes) */
+.subsection.left {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 70vh;
+    flex: 1;
+    width: 45%;
+}
+
+.subsection.left img {
+    max-height: 100%;
+    width: auto;
+    object-fit: contain;
+}
+
+/* Subsección derecha (contenido) */
+.subsection.right {
+    position: relative;
+    height: 70vh;
+    width: 55%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+/* Botones de navegación idénticos */
+/* Botones de navegación (solo imagen) */
+
+.nav-button {
+    padding: 10px; /* Ajusta el padding para que las imágenes queden bien */
+    background-color: transparent; /* Fondo transparente */
+    border: none;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.nav-button:hover {
+    transform: scale(1.1); /* Efecto de escala al pasar el mouse */
+}
+
+.nav-icon {
+    height: 32px; /* Tamaño fijo para las imágenes */
+    width: auto; /* Mantiene la proporción de la imagen */
+    display: block; /* Asegura que la imagen se comporte como un bloque */
+}
+
+.button-container {
+    position: absolute;
+    bottom: 10px;
+    right: 400px;
+    display: flex;
+    gap: 10px;
+}   
+
+/* Contenido de texto idéntico */
+.team-info-content {
+    color: #333 !important;
+    font-size: 0.9rem;
+    line-height: 1;
+    width: 100%;
+    
+    h2 {
+        font-family: 'titulos', sans-serif;
+        font-size: 1.8rem;
+        color: #000;
+        margin-bottom: 0.5rem;
+        letter-spacing: -0.5px;
+    }
+    
+    h3 {
+        font-size: 0.95rem;
+        color: #444;
+    }
+    
+    p {
+        font-family: 'texto', sans-serif;
+        font-size: 0.85rem;
+        margin-bottom: 0.1rem;
+        text-align: justify;
+    }
+}
+
+/* Responsive idéntico */
+@media (max-width: 768px) {
+    .subsections {
+        flex-direction: column;
+        width: 95vw;
+    }
+    
+    .subsection.left, 
+    .subsection.right {
+        width: 100% !important;
+        height: auto !important;
+    }
+    
+    .subsection.left {
+        height: 50vh !important;
+    }
+    
+    .subsection.right {
+        padding: 20px 0;
+        height: auto;
+    }
+    
+    .button-container {
+        position: relative;
+        justify-content: flex-end;
+        bottom: auto;
+        right: auto;
+        margin-top: 15px;
+    }
+}
+/* Estilos para contenido dinámico */
+.team-info-content {
+    h2 {
+      color: #2a2a2a;
+      border-bottom: 2px solid #000;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+  
+    .destacado {
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      
+      p {
+        margin: 0.5rem 0;
+      }
+    }
+  
+    ul {
+      li {
+        margin-bottom: 0.8rem;
+        &::marker {
+          color: #666;
+        }
+      }
+    }
+  }

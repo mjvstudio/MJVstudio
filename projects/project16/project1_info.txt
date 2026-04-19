@@ -1,0 +1,12 @@
+<h3>Memoria Descriptiva</h3>
+<p>El proyecto consiste en un edificio de dos plantas, donde se desarrollan una clínica odontológica en planta baja y una estación de radio en planta alta. El edificio se concibió a partir de la integración de la biofilia en arquitectura, buscando crear espacios que estuvieran en armonía con el entorno natural y que permitieran a los usuarios conectarse con la naturaleza.<br>Se implementaron parasoles de ladrillo común y parasoles de madera para mitigar las condiciones climáticas de la zona y generar jardines que ambientan los espacios. El diseño del edificio busca fomentar la salud y el bienestar de los usuarios y proporcionar un espacio adecuado para ambos usos.</p>
+
+<h3>Ubicación</h3>
+<p>Mayor Otaño - Itapúa - Paraguay</p>
+<h3>Superficie</h3>
+<p>340m2</p>
+<h3>Año</h3>
+<p>2023</p>
+<h3>Proyectistas</h3>
+<p>Arq. Martín José Villalba Lovera</p>
+<p>Arq. María José Vera Scavenius</p>

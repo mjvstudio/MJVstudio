@@ -1,0 +1,9 @@
+<h3> Sistema Estructural</h3>
+<p class="subtitulo">Innovación en acero y hormigón</p>
+
+<ul>
+  <li><strong>Material principal:</strong> Acero ASTM A572</li>
+  <li><strong>Resistencia:</strong> 345 MPa</li>
+  <li><em>Técnica constructiva:</em> Módulos prefabricados</li>
+</ul>
+

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vazquez Automotores</title>
+    <link rel="icon" type="image/png" href="../../assets/logo_2.png">
+    <link rel="stylesheet" href="project20.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+</head>
+<body>
+    <div class="title-header-container">
+        <div class="project-title">
+            <h1>Vazquez Automotores</h1>
+        </div>
+    </div>
+
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+            <!-- Slide 1: Memoria -->
+<div class="swiper-slide">
+    <main>
+        <div class="sub-section-container">
+            <!-- Subsección izquierda (imagen estática) -->
+            <div class="sub-section left memoria">
+                <img src="project20_main_2.jpg" alt="Imagen principal">
+            </div>
+
+            <!-- Subsección derecha (texto) -->
+            <div class="sub-section right memoria">
+                <p id="memoria-text">Cargando descripción...</p>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Slide 2: Detalles técnicos (con carrusel) -->
+<div class="swiper-slide">
+    <main>
+        <div class="subsections">
+            <!-- Carrusel de imágenes -->
+            <div class="subsection left">
+                <div class="team-carousel">
+                    <div class="team-slide active" data-member="1">
+                        <img src="project20_main_2.jpg" alt="Detalle 1" class="team-photo">
+                    </div>
+                    <div class="team-slide" data-member="2">
+                        <img src="project20_ubi.png" alt="Detalle 2" class="team-photo">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Carrusel de información -->
+            <div class="subsection right">
+                <div class="info-carousel">
+                    <div class="info-slide active" data-member="1">
+                        <div class="team-info-content"></div>
+                    </div>
+                    <div class="info-slide" data-member="2">
+                        <div class="team-info-content"></div>
+                    </div>
+                </div>
+                
+                <!-- Botones de navegación -->
+                <div class="button-container">
+                    <button id="tech-prev-btn" class="nav-button">
+                        <img src="../../assets/atras.jpg" alt="Atrás" class="nav-icon">
+                    </button>
+                    <button id="tech-next-btn" class="nav-button">
+                        <img src="../../assets/adelante.jpg" alt="Adelante" class="nav-icon">
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+            <!-- Slide 3: Galería -->
+            <div class="swiper-slide">
+                <main>
+                    <div class="gallery-grid">
+                        <div class="gallery-item img01">
+                            <img src="images/01.png" alt="Imagen 01">
+                            <span>Imaginario 01</span>
+                        </div>
+                        <div class="gallery-item img02">
+                            <img src="images/02.png" alt="Imagen 02">
+                            <span>Imaginario 02</span>
+                        </div>
+                        <div class="gallery-item img03">
+                            <img src="images/03.png" alt="Imagen 03">
+                            <span>Imaginario 03</span>
+                        </div>
+                        <div class="gallery-item img04">
+                            <img src="images/04.png" alt="Imagen 04">
+                            <span>Imaginario 04</span>
+                        </div>
+                        <div class="gallery-item img05">
+                            <img src="images/05.png" alt="Imagen 05">
+                            <span>Imaginario 05</span>
+                        </div>
+                        <div class="gallery-item img06">
+                            <img src="images/06.png" alt="Imagen 06">
+                            <span>Imaginario 06</span>
+                        </div>
+                        <div class="gallery-item img07">
+                            <img src="images/07.png" alt="Imagen 07">
+                            <span>Imaginario 07</span>
+                        </div>
+                        <div class="gallery-item img08">
+                            <img src="images/08.png" alt="Imagen 08">    
+                            <span>Planta Baja</span>
+                        </div>
+                        <div class="gallery-item img09">
+                            <img src="images/09.png" alt="Imagen 09">
+                            <span>Sección</span>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+        <div class="swiper-pagination"></div>
+    </div>
+
+    <!-- Lightbox para la galería -->
+    <div class="lightbox" id="lightbox">
+        <div class="lightbox-content">
+            <span class="close-btn">&times;</span>
+            <div class="swiper lightbox-swiper">
+                <div class="swiper-wrapper"></div>
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="project20.js"></script>
+</body>
+</html>
