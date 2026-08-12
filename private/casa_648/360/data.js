@@ -1,8 +1,8 @@
 var APP_DATA = {
   "scenes": [
     {
-      "id": "0-estar-social",
-      "name": "Estar Social",
+      "id": "0-hall",
+      "name": "Hall",
       "levels": [
         {
           "tileSize": 256,
@@ -30,91 +30,41 @@ var APP_DATA = {
       },
       "linkHotspots": [
         {
-          "yaw": -0.3310980223650173,
-          "pitch": 0.20153715872673317,
+          "yaw": 1.4364869022717892,
+          "pitch": 0.245407450428484,
           "rotation": 0,
-          "target": "1-distribuidor"
+          "target": "1-habitacin-principal"
         },
         {
-          "yaw": -2.8624435197856215,
-          "pitch": 0.4073735520260122,
+          "yaw": 0.03357977482967378,
+          "pitch": 0.30033633428868,
           "rotation": 0,
-          "target": "7-jardin-frontal"
+          "target": "3-bao-social"
         },
         {
-          "yaw": -0.05333449851254457,
-          "pitch": 0.138307439053861,
+          "yaw": -1.4227100013883742,
+          "pitch": 0.2233363940016755,
           "rotation": 0,
-          "target": "2-cocina"
+          "target": "4-habitacion-secundaria"
+        },
+        {
+          "yaw": 1.2138811731438146,
+          "pitch": 0.22596015595650343,
+          "rotation": 0,
+          "target": "2-bao-habitacin"
+        },
+        {
+          "yaw": -3.100945110300975,
+          "pitch": 0.32239554782090707,
+          "rotation": 0,
+          "target": "9-comedor"
         }
       ],
       "infoHotspots": []
     },
     {
-      "id": "1-distribuidor",
-      "name": "Distribuidor",
-      "levels": [
-        {
-          "tileSize": 256,
-          "size": 256,
-          "fallbackOnly": true
-        },
-        {
-          "tileSize": 512,
-          "size": 512
-        },
-        {
-          "tileSize": 512,
-          "size": 1024
-        },
-        {
-          "tileSize": 512,
-          "size": 2048
-        }
-      ],
-      "faceSize": 2048,
-      "initialViewParameters": {
-        "yaw": -1.6248984333542928,
-        "pitch": 0.03264382860003856,
-        "fov": 1.335888521808506
-      },
-      "linkHotspots": [
-        {
-          "yaw": 2.1126495004600763,
-          "pitch": 0.40542631466673384,
-          "rotation": 0,
-          "target": "0-estar-social"
-        },
-        {
-          "yaw": 0.03003806780932905,
-          "pitch": 0.27396757043283415,
-          "rotation": 0,
-          "target": "4-dormitorio-principal"
-        },
-        {
-          "yaw": -0.33854042822565056,
-          "pitch": 0.3005474081368078,
-          "rotation": 0,
-          "target": "3-bao-privado"
-        },
-        {
-          "yaw": -3.0832435731003063,
-          "pitch": 0.3955988807419093,
-          "rotation": 0,
-          "target": "8-dormitorio"
-        },
-        {
-          "yaw": -1.7267861056958296,
-          "pitch": 0.54179733167161,
-          "rotation": 0,
-          "target": "9-bao-social"
-        }
-      ],
-      "infoHotspots": []
-    },
-    {
-      "id": "2-cocina",
-      "name": "Cocina",
+      "id": "1-habitacin-principal",
+      "name": "Habitación Principal",
       "levels": [
         {
           "tileSize": 256,
@@ -142,136 +92,17 @@ var APP_DATA = {
       },
       "linkHotspots": [
         {
-          "yaw": -0.3883365096291147,
-          "pitch": 0.2343423589199034,
+          "yaw": -1.6655876657821835,
+          "pitch": 0.1739892526244322,
           "rotation": 0,
-          "target": "11-estar-exterior"
-        },
-        {
-          "yaw": -3.0970146164052803,
-          "pitch": 0.1452567128690987,
-          "rotation": 0,
-          "target": "0-estar-social"
-        },
-        {
-          "yaw": -2.7101146289799125,
-          "pitch": 0.17390666596604376,
-          "rotation": 0,
-          "target": "1-distribuidor"
+          "target": "0-hall"
         }
       ],
       "infoHotspots": []
     },
     {
-      "id": "3-bao-privado",
-      "name": "Baño Privado",
-      "levels": [
-        {
-          "tileSize": 256,
-          "size": 256,
-          "fallbackOnly": true
-        },
-        {
-          "tileSize": 512,
-          "size": 512
-        },
-        {
-          "tileSize": 512,
-          "size": 1024
-        },
-        {
-          "tileSize": 512,
-          "size": 2048
-        }
-      ],
-      "faceSize": 2048,
-      "initialViewParameters": {
-        "yaw": -1.6364192325166016,
-        "pitch": -0.07784312815049432,
-        "fov": 1.335888521808506
-      },
-      "linkHotspots": [
-        {
-          "yaw": 1.5064901405811995,
-          "pitch": 0.02747109374424639,
-          "rotation": 0,
-          "target": "4-dormitorio-principal"
-        }
-      ],
-      "infoHotspots": []
-    },
-    {
-      "id": "4-dormitorio-principal",
-      "name": "Dormitorio Principal",
-      "levels": [
-        {
-          "tileSize": 256,
-          "size": 256,
-          "fallbackOnly": true
-        },
-        {
-          "tileSize": 512,
-          "size": 512
-        },
-        {
-          "tileSize": 512,
-          "size": 1024
-        },
-        {
-          "tileSize": 512,
-          "size": 2048
-        }
-      ],
-      "faceSize": 2048,
-      "initialViewParameters": {
-        "yaw": -1.5902564883013355,
-        "pitch": 0.002203179050006554,
-        "fov": 1.335888521808506
-      },
-      "linkHotspots": [
-        {
-          "yaw": 2.9366855510669367,
-          "pitch": 0.19053451324418091,
-          "rotation": 0,
-          "target": "1-distribuidor"
-        }
-      ],
-      "infoHotspots": []
-    },
-    {
-      "id": "5-estar-exterior",
-      "name": "Estar Exterior",
-      "levels": [
-        {
-          "tileSize": 256,
-          "size": 256,
-          "fallbackOnly": true
-        },
-        {
-          "tileSize": 512,
-          "size": 512
-        },
-        {
-          "tileSize": 512,
-          "size": 1024
-        },
-        {
-          "tileSize": 512,
-          "size": 2048
-        }
-      ],
-      "faceSize": 2048,
-      "initialViewParameters": {
-        "pitch": 0,
-        "yaw": 0,
-        "fov": 1.5707963267948966
-      },
-      "linkHotspots": [],
-      "infoHotspots": []
-    },
-    {
-      "id": "6-fachada-frontal",
-      "name": "Fachada Frontal",
+      "id": "2-bao-habitacin",
+      "name": "Baño Habitación",
       "levels": [
         {
           "tileSize": 256,
@@ -299,92 +130,16 @@ var APP_DATA = {
       },
       "linkHotspots": [
         {
-          "yaw": 0.19088633258672516,
-          "pitch": 0.2051833630812112,
+          "yaw": 2.8590213627160095,
+          "pitch": 0.31102707342639135,
           "rotation": 0,
-          "target": "7-jardin-frontal"
+          "target": "1-habitacin-principal"
         }
       ],
       "infoHotspots": []
     },
     {
-      "id": "7-jardin-frontal",
-      "name": "Jardin Frontal",
-      "levels": [
-        {
-          "tileSize": 256,
-          "size": 256,
-          "fallbackOnly": true
-        },
-        {
-          "tileSize": 512,
-          "size": 512
-        },
-        {
-          "tileSize": 512,
-          "size": 1024
-        },
-        {
-          "tileSize": 512,
-          "size": 2048
-        }
-      ],
-      "faceSize": 2048,
-      "initialViewParameters": {
-        "pitch": 0,
-        "yaw": 0,
-        "fov": 1.5707963267948966
-      },
-      "linkHotspots": [
-        {
-          "yaw": 0.0867049336544099,
-          "pitch": 0.10015641816925402,
-          "rotation": 0,
-          "target": "0-estar-social"
-        }
-      ],
-      "infoHotspots": []
-    },
-    {
-      "id": "8-dormitorio",
-      "name": "Dormitorio",
-      "levels": [
-        {
-          "tileSize": 256,
-          "size": 256,
-          "fallbackOnly": true
-        },
-        {
-          "tileSize": 512,
-          "size": 512
-        },
-        {
-          "tileSize": 512,
-          "size": 1024
-        },
-        {
-          "tileSize": 512,
-          "size": 2048
-        }
-      ],
-      "faceSize": 2048,
-      "initialViewParameters": {
-        "yaw": -1.6068935203446628,
-        "pitch": 0.00957687563419185,
-        "fov": 1.335888521808506
-      },
-      "linkHotspots": [
-        {
-          "yaw": 0.3771476096959141,
-          "pitch": 0.186780642183491,
-          "rotation": 0,
-          "target": "1-distribuidor"
-        }
-      ],
-      "infoHotspots": []
-    },
-    {
-      "id": "9-bao-social",
+      "id": "3-bao-social",
       "name": "Baño Social",
       "levels": [
         {
@@ -407,23 +162,101 @@ var APP_DATA = {
       ],
       "faceSize": 2048,
       "initialViewParameters": {
-        "yaw": -1.6263838680398948,
-        "pitch": 0.013942645745157023,
-        "fov": 1.335888521808506
+        "pitch": 0,
+        "yaw": 0,
+        "fov": 1.5707963267948966
       },
       "linkHotspots": [
         {
-          "yaw": 1.2211528018328774,
-          "pitch": 0.3718100564758622,
+          "yaw": 2.93993461458437,
+          "pitch": 0.41266987882899997,
           "rotation": 0,
-          "target": "1-distribuidor"
+          "target": "0-hall"
         }
       ],
       "infoHotspots": []
     },
     {
-      "id": "10-jardin-exterior",
-      "name": "Jardin Exterior",
+      "id": "4-habitacion-secundaria",
+      "name": "Habitacion Secundaria",
+      "levels": [
+        {
+          "tileSize": 256,
+          "size": 256,
+          "fallbackOnly": true
+        },
+        {
+          "tileSize": 512,
+          "size": 512
+        },
+        {
+          "tileSize": 512,
+          "size": 1024
+        },
+        {
+          "tileSize": 512,
+          "size": 2048
+        }
+      ],
+      "faceSize": 2048,
+      "initialViewParameters": {
+        "yaw": -0.02415978479983316,
+        "pitch": 0.054159834528476836,
+        "fov": 1.1479251634083179
+      },
+      "linkHotspots": [
+        {
+          "yaw": 2.086717511193063,
+          "pitch": 0.28104611148826564,
+          "rotation": 0,
+          "target": "0-hall"
+        }
+      ],
+      "infoHotspots": []
+    },
+    {
+      "id": "5--atrs-",
+      "name": " Atrás ",
+      "levels": [
+        {
+          "tileSize": 256,
+          "size": 256,
+          "fallbackOnly": true
+        },
+        {
+          "tileSize": 512,
+          "size": 512
+        },
+        {
+          "tileSize": 512,
+          "size": 1024
+        }
+      ],
+      "faceSize": 1024,
+      "initialViewParameters": {
+        "yaw": 2.964110571794638,
+        "pitch": 0.20604929521016402,
+        "fov": 1.1479251634083179
+      },
+      "linkHotspots": [
+        {
+          "yaw": -0.22515698039306287,
+          "pitch": 0.06667978670578201,
+          "rotation": 0,
+          "target": "8-cocina"
+        },
+        {
+          "yaw": 3.1367330159381037,
+          "pitch": 0.13276321005780645,
+          "rotation": 0,
+          "target": "6-patio-trasero"
+        }
+      ],
+      "infoHotspots": []
+    },
+    {
+      "id": "6-patio-trasero",
+      "name": "Patio Trasero",
       "levels": [
         {
           "tileSize": 256,
@@ -451,17 +284,17 @@ var APP_DATA = {
       },
       "linkHotspots": [
         {
-          "yaw": 3.0396510607161122,
-          "pitch": 0.15237920587677323,
+          "yaw": 0.012543184342506564,
+          "pitch": 0.12308285378046335,
           "rotation": 0,
-          "target": "11-estar-exterior"
+          "target": "5--atrs-"
         }
       ],
       "infoHotspots": []
     },
     {
-      "id": "11-estar-exterior",
-      "name": "Estar Exterior",
+      "id": "7-entrada",
+      "name": "Entrada",
       "levels": [
         {
           "tileSize": 256,
@@ -483,22 +316,154 @@ var APP_DATA = {
       ],
       "faceSize": 2048,
       "initialViewParameters": {
-        "yaw": 0.10970359624320913,
-        "pitch": 0.11566401570158824,
-        "fov": 1.335888521808506
+        "pitch": 0,
+        "yaw": 0,
+        "fov": 1.5707963267948966
       },
       "linkHotspots": [
         {
-          "yaw": -0.12796025880667905,
-          "pitch": 0.10268127545234407,
+          "yaw": 0.10099889171067389,
+          "pitch": 0.224729673848298,
           "rotation": 0,
-          "target": "10-jardin-exterior"
+          "target": "10-sala"
+        }
+      ],
+      "infoHotspots": []
+    },
+    {
+      "id": "8-cocina",
+      "name": "Cocina",
+      "levels": [
+        {
+          "tileSize": 256,
+          "size": 256,
+          "fallbackOnly": true
         },
         {
-          "yaw": -3.0484898304398804,
-          "pitch": 0.14503202716965014,
+          "tileSize": 512,
+          "size": 512
+        },
+        {
+          "tileSize": 512,
+          "size": 1024
+        },
+        {
+          "tileSize": 512,
+          "size": 2048
+        }
+      ],
+      "faceSize": 2048,
+      "initialViewParameters": {
+        "yaw": 3.1380016855786073,
+        "pitch": 0.138543195759258,
+        "fov": 1.1479251634083179
+      },
+      "linkHotspots": [
+        {
+          "yaw": 2.9465644184410458,
+          "pitch": 0.004105952440465188,
           "rotation": 0,
-          "target": "2-cocina"
+          "target": "5--atrs-"
+        },
+        {
+          "yaw": -0.08924392544544801,
+          "pitch": 0.20645498234206094,
+          "rotation": 0,
+          "target": "9-comedor"
+        }
+      ],
+      "infoHotspots": []
+    },
+    {
+      "id": "9-comedor",
+      "name": "Comedor",
+      "levels": [
+        {
+          "tileSize": 256,
+          "size": 256,
+          "fallbackOnly": true
+        },
+        {
+          "tileSize": 512,
+          "size": 512
+        },
+        {
+          "tileSize": 512,
+          "size": 1024
+        },
+        {
+          "tileSize": 512,
+          "size": 2048
+        }
+      ],
+      "faceSize": 2048,
+      "initialViewParameters": {
+        "yaw": 1.5361541705395592,
+        "pitch": 0.07229979106170425,
+        "fov": 1.1479251634083179
+      },
+      "linkHotspots": [
+        {
+          "yaw": 1.3846900979577548,
+          "pitch": 0.09071578722492113,
+          "rotation": 0,
+          "target": "8-cocina"
+        },
+        {
+          "yaw": 0.045653986848959605,
+          "pitch": 0.2474158744193975,
+          "rotation": 0,
+          "target": "0-hall"
+        },
+        {
+          "yaw": -1.5282227870636564,
+          "pitch": 0.15694232107339623,
+          "rotation": 0,
+          "target": "10-sala"
+        }
+      ],
+      "infoHotspots": []
+    },
+    {
+      "id": "10-sala",
+      "name": "Sala",
+      "levels": [
+        {
+          "tileSize": 256,
+          "size": 256,
+          "fallbackOnly": true
+        },
+        {
+          "tileSize": 512,
+          "size": 512
+        },
+        {
+          "tileSize": 512,
+          "size": 1024
+        },
+        {
+          "tileSize": 512,
+          "size": 2048
+        }
+      ],
+      "faceSize": 2048,
+      "initialViewParameters": {
+        "pitch": 0,
+        "yaw": 0,
+        "fov": 1.5707963267948966
+      },
+      "linkHotspots": [
+        {
+          "yaw": -0.15016849517514608,
+          "pitch": 0.20996676268230985,
+          "rotation": 0,
+          "target": "9-comedor"
+        },
+        {
+          "yaw": -2.7638382955117784,
+          "pitch": 0.3619832104988596,
+          "rotation": 0,
+          "target": "7-entrada"
         }
       ],
       "infoHotspots": []
