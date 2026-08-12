@@ -828,3 +828,105 @@ body.view-control-buttons .viewControlButton {
 .viewControlButton-6 {
   margin-left: 105px;
 }
+
+/* ===== MJV - MARCA DE AGUA ===== */
+.watermark {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 10000;
+  opacity: 0.65;
+  pointer-events: none;
+}
+
+.watermark img {
+  width: 80px;
+  height: auto;
+  display: block;
+}
+
+/* ===== MJV - CONTROLES EN LA PARTE INFERIOR ===== */
+#titleBar {
+  top: auto !important;
+  bottom: 0 !important;
+  right: 40px !important;
+  left: 40px !important;
+  z-index: 10001;
+}
+
+.mobile #titleBar {
+  right: 50px !important;
+  left: 50px !important;
+  height: 50px !important;
+}
+
+body:not(.multiple-scenes) #titleBar {
+  left: 0 !important;
+}
+
+#sceneListToggle {
+  top: auto !important;
+  bottom: 0 !important;
+  left: 0 !important;
+}
+
+#autorotateToggle {
+  top: auto !important;
+  bottom: 0 !important;
+  right: 0 !important;
+}
+
+body.fullscreen-enabled #autorotateToggle {
+  right: 40px !important;
+}
+
+body.fullscreen-enabled.mobile #autorotateToggle {
+  right: 50px !important;
+}
+
+#fullscreenToggle {
+  top: auto !important;
+  bottom: 0 !important;
+  right: 0 !important;
+}
+
+/* Lista de escenas anclada abajo y desplegable desde la izquierda */
+#sceneList {
+  top: auto !important;
+  bottom: 0 !important;
+  left: -220px !important;
+  padding-top: 0 !important;
+  padding-bottom: 40px !important;
+  max-height: calc(100% - 40px) !important;
+}
+
+.mobile #sceneList {
+  left: -100% !important;
+  padding-bottom: 50px !important;
+  max-height: calc(100% - 50px) !important;
+}
+
+#sceneList.enabled {
+  margin-left: 220px !important;
+}
+
+.mobile #sceneList.enabled {
+  margin-left: 100% !important;
+}
+
+#sceneList .scenes {
+  margin-bottom: 0;
+}
+
+/* Ajuste móvil del logo */
+@media (max-width: 600px) {
+  .watermark {
+    top: 10px;
+    right: 10px;
+  }
+
+  .watermark img {
+    width: 60px;
+  }
+}
+
