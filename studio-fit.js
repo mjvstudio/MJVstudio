@@ -137,25 +137,27 @@
             }
             if (!found) { box.style.setProperty('--info-fs', FONT_STEPS[FONT_STEPS.length - 1] + 'rem'); var l2 = MIN_FRAC; setLayout(l2, bw - GAP - geom(bh, l2), bh); }
         } else {
-            // en vertical el mosaico va arriba y el texto abajo; lo que se ajusta es el ALTO del mosaico (y con él su ancho)
+            // En vertical (celular) el mosaico va arriba, GRANDE (todo el ancho disponible, hasta ~60 % del alto), y el
+            // texto queda abajo, en su propio recuadro, como el texto de los proyectos. Si el texto es largo, se
+            // desplaza dentro de ese recuadro (en vez de achicar las fotos).
             var r = estRatio();
             var Hmax = Math.min(bh - GAP - 120, (bw - SG + 0.75 * SG) / (r + 0.25));
-            function setH(H) { box.style.setProperty('--team-h', Math.round(H) + 'px'); geom(H, 1); }
-            for (f = 0; f < FONT_STEPS.length && !found; f++) {
-                box.style.setProperty('--info-fs', FONT_STEPS[f] + 'rem');
-                var Hmin = Hmax * MIN_FRAC_PORTRAIT;
-                setH(Hmin);
-                if (!fits()) continue;
-                a = Hmin; b = Hmax;
-                setH(Hmax);
-                if (fits()) a = Hmax;
-                else for (k = 0; k < 9; k++) { mid = (a + b) / 2; setH(mid); if (fits()) a = mid; else b = mid; }
-                setH(a);
-                found = true;
+            var H = Math.max(120, Math.min(Hmax, bh * 0.6 - GAP));
+            box.style.setProperty('--team-h', Math.round(H) + 'px');
+            geom(H, 1);
+            box.style.setProperty('--info-fs', '0.9rem');
+            found = fits();
+            if (!found) {
+                // se prueba con letra un poco más chica antes de dejar el desplazamiento
+                for (f = 0; f < FONT_STEPS.length && !found; f++) {
+                    box.style.setProperty('--info-fs', FONT_STEPS[f] + 'rem');
+                    found = fits();
+                }
+                if (!found) box.style.setProperty('--info-fs', '0.85rem');
             }
-            if (!found) { box.style.setProperty('--info-fs', FONT_STEPS[FONT_STEPS.length - 1] + 'rem'); setH(Hmax * MIN_FRAC_PORTRAIT); }
         }
-        box.classList.toggle('studio-scroll', !found);       // último recurso: si de verdad no entra, vuelve la barra (finita)
+        box.classList.toggle('studio-scroll', !found);
+        textEl.classList.toggle('swiper-no-swiping', !found);   // si el texto se desplaza, el dedo lo mueve a él y no cambia de sección       // último recurso: si de verdad no entra, vuelve la barra (finita)
         void box.offsetWidth;
         if (firstFit) { firstFit = false; requestAnimationFrame(function () { box.classList.remove('is-fitting'); }); }
         else box.classList.remove('is-fitting');

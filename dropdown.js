@@ -93,6 +93,11 @@ function setupAnimatedDropdown(buttonEl, dropdownEl) {
         (isOpen() && !dropdownEl.classList.contains('closing')) ? closeAnimated() : open();
     });
 
+    // Al elegir una opción, la lista se esconde (con la animación de cierre) y el fondo recupera la nitidez
+    dropdownEl.addEventListener('click', (e) => {
+        if (e.target.closest && e.target.closest('a')) closeAnimated();
+    }, true);
+
     dropdownEl.addEventListener('mouseenter', hoverOpen);
     dropdownEl.addEventListener('mouseleave', hoverClose);
 

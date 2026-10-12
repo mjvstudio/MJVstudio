@@ -155,6 +155,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const cards = document.querySelectorAll('.team-card');
     const infoPanelText = document.getElementById('info-panel-text');
+    // Si el carrusel duplicó las secciones (versiones de Swiper con "loop"), el texto tiene copias: se actualizan todas
+    const setPanelText = (t) => { document.querySelectorAll('#info-panel-text').forEach(el => { el.textContent = t; }); };
     const moreLink = document.getElementById('more-link');
     const modalOverlay = document.getElementById('info-modal-overlay');
     const modalTitle = document.getElementById('info-modal-title');
@@ -169,19 +171,24 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const langSuffix = () => (window.mjvLang ? window.mjvLang.suffix() : '');
 
+    const fetchMember = (member, suffix) => fetch(`team/${member}${suffix}.txt`).then(res => {
+        if (!res.ok) throw new Error(`No se pudo cargar team/${member}${suffix}.txt`);
+        return res.text();
+    });
     const loadMemberText = (member) => {
-        return fetch(`team/${member}${langSuffix()}.txt`)
-            .then(res => {
-                if (!res.ok) throw new Error(`No se pudo cargar team/${member}${langSuffix()}.txt`);
-                return res.text();
-            })
-            .then(text => { memberTexts[member] = text; })
-            .catch(() => { memberTexts[member] = pickLang(NOT_AVAILABLE); });
+        const sfx = langSuffix();
+        // 1) idioma actual; 2) un reintento (red lenta); 3) el texto sin sufijo (español)
+        return fetchMember(member, sfx)
+            .catch(() => new Promise(r => setTimeout(r, 1200)).then(() => fetchMember(member, sfx)))
+            .catch(() => (sfx ? fetchMember(member, '') : Promise.reject()))
+            .then(text => { if (sfx === langSuffix()) memberTexts[member] = text; })
+            .catch(() => { memberTexts[member] = pickLang(NOT_AVAILABLE); })
+            .then(() => { if (member === DEFAULT_MEMBER && lastFocusedMember === DEFAULT_MEMBER) setPanelText(memberTexts[DEFAULT_MEMBER] || ''); });
     };
 
     const allMembers = Array.from(cards).map(c => c.dataset.member);
     const loadAllMemberTexts = () => Promise.all(allMembers.map(loadMemberText)).then(() => {
-        infoPanelText.textContent = memberTexts[DEFAULT_MEMBER] || '';
+        setPanelText(memberTexts[DEFAULT_MEMBER] || '');
     });
     loadAllMemberTexts();
 
@@ -204,7 +211,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Texto del panel = el de esta tarjeta mientras se está mirando
             if (memberTexts[member] !== undefined) {
-                infoPanelText.textContent = memberTexts[member];
+                setPanelText(memberTexts[member]);
             }
             lastFocusedMember = member;
 
@@ -226,7 +233,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // Al sacar el cursor/dedo, el panel vuelve al texto por defecto
             lastFocusedMember = DEFAULT_MEMBER;
             if (memberTexts[DEFAULT_MEMBER] !== undefined) {
-                infoPanelText.textContent = memberTexts[DEFAULT_MEMBER];
+                setPanelText(memberTexts[DEFAULT_MEMBER]);
             }
         };
 

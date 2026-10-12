@@ -343,7 +343,7 @@
         var key = m.seed + '|' + d.cols + 'x' + d.rows + '|' + ca.toFixed(2) + '|' + items.map(function (it) { return it.id + ':' + it.w.toFixed(2); }).join(',');
         var hit = computeCache[key];
         if (!hit) {
-            if (computeCacheN++ > 150) { computeCache = {}; computeCacheN = 0; }
+            if (computeCacheN++ > 400) { computeCache = {}; computeCacheN = 0; }
             hit = computeCache[key] = tile(items, d.cols, d.rows, m.seed, ca);
         }
         return { cols: d.cols, rows: d.rows, rects: hit, visible: visible };
@@ -557,8 +557,14 @@
         }
         return null;
     }
+    var gRect = null, gRectAt = 0;
+    function galleryRect() {                      // getBoundingClientRect fuerza el cálculo de la página: se reutiliza unos instantes
+        var t = performance.now();
+        if (!gRect || t - gRectAt > 120) { gRect = gallery.getBoundingClientRect(); gRectAt = t; }
+        return gRect;
+    }
     function slotPx(id) {
-        var r = layout.rects[id], g = gallery.getBoundingClientRect();
+        var r = layout.rects[id], g = drag && drag.active ? galleryRect() : gallery.getBoundingClientRect();
         return {
             left: g.left + gap / 2 + r.x / layout.cols * gw,
             top: g.top + gap / 2 + r.y / layout.rows * gh,
@@ -589,6 +595,7 @@
         drag.startOrder = currentOrder();
         drag.lastOver = drag.id;
         finishFilterNow();
+        if (drag.type !== 'mouse') warmUp();
         lockSwiper(true);
         gallery.classList.add('is-dragging');
         drag.el.classList.add('is-dragging');
@@ -619,7 +626,7 @@
 
     /* El hueco del proyecto arrastrado va hacia donde está el puntero: se prueban acomodos con el proyecto
        metido en distintos lugares del orden y se elige donde su hueco queda debajo del puntero. */
-    function findHole(x, y) {
+    function findHole(x, y, deadline) {
         var c = cellOf(x, y);
         if (!c) return null;
         var cur = layout.rects[drag.id];
@@ -628,34 +635,55 @@
         var over = tileAt(x, y), cands = [];
         if (over && over !== drag.id) {
             var oi = vis.indexOf(over);
-            [oi - 1, oi, oi + 1, oi + 2].forEach(function (k) { if (k >= 0 && k <= m && cands.indexOf(k) < 0) cands.push(k); });
+            // primero los lugares más probables: justo antes y justo después del proyecto que está bajo el puntero
+            [oi, oi + 1, oi - 1, oi + 2].forEach(function (k) { if (k >= 0 && k <= m && cands.indexOf(k) < 0) cands.push(k); });
         }
-        var best = null;
-        function tryList(list) {
-            list.forEach(function (k) {
-                var ord = orderWithDragAt(k), L = compute(ord), r = L.rects[drag.id];
-                if (!r) return;
-                var d = distToRect(c, r), cd = Math.hypot(c.x - (r.x + r.w / 2), c.y - (r.y + r.h / 2));
-                if (!best || d < best.d - 1e-6 || (Math.abs(d - best.d) < 1e-6 && cd < best.cd)) best = { d: d, cd: cd, ord: ord, L: L };
-            });
+        var best = null, late = false;
+        function consider(ord) {
+            var L = compute(ord), r = L.rects[drag.id];
+            if (!r) return;
+            var d = distToRect(c, r), cd = Math.hypot(c.x - (r.x + r.w / 2), c.y - (r.y + r.h / 2));
+            if (!best || d < best.d - 1e-6 || (Math.abs(d - best.d) < 1e-6 && cd < best.cd)) best = { d: d, cd: cd, ord: ord, L: L };
         }
-        tryList(cands);
-        if (!best || best.d > 0) {            // ninguno la deja bajo el puntero: se prueban todos los lugares
-            var all = []; for (var k = 0; k <= m; k++) if (cands.indexOf(k) < 0) all.push(k);
-            tryList(all);
+        // true = ya está bien (el hueco queda bajo el puntero) o se acabó el tiempo de este cuadro
+        function done() {
+            if (best && best.d <= 1e-6) return true;
+            if (deadline && performance.now() > deadline) { late = true; return true; }
+            return false;
         }
-        if (!best || best.d > 0) {            // todavía no: también se prueba intercambiar el lugar con cada otro proyecto
+        for (var i = 0; i < cands.length && !done(); i++) consider(orderWithDragAt(cands[i]));
+        if (!done()) {            // ninguno la deja bajo el puntero: se prueban todos los lugares (los más cercanos primero)
+            var all = [], k;
+            for (k = 0; k <= m; k++) if (cands.indexOf(k) < 0) all.push(k);
+            var ref = over ? vis.indexOf(over) : 0;
+            all.sort(function (p, q) { return Math.abs(p - ref) - Math.abs(q - ref); });
+            for (i = 0; i < all.length && !done(); i++) consider(orderWithDragAt(all[i]));
+        }
+        if (!done()) {            // todavía no: también se prueba intercambiar el lugar con cada otro proyecto
             var base = currentOrder(), ia = base.indexOf(drag.id);
-            vis.forEach(function (id) {
-                var ord = base.slice(), ib = ord.indexOf(id);
-                ord[ia] = id; ord[ib] = drag.id;
-                var L = compute(ord), r = L.rects[drag.id];
-                if (!r) return;
-                var d = distToRect(c, r), cd = Math.hypot(c.x - (r.x + r.w / 2), c.y - (r.y + r.h / 2));
-                if (!best || d < best.d - 1e-6 || (Math.abs(d - best.d) < 1e-6 && cd < best.cd)) best = { d: d, cd: cd, ord: ord, L: L };
-            });
+            for (i = 0; i < vis.length && !done(); i++) {
+                var ord = base.slice(), ib = ord.indexOf(vis[i]);
+                ord[ia] = vis[i]; ord[ib] = drag.id;
+                consider(ord);
+            }
         }
+        if (best) best.partial = late && best.d > 1e-6;
         return best;
+    }
+
+    // Mientras se mantiene presionado un proyecto (antes de que empiece el arrastre) se van calculando, de a poco y sin
+    // trabar la pantalla, los acomodos con ese proyecto en cada lugar posible: al arrastrar ya están listos.
+    function warmUp() {
+        var d = drag, k = 0;
+        function step() {
+            if (!drag || drag !== d) return;
+            var m = visibleOthers().length;
+            if (k > m) return;
+            try { compute(orderWithDragAt(k)); } catch (e) { return; }
+            k++;
+            setTimeout(step, 0);
+        }
+        setTimeout(step, 30);
     }
 
     function moveDrag(x, y) {
@@ -669,7 +697,15 @@
             return;
         }
         drag.lastSearch = t;
-        var best = findHole(x, y);
+        var best = findHole(x, y, t + 10);                             // máximo ~10 ms por búsqueda: la pantalla no se traba
+        if (best && best.partial) {
+            // se cortó la búsqueda: solo se acepta si acerca el hueco al puntero; el resto se sigue buscando enseguida
+            var c0 = cellOf(x, y), cur0 = layout.rects[drag.id];
+            if (!(c0 && cur0 && best.d < distToRect(c0, cur0) - 1e-6)) best = null;
+            clearTimeout(drag.searchTimer);
+            drag.lastSearch = 0;
+            drag.searchTimer = setTimeout(function () { if (drag && drag.active) moveDrag(drag.lx, drag.ly); }, 0);
+        }
         if (best && best.ord.join() !== currentOrder().join()) {
             userOrder = best.ord;
             apply(best.L, { animate: true });
@@ -706,6 +742,7 @@
         window.removeEventListener('pointercancel', onUp);
         document.removeEventListener('keydown', onKey, true);
         clearTimeout(d.searchTimer);
+        if (d.raf) cancelAnimationFrame(d.raf);
         if (!d.active) return;
         if (d.ghost) { var gh_ = d.ghost; gh_.classList.add('is-out'); setTimeout(function () { if (gh_.parentNode) gh_.parentNode.removeChild(gh_); }, 400); }
 
@@ -764,6 +801,7 @@
         } else {
             drag.timer = setTimeout(function () { if (drag) activate(drag.x, drag.y); }, CFG.LONGPRESS_MS);
         }
+        if (e.pointerType === 'mouse') warmUp();
         window.addEventListener('pointermove', onMove);
         window.addEventListener('pointerup', onUp);
         window.addEventListener('pointercancel', onUp);
@@ -783,7 +821,12 @@
             return;
         }
         if (e.cancelable) e.preventDefault();
-        moveDrag(e.clientX, e.clientY);
+        // un solo movimiento por cuadro (los dispositivos mandan más de 100 eventos por segundo)
+        if (!drag.raf) drag.raf = requestAnimationFrame(function () {
+            if (!drag) return;
+            drag.raf = 0;
+            if (drag.active) moveDrag(drag.x, drag.y);
+        });
     }
 
     function onUp(e) {
