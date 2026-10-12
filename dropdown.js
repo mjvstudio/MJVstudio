@@ -13,6 +13,13 @@
      esconden en orden inverso al que aparecieron.
    ========================================================================== */
 
+// Cuántas listas hay abiertas ahora (para difuminar el contenido de fondo: clase "dd-open" en <html>)
+const mjvOpenDropdowns = new Set();
+function mjvSyncDropdownBlur(el, open) {
+    if (open) mjvOpenDropdowns.add(el); else mjvOpenDropdowns.delete(el);
+    document.documentElement.classList.toggle('dd-open', mjvOpenDropdowns.size > 0);
+}
+
 function setupAnimatedDropdown(buttonEl, dropdownEl) {
     if (!buttonEl || !dropdownEl) return;
 
@@ -44,17 +51,20 @@ function setupAnimatedDropdown(buttonEl, dropdownEl) {
         dropdownEl.classList.remove('closing');
         dropdownEl.style.display = 'block';
         syncAria(true);
+        mjvSyncDropdownBlur(dropdownEl, true);
     };
 
     const closeNow = () => {
         dropdownEl.style.display = 'none';
         dropdownEl.classList.remove('closing');
         syncAria(false);
+        mjvSyncDropdownBlur(dropdownEl, false);
     };
 
     const closeAnimated = () => {
         if (!isOpen() || dropdownEl.classList.contains('closing')) return;
         dropdownEl.classList.add('closing');
+        mjvSyncDropdownBlur(dropdownEl, false);   // el fondo recupera la nitidez mientras las opciones se esconden
         clearTimeout(closeAnimTimer);
         closeAnimTimer = setTimeout(closeNow, CLOSE_TOTAL_MS);
     };

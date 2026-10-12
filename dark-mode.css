@@ -634,19 +634,16 @@ html.cur-busy, html.cur-busy * { cursor: none !important; }
 @media (prefers-reduced-motion: reduce) { .cur-spinner svg { animation-duration: 2.4s; } }
 
 /* =====================================================================
-   DESPLEGABLES EN CELULAR / PANTALLAS TÁCTILES
-   Las opciones (Categorías, Contacto, Idioma) se leían confundidas con el fondo de la página. Ahora llevan un fondo
-   suave del color del tema, SIN borde: el contorno se esfuma hacia afuera (la "sombra" es del mismo color del fondo).
+   DESPLEGABLES (solo celular): al abrirse una lista de opciones (Categorías, Contacto, Idioma), el contenido de la sección pierde
+   un poco de nitidez para que las opciones se lean bien, sin ponerles fondo ni borde. dropdown.js le pone la clase
+   "dd-open" a <html> mientras haya una lista abierta.
    ===================================================================== */
-:root { --dd-fade: rgba(255, 255, 255, 0.96); }
-[data-theme="dark"] { --dd-fade: rgba(59, 59, 59, 0.96); }
-@media (hover: none), (pointer: coarse), (max-width: 768px) {
-    .dropdown-content,
-    .contact-dropdown-content,
-    .lang-dropdown-content {
-        background: var(--dd-fade);
-        border: 0;
-        border-radius: 14px;
-        box-shadow: 0 0 14px 12px var(--dd-fade);
-    }
+@media (hover: none) and (pointer: coarse) {   /* solo teléfonos y tabletas: en PC las opciones no estorban */
+    main, .title-header-container, .swiper-pagination { transition: filter .35s ease, opacity .35s ease; }
+    html.dd-open main,
+    html.dd-open .swiper-pagination,
+    html.dd-open .title-header-container { filter: blur(5px); opacity: .55; }
+}
+@media (prefers-reduced-motion: reduce) {
+    main, .title-header-container, .swiper-pagination { transition: none; }
 }
