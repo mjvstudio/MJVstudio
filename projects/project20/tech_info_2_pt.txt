@@ -1,0 +1,8 @@
+<h3>Sistema estrutural</h3>
+<p class="subtitulo">Inovação em aço e concreto</p>
+
+<ul>
+  <li><strong>Material principal:</strong> aço ASTM A572</li>
+  <li><strong>Resistência:</strong> 345 MPa</li>
+  <li><em>Técnica construtiva:</em> módulos pré-fabricados</li>
+</ul>

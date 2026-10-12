@@ -18,17 +18,29 @@ p, span, a {
     font-family: 'texto', sans-serif;
 }
 
+/*-------- Estructura de la página (sin números "a ojo") --------*/
+html, body {
+    height: 100%;
+    height: 100dvh;   /* celular: el alto que realmente se ve (con la barra del navegador) */
+    margin: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
 /*-------- Swiper Container --------*/
 .swiper-container {
     width: 100vw;
-    height: 100vh;
+    flex: 1 1 auto;
+    min-height: 0; /* necesario para que flex pueda encoger el swiper correctamente */
     overflow: hidden;
-    padding-top: 80px;
 }
 
 .swiper-slide main {
     display: flex;
-    height: calc(100vh - 160px);
+    height: 100%;
     align-items: center;
     justify-content: center;
     margin: 0 auto;
@@ -82,7 +94,7 @@ html, body, .swiper-slide, .gallery {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    height: 75vh;
+    height: calc(75 * var(--vh));
 }
 
 /*-------- Subsección (Memoria) --------*/
@@ -92,11 +104,44 @@ html, body, .swiper-slide, .gallery {
 }
 
 .sub-section.left.memoria img {
-    height: 75vh;
+    height: calc(75 * var(--vh));
     width: auto;
     object-fit: contain;
     display: block;
     margin: 0 auto;
+}
+
+/* Visor 3D — ocupa el mismo espacio que antes ocupaba la imagen principal */
+/* Sin fondo, sin bordes redondeados y sin sombra de caja: el modelo "flota" sobre el
+   fondo de la página (blanco en modo claro, gris oscuro en modo noche) y no se ve
+   ningún marco alrededor. */
+.modelo-3d-wrapper {
+    position: relative;
+    height: calc(75 * var(--vh));
+    width: 42vw;
+    max-width: 100%;
+    margin: 0 auto;
+    background: transparent;
+}
+
+.modelo-3d-wrapper model-viewer {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    --poster-color: transparent;
+    --progress-bar-color: transparent;   /* sin la barrita de carga: ya hay un "Cargando modelo… %" */
+    outline: none;                        /* sin el recuadro de foco al tocar el modelo */
+}
+
+.modelo-3d-wrapper .loading-status {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'texto', sans-serif;
+    font-size: 0.85rem;
+    color: #999;
+    pointer-events: none;
 }
 
 .sub-section.right.memoria {
@@ -133,7 +178,7 @@ html, body, .swiper-slide, .gallery {
 }
 
 .sub-section.left.detalles img {
-    height: 75vh;
+    height: calc(75 * var(--vh));
     width: auto;
     object-fit: contain;
     display: block;
@@ -167,7 +212,7 @@ html, body, .swiper-slide, .gallery {
     gap: 10px;
     padding: 20px;
     width: 60vw;
-    height: 75vh;
+    height: calc(75 * var(--vh));
     margin: auto;
     place-items: stretch;
 }
@@ -234,7 +279,7 @@ html, body, .swiper-slide, .gallery {
         width: 100%;
         gap: 30px;
         padding: 40px 20px;
-        min-height: 90vh;
+        min-height: calc(90 * var(--vh));
     }
     
     .sub-section.left, 
@@ -243,7 +288,12 @@ html, body, .swiper-slide, .gallery {
     }
     
     .sub-section.left img {
-        max-height: 50vh;
+        max-height: calc(50 * var(--vh));
+    }
+
+    .modelo-3d-wrapper {
+        width: 100%;
+        height: calc(50 * var(--vh));
     }
     
     .sub-section.right {
@@ -284,14 +334,12 @@ html, body, .swiper-slide, .gallery {
 
 /*-------- Título del proyecto --------*/
 .title-header-container {
-    position: fixed;
-    top: 0;
-    left: 35%;
-    transform: translateX(-50%);
+    flex: 0 0 auto; /* ocupa su alto real y empuja al resto hacia abajo */
     width: 90%;
     max-width: 1400px;
-    z-index: 1000;
-    padding: 1.5rem 0;
+    margin: 0 auto;
+    padding: 1.5rem 56px 1.5rem 0;   /* a la derecha queda libre el botón de volver */
+    box-sizing: border-box;
 }
 
 .project-title h1 {
@@ -317,140 +365,139 @@ html, body, .swiper-slide, .gallery {
     }
 }
 
-/*-------- Lightbox --------*/
-.lightbox {
-    display: none;
+/*-------- Botón "Volver a proyectos" --------*/
+/* Solo el símbolo (sin círculo ni sombra de fondo). El área de clic sigue siendo de
+   42 × 42 px para que sea fácil de tocar. */
+.back-to-projects-btn {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgb(255, 255, 255);
-    z-index: 9999;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-}
-
-.lightbox.active {
-    display: flex;
-}
-
-.lightbox-content {
-    width: 100%;
-    max-width: 1400px;
-    height: 100%;
-    position: relative;
-}
-
-.close-btn {
-    position: fixed;
-    top: 30px;
-    right: 30px;
-    color: white;
-    font-size: 40px;
-    cursor: pointer;
-    z-index: 10000;
-    transition: opacity 0.3s;
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
+    top: 25px;
+    right: 25px;
+    z-index: 1000;
+    width: 42px;
+    height: 42px;
     display: flex;
     align-items: center;
     justify-content: center;
-    line-height: 1;
-}
-
-.close-btn:hover {
-    opacity: 0.8;
-    background: rgba(0, 0, 0, 0.5);
-}
-
-.lightbox-swiper {
-    width: 100%;
-    height: 100%;
-    padding: 40px 0;
-}
-
-.lightbox-swiper .swiper-slide {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: calc(100vh - 80px);
-    padding: 20px;
-}
-
-.lightbox-swiper img {
-    max-width: 85%;
-    max-height: 85%;
-    width: auto;
-    height: auto;
-    object-fit: contain;
-    border-radius: 5px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    margin: auto;
-    display: block;
+    background: none;
+    -webkit-tap-highlight-color: transparent;
     transition: transform 0.3s ease;
 }
 
-.swiper-button-next,
-.swiper-button-prev {
-    color: white !important;
-    background: rgba(255, 255, 255, 0.15);
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    backdrop-filter: blur(8px);
-    transition: all 0.3s;
+.back-to-projects-btn:hover { transform: scale(1.12); }
+.back-to-projects-btn:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; border-radius: 4px; }
+
+.back-to-projects-btn img {
+    width: 28px;
+    height: auto;
+    display: block;
+}
+
+/*-------- Galería: la foto se abre en el mismo espacio --------*/
+/* Al tocar una foto de la grilla, se abre en el espacio central de la sección (donde
+   estaba la grilla), ocupando siempre todo el ALTO disponible; el ancho se adapta a
+   cada foto. Con las flechitas se pasa a otra, con un fundido suave entre fotos.
+   Solo los símbolos: sin círculos de fondo. (El código está en project20.js) */
+.gallery-grid { transition: opacity 0.45s ease, visibility 0s; }
+.gallery-grid.is-covered {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.45s ease, visibility 0s linear 0.45s;
+}
+
+.gallery-item { cursor: pointer; }
+.gallery-item:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+
+.gallery-viewer {
+    --gv-halo: rgba(255, 255, 255, 0.9);        /* halo para que los símbolos se lean sobre las fotos */
+    position: absolute;
+    left: 50%;
     top: 50%;
-    transform: translateY(-50%);
-    margin: 0 20px;
-    opacity: 0.9;
+    width: min(88vw, 1300px);
+    height: min(calc(75 * var(--vh)), calc(100% - 24px));
+    transform: translate(-50%, -50%);
+    color: #3a3b3b;                              /* gris oscuro de la marca, como los demás íconos */
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.5s ease, visibility 0s linear 0.5s;
+    z-index: 5;
+    touch-action: pan-y pinch-zoom;
 }
 
-.swiper-button-next:hover,
-.swiper-button-prev:hover {
-    background: rgba(255, 255, 255, 0.25);
-    transform: translateY(-50%) scale(1.15);
+.gallery-viewer:focus { outline: none; }
+
+.gallery-viewer.is-open {
     opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transition: opacity 0.5s ease, visibility 0s;
 }
 
-.swiper-button-next:after,
-.swiper-button-prev:after {
-    font-size: 28px !important;
-    font-weight: bold;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+.gv-stage { position: absolute; inset: 0; }
+
+/* Dos capas apiladas del mismo tamaño: una sale mientras la otra entra, y como las
+   dos ocupan el mismo cuadro, la foto siempre queda centrada. */
+.gv-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    opacity: 0;
+    transition: opacity 0.7s ease;
+    user-select: none;
+    -webkit-user-drag: none;
 }
+.gv-img.on { opacity: 1; }
+
+.gv-btn {
+    position: absolute;
+    z-index: 2;
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0.85;
+    -webkit-tap-highlight-color: transparent;
+    transition: opacity 0.3s ease, scale 0.3s ease;
+}
+.gv-btn:hover { opacity: 1; scale: 1.15; }
+.gv-btn:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; border-radius: 4px; }
+.gv-prev { left: 0;  top: 50%; margin-top: -24px; }
+.gv-next { right: 0; top: 50%; margin-top: -24px; }
+.gv-close { right: 0; top: 0; }
+
+/* Los símbolos son archivos .svg usados como "máscara": toman el color del texto,
+   así cambian solos con el tema (igual que los íconos de la barra de preferencias) */
+.gv-icon {
+    display: block;
+    width: 22px;
+    height: 33px;
+    background-color: currentColor;
+    filter: drop-shadow(0 0 3px var(--gv-halo));
+    -webkit-mask: center / contain no-repeat;
+            mask: center / contain no-repeat;
+}
+.gv-prev .gv-icon  { -webkit-mask-image: url('../../assets/atras.svg');       mask-image: url('../../assets/atras.svg'); }
+.gv-next .gv-icon  { -webkit-mask-image: url('../../assets/adelante.svg');    mask-image: url('../../assets/adelante.svg'); }
+.gv-close .gv-icon { -webkit-mask-image: url('../../assets/icons/close.svg'); mask-image: url('../../assets/icons/close.svg'); width: 26px; height: 26px; }
 
 @media (max-width: 768px) {
-    .lightbox {
-        padding: 10px;
-    }
-    
-    .close-btn {
-        top: 15px;
-        right: 15px;
-        font-size: 30px;
-        width: 40px;
-        height: 40px;
-    }
-    
-    .lightbox-swiper .swiper-slide {
-        height: calc(100vh - 40px);
-    }
-    
-    .swiper-button-next,
-    .swiper-button-prev {
-        width: 45px;
-        height: 45px;
-        margin: 0 10px;
-    }
-    
-    .swiper-button-next:after,
-    .swiper-button-prev:after {
-        font-size: 22px !important;
-    }
+    .gallery-viewer { width: 94vw; }
+    .gv-btn { width: 44px; height: 44px; }
+    .gv-prev { margin-top: -22px; }
+    .gv-next { margin-top: -22px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .gallery-viewer, .gallery-grid, .gv-img, .gv-btn { transition: none !important; }
 }
 
 /*-------- Carrusel --------*/
@@ -469,7 +516,7 @@ html, body, .swiper-slide, .gallery {
 .team-carousel, .info-carousel {
     position: relative;
     width: 100%;
-    height: 70vh;
+    height: calc(70 * var(--vh));
 }
 
 /* Slides individuales */
@@ -491,7 +538,7 @@ html, body, .swiper-slide, .gallery {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 70vh;
+    height: calc(70 * var(--vh));
     flex: 1;
     width: 45%;
 }
@@ -505,7 +552,7 @@ html, body, .swiper-slide, .gallery {
 /* Subsección derecha (contenido) */
 .subsection.right {
     position: relative;
-    height: 70vh;
+    height: calc(70 * var(--vh));
     width: 55%;
     display: flex;
     flex-direction: column;
@@ -586,7 +633,7 @@ html, body, .swiper-slide, .gallery {
     }
     
     .subsection.left {
-        height: 50vh !important;
+        height: calc(50 * var(--vh)) !important;
     }
     
     .subsection.right {
@@ -632,3 +679,8 @@ html, body, .swiper-slide, .gallery {
       }
     }
   }
+
+/*-------- Galería: en pantallas táctiles no hay "pasar el mouse", así que se ve a color --------*/
+@media (hover: none) {
+    .gallery-item img { filter: grayscale(0%); }
+}

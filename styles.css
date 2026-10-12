@@ -1,14 +1,14 @@
 /* --------------- FUENTES --------------- */
 @font-face {
     font-family: 'titulos';
-    src: url('/assets/fonts/titulos/titulos.ttf') format('truetype');
+    src: url('assets/fonts/titulos/titulos.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'texto';
-    src: url('/assets/fonts/texto/texto.otf') format('opentype');
+    src: url('assets/fonts/texto/texto.otf') format('opentype');
     font-weight: normal;
     font-style: normal;
 }
@@ -17,7 +17,7 @@
 body {
     margin: 0;
     overflow: hidden;
-    height: 100vh;
+    height: calc(100 * var(--vh));
     display: flex;
     align-items: center;
     justify-content: center;
@@ -32,8 +32,10 @@ body {
 
 /* --------------- SWIPER CONTAINER --------------- */
 .swiper-container {
+    position: relative;
+    overflow: hidden;   /* las 3 secciones van una al lado de la otra: lo que sobra no debe poder desplazarse (iPhone) */
     width: 100vw;
-    height: 100vh;
+    height: calc(100 * var(--vh));
     user-select: none;
 }
 
@@ -51,6 +53,9 @@ body {
 .swiper-pagination {
     bottom: 10px !important;
 }
+@media (orientation: portrait) {
+    .swiper-pagination { bottom: 4px !important; }   /* debajo de los botones de preferencias, sin pisarlos */
+}
 
 .swiper-pagination-bullet {
     width: 15px !important;
@@ -67,22 +72,99 @@ body {
 }
 
 /* --------------- LOGO CENTRADO --------------- */
+
+/* El logo es el archivo de cada idioma (assets/mjv-logo-es.svg, -en, -fr, -pt: una animación de 4,65 s):
+   el símbolo rota, se arma el isotipo, se desliza y revela el nombre. Acá solo
+   se agrega una respiración lenta y continua que arranca cuando esa animación
+   ya terminó (4,8 s), para no pisarla.
+   Si cambiás la duración de la animación del SVG, cambiá también ese "4.8s". */
+@keyframes logoRespirar {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.02); }
+}
+
+.logo-svg-wrap {
+    animation: logoRespirar 6s ease-in-out 4.8s infinite;
+}
+/* Mientras el logo espera para repetir su animación (logo-replay.js), no respira:
+   al quitarse esta clase, la respiración vuelve a contar desde cero. */
+.logo-svg-wrap.is-waiting { animation: none; }
+
+.center-logo {
+    position: relative; /* punto de referencia para el botón de tema */
+}
+
+/* TAMAÑO DEL LOGO. Cada SVG es un lienzo de 1280×720 y el logo armado ocupa solo
+   una parte (66 % del ancho en español, 67 % en los otros idiomas). Para que el logo se vea del tamaño que se
+   quiere (25 % de la pantalla en computadora, 70 % en vertical, 50 % en celular),
+   el lienzo se agranda en esa proporción.
+     --logo-frac    = qué parte del ancho del lienzo ocupa el logo ya armado
+     --logo-shift-x = corrimiento para centrarlo (en el lienzo actual, el logo
+                      queda 86 px a la derecha del centro: 86/1280 = 6,7 %).
+                      Si algún día centrás el logo dentro del SVG, poné 0%.
+   Si cambiás la animación y el logo queda más grande o más chico, ajustá
+   --logo-frac. */
 .logo-main {
-    max-width: 25%;
-    max-height: 25%;
+    --logo-frac: 0.661;
+    --logo-shift-x: -6.7%;
+    flex-shrink: 0;   /* en vertical el lienzo pide más del 100 % de ancho (su margen transparente sobra a los lados): que no se encoja */
+    width: calc(25% / var(--logo-frac));
+    max-width: calc(25% / var(--logo-frac));
+    /* (Sin max-height: recortaba la caja y el dibujo se salía hacia abajo, descentrándolo.) */
+}
+
+/* El SÍMBOLO tiene el mismo tamaño en los 4 idiomas (los cuatro SVG comparten
+   escala): lo que cambia de un idioma a otro es el largo del texto. Por eso
+   --logo-frac es el mismo para todos, y cada idioma solo trae su corrimiento
+   para quedar centrado en la pantalla.
+   Medido sobre el cuadro final de cada animación (lienzo de 1280 px):
+        el dibujo ocupa   queda a la derecha del centro
+   es       66,1 %             6,7 %
+   en       65,2 %             6,3 %     (el francés mide exactamente igual)
+   fr       65,2 %             6,3 %
+   pt       62,1 %             4,7 %
+   --logo-frac-fixed es lo mismo para la versión FIJA (la de "reducir movimiento"),
+   que viene recortada justo al dibujo: se achica en proporción al largo de cada
+   texto (846 / 835 / 795 px) para que el símbolo mida igual que en la animada.
+   Si cambiás el texto de un logo, volvé a medir y ajustá su línea.
+   (Para que los 4 logos ocupen el mismo ANCHO total en vez de tener el mismo
+   símbolo, poné en cada idioma --logo-frac igual a su "el dibujo ocupa".) */
+.logo-main[data-logo-lang="es"] { --logo-shift-x: -6.7%; --logo-frac-fixed: 1; }
+.logo-main[data-logo-lang="en"],
+.logo-main[data-logo-lang="fr"] { --logo-shift-x: -6.3%; --logo-frac-fixed: 1.013; }
+.logo-main[data-logo-lang="pt"] { --logo-shift-x: -4.7%; --logo-frac-fixed: 1.064; }
+
+.logo-svg-wrap picture { display: block; }
+.logo-svg-wrap img {
+    display: block;
+    width: 100%;
+    height: auto;
+    transform: translateX(var(--logo-shift-x));
+    -webkit-user-drag: none;
+}
+
+/* "Reducir movimiento": la página muestra el logo fijo del idioma (mjv-logo-xx-fijo.svg, dibujado
+   justo al tamaño del logo, sin lienzo ni corrimiento) y sin "respiración". */
+@media (prefers-reduced-motion: reduce) {
+    .logo-svg-wrap { animation: none; }
+    .logo-main,
+    .logo-main[data-logo-lang] {
+        --logo-frac: var(--logo-frac-fixed, 1);
+        --logo-shift-x: 0%;
+    }
 }
 
 @media (orientation: portrait) {
     .logo-main {
-        max-width: 70% !important;
-        max-height: 70% !important;
+        width: calc(70% / var(--logo-frac)) !important;
+        max-width: calc(70% / var(--logo-frac)) !important;
     }
 }
 
 @media (max-width: 768px) {
     .logo-main {
-        max-width: 50% !important;
-        max-height: 50% !important;
+        width: calc(50% / var(--logo-frac)) !important;
+        max-width: calc(50% / var(--logo-frac)) !important;
     }
 }
 
@@ -103,12 +185,23 @@ body {
     position: relative;
 }
 
+/* Celular / pantalla vertical: encabezado y pie con alto mínimo (el pie lleva los botones de preferencias: 40 px de alto) y
+   el contenido (main) se lleva todo lo que sobra. --hdr-h / --ftr-h / --main-h los usan también la galería y el estudio. */
+:root { --hdr-h: calc(10 * var(--vh)); --ftr-h: calc(10 * var(--vh)); --main-h: calc(80 * var(--vh)); }
 @media (orientation: portrait) {
-    header, footer { height: 5vh; }
+    :root {
+        --hdr-h: max(calc(6 * var(--vh)), 44px);
+        --ftr-h: max(calc(6 * var(--vh)), 58px);
+        --main-h: calc(calc(100 * var(--vh)) - var(--hdr-h) - var(--ftr-h));
+    }
+    header, footer { height: auto; }
+    .swiper-slide header { height: var(--hdr-h); }
+    .swiper-slide footer { height: var(--ftr-h); }
 }
+.swiper-slide header { font-size: max(1.15rem, 2vw); }
 
 @media (orientation: landscape) {
-    header, footer { height: 10vh; }
+    header, footer { height: calc(10 * var(--vh)); }
 }
 
 .swiper-slide main {
@@ -121,34 +214,39 @@ body {
 }
 
 @media (orientation: portrait) {
-    main { width: 90vw; height: 90vh; }
+    main { width: 90vw; height: var(--main-h); }
 }
 
 @media (orientation: landscape) {
-    main { width: 90vw; height: 80vh; }
+    main { width: 90vw; height: calc(80 * var(--vh)); }
 }
 
 /* --------------- GALERÍA DE PROYECTOS --------------- */
 .gallery {
-    display: grid;
-    grid-gap: 10px;
-    align-content: center;
+    --gap: 10px;              /* espacio entre fotos (también lo usa el efecto de .project:hover) */
+    --hover-scale: 1.05;      /* cuánto crece un proyecto al pasar el mouse (sin grid.js) */
+    --tile-radius: 0px;       /* esquinas redondeadas de los proyectos (ej. 14px para estilo "bento") */
+    position: relative;
+    flex-shrink: 0;
 }
 
+/* Con grid.js los proyectos se posicionan solos (mosaico). Medidas de la caja = las de antes + el --gap */
 @media (orientation: landscape) {
-    .gallery {
-        grid-template-columns: repeat(5, 1fr);
-        width: 65vw;
-    }
-    .project { height: calc((70vh / 4) - 7px); }
+    .gallery { width: calc(65vw + var(--gap)); height: calc(calc(70 * var(--vh)) + var(--gap)); }
+}
+@media (orientation: portrait) {
+    .gallery { width: calc(90vw + var(--gap)); height: calc(var(--main-h) - 8px + var(--gap)); }
 }
 
+/* Respaldo si grid.js no carga: la grilla pareja de siempre */
+.gallery:not(.is-grid) { display: grid; grid-gap: var(--gap); align-content: center; height: auto; }
+@media (orientation: landscape) {
+    .gallery:not(.is-grid) { grid-template-columns: repeat(5, 1fr); width: 65vw; }
+    .gallery:not(.is-grid) .project { height: calc((calc(70 * var(--vh)) / 4) - 7px); }
+}
 @media (orientation: portrait) {
-    .gallery {
-        grid-template-columns: repeat(2, 1fr);
-        width: 90vw;
-    }
-    .project { height: calc((89vh / 10) - 7px); }
+    .gallery:not(.is-grid) { grid-template-columns: repeat(2, 1fr); width: 90vw; }
+    .gallery:not(.is-grid) .project { height: calc((var(--main-h) / 10) - 7px); }
 }
 
 .project {
@@ -156,13 +254,14 @@ body {
     overflow: hidden;
     transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
     position: relative;
+    z-index: 0;
 }
 
 .project img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    filter: grayscale(60%);
+    filter: grayscale(100%);
     transition: filter 0.3s ease;
 }
 
@@ -181,133 +280,326 @@ body {
 }
 
 .project:hover img { filter: grayscale(0%); }
+
+/* En pantallas táctiles no existe "pasar el mouse": ahí las fotos se ven a color */
+@media (hover: none) {
+    .project img { filter: grayscale(0%); }
+}
 .project:hover span { display: block; transform: translateY(0); }
-.project:hover { transform: scale(1.05); box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); }
-
-/* --------------- SECCIÓN STUDIO (CARRUSEL) --------------- */
-.subsections {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    width: 48%;
+/* EFECTO AL PASAR EL MOUSE SOBRE UN PROYECTO
+   El proyecto crece (--hover-scale) y a su alrededor aparece un marco del color de la página
+   que recorta las fotos vecinas (arriba, abajo, izquierda y derecha) y deja, entre el proyecto
+   y lo que queda visible de cada vecina, el MISMO espacio que hay normalmente entre fotos
+   (--gap: lo que mide el "grid-gap" de .gallery). No es un borde: es la página "tapando" a las
+   vecinas. El marco se divide por la escala porque la transformación también lo agranda.
+     --gap          = espacio entre fotos (igual que grid-gap)
+     --hover-scale  = cuánto crece el proyecto */
+.project:hover {
+    transform: scale(var(--hover-scale));
+    z-index: 2;                                   /* por encima de las vecinas, para recortarlas */
+    box-shadow: 0 0 0 calc(var(--gap) / var(--hover-scale)) var(--page-bg, #fff);
 }
 
-/* Contenedor del carrusel */
-.team-carousel, .info-carousel {
-    position: relative;
-    width: 100%;
-    height: 100%;
-}
-
-/* Slides individuales */
-.team-slide, .info-slide {
-    display: none;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    transition: opacity 0.5s ease-in-out;
-}
-
-.team-slide.active, .info-slide.active {
+/* ---- MOSAICO (grid.js) ---- */
+.gallery.is-grid .project {
+    position: absolute;
     display: block;
+    border-radius: var(--tile-radius);
+    container-type: size;
+    --hs: 1.05;                                   /* lo calcula grid.js según el tamaño de cada uno */
+    transition: left .7s cubic-bezier(.65,0,.2,1) var(--d,0s), top .7s cubic-bezier(.65,0,.2,1) var(--d,0s),
+                width .7s cubic-bezier(.65,0,.2,1) var(--d,0s), height .7s cubic-bezier(.65,0,.2,1) var(--d,0s),
+                transform .3s ease, box-shadow .3s ease, filter .3s ease,
+                opacity .35s ease, translate .42s cubic-bezier(.3,.7,.2,1), scale .42s cubic-bezier(.3,.7,.2,1);
+}
+.gallery.is-grid .project:hover {
+    transform: scale(var(--hs));
+    box-shadow: 0 0 0 calc(var(--gap) / var(--hs)) var(--page-bg, #fff);
+}
+.gallery.is-grid .project span { font-size: clamp(.6rem, 9cqw, 1.2rem); padding: 6px; box-sizing: border-box; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.gallery.is-grid.no-anim .project { transition: none !important; }
+.gallery.is-grid .project.is-hidden { display: none; }
+.gallery.is-grid .project.is-leaving { translate: var(--ox,0) var(--oy,0); scale: .85; opacity: 0; pointer-events: none; }
+.gallery.is-grid .project.is-entering { opacity: 0; scale: .85; }
+.gallery.is-grid .project.is-dropping { z-index: 10; }
+.gallery.is-grid .project.is-dragging {
+    z-index: 40; cursor: var(--cur-touch, pointer) !important; transition: none !important;
+    transform: scale(var(--hs));
+    box-shadow: 0 0 0 calc(var(--gap) / var(--hs)) var(--page-bg, #fff), 0 14px 30px rgba(0,0,0,.28);
+}
+.gallery.is-grid .project.is-dragging img { filter: grayscale(0%); }
+.gallery.is-grid .project.is-dragging span { display: block; }
+.gallery.is-dragging, .gallery.is-dragging * { cursor: var(--cur-touch, pointer) !important; user-select: none; -webkit-user-select: none; }
+.gallery.is-dragging .project:not(.is-dragging) { pointer-events: none; }
+.gallery.is-grid .project { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+/* Hueco del proyecto que se está arrastrando */
+.gallery .grid-slot {
+    position: absolute; z-index: 1; pointer-events: none;
+    border-radius: var(--tile-radius);
+    background: var(--dd-hover-bg, rgba(0,0,0,.07));
+    outline: 1px dashed rgba(127,127,127,.45); outline-offset: -1px;
+    transition: left .5s cubic-bezier(.65,0,.2,1), top .5s cubic-bezier(.65,0,.2,1),
+                width .5s cubic-bezier(.65,0,.2,1), height .5s cubic-bezier(.65,0,.2,1), opacity .3s ease;
+    animation: slotIn .25s ease both;
+}
+.gallery .grid-slot.is-out { opacity: 0; }
+@keyframes slotIn { from { opacity: 0; } to { opacity: 1; } }
+.gallery.no-anim .grid-slot { transition: none; }
+@media (prefers-reduced-motion: reduce) {
+    .gallery.is-grid .project { transition: none !important; }
+}
+
+/* --------------- SECCIÓN STUDIO (MOSAICO DE TARJETAS) --------------- */
+/* Misma caja (ancho x alto) que usa .gallery en Architecture, para que ambas
+   secciones ocupen la misma proporción de pantalla. */
+.studio-container {
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    gap: 20px;
+}
+
+@media (orientation: landscape) {
+    .studio-container {
+        width: var(--studio-w, 65vw);   /* studio-fit.js: como máximo el ancho de la galería (65vw); se angosta a lo que pide el texto */
+        max-width: 65vw;
+        height: calc(70 * var(--vh));
+        transition: width 0.5s cubic-bezier(0.3, 0.7, 0.2, 1);
+    }
+    .studio-container.is-fitting { transition: none; }
+}
+
+@media (orientation: portrait) {
+    .studio-container {
+        width: 90vw;
+        height: calc(var(--main-h) - 8px);
+        flex-direction: column;
+    }
+}
+
+/* Mosaico de 5 tarjetas en 3 columnas: la foto del Estudio ocupa 2 columnas y todo el alto; en la tercera
+   columna, de arriba abajo: Majo, Martín, María y Gonza. Las tarjetas son CUADRADAS o VERTICALES: el ALTO del mosaico es el de la caja
+   y su ANCHO (--team-w) lo calcula studio-fit.js: el más ancho posible (tarjetas cuadradas) en el
+   que el texto todavía se lee entero sin barra de desplazamiento. Si el texto necesita más lugar,
+   el mosaico se angosta (tarjetas más verticales) y el panel de texto se ensancha. */
+.team-grid {
+    flex: none;
+    width: var(--team-w, 38%);
+    height: 100%;
+    display: grid;
+    grid-template-columns: var(--est-w, 2fr) var(--col-w, 1fr);   /* studio-fit.js: la foto del Estudio con SU proporción (sin recortes) + columna del equipo */
+    grid-template-rows: repeat(4, 1fr);
+    grid-template-areas:
+        "estudio majo"
+        "estudio martin"
+        "estudio maria"
+        "estudio gonza";
+    gap: 10px;
+    transition: width 0.5s cubic-bezier(0.3, 0.7, 0.2, 1);
+}
+.studio-container.is-fitting .team-grid { transition: none; }
+
+@media (orientation: portrait) {
+    .team-grid {
+        height: var(--team-h, calc(60 * var(--vh)));
+        width: var(--team-w, 60%);
+        align-self: center;
+        flex: none;
+    }
+}
+
+.card-estudio { grid-area: estudio; }
+.card-majo    { grid-area: majo; }
+.card-martin  { grid-area: martin; }
+.card-gonza   { grid-area: gonza; }
+.card-maria   { grid-area: maria; }
+
+.team-card {
+    position: relative;
+    overflow: hidden;
+    cursor: var(--cur-touch, pointer);
+    background-color: #111;
+    outline: none;
+}
+
+.team-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    filter: grayscale(100%);
+    transition: filter 0.5s ease, opacity 0.35s ease;
+}
+
+/* Estado activo: cuando el cursor está encima (PC) o se mantiene presionado (celular) */
+.team-card.previewing .team-card-img {
+    filter: grayscale(0%);
+}
+
+.team-card-label {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent);
+    color: #fff;
+    font-family: 'titulos', sans-serif;
+    text-align: center;
+    font-size: 0.9rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.team-card.previewing .team-card-label {
     opacity: 1;
 }
 
-/* Subsección izquierda (imágenes) */
-.subsection.left {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 70vh;
+/* Panel de texto a la derecha del mosaico */
+.info-panel {
     flex: 1;
-}
-
-.subsection.left img {
-    max-height: 100%;
-    width: auto;
-    object-fit: contain;
-}
-
-/* Subsección derecha (contenido) */
-.subsection.right {
-    position: relative;
-    height: 70vh;
-    width: 55%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 10px;
-    overflow-y: auto;
-    overflow-x: hidden;
+    justify-content: space-between;
+    background-color: #f7f7f7;
+    padding: 25px;
+    box-sizing: border-box;
+    overflow: hidden;
+    position: relative;
+    min-width: 0;
+    min-height: 0;
 }
+/* caja invisible con la que studio-fit.js mide cuánto ocupa cada texto */
+.info-panel-text::-webkit-scrollbar { display: none; }
+/* último recurso (studio-fit.js): si ni así entra el texto, vuelve una barra finita */
+.studio-container.studio-scroll .info-panel-text { scrollbar-width: thin; }
+.studio-container.studio-scroll .info-panel-text::-webkit-scrollbar { display: block; width: 4px; }
+@media (orientation: portrait) { .info-panel { padding: 16px 18px; } }
+.info-probe { position: absolute; left: 25px; top: 0; visibility: hidden; pointer-events: none; height: auto; overflow: visible; }
 
-/* --------------- BOTONES DE NAVEGACIÓN --------------- */
-.nav-button {
-    padding: 10px;
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-}
-
-.nav-button:hover {
-    transform: scale(1.1);
-}
-
-.nav-icon {
-    height: 32px;
-    width: auto;
-    display: block;
-}
-
-.button-container {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-    display: flex;
-    gap: 10px;
-}
-
-/* Estilos específicos para el contenido de texto */
-.team-info-content {
-    color: #000000 !important;
-    font-size: 1rem;
+.info-panel-text {
+    font-family: 'texto', sans-serif;
+    font-size: var(--info-fs, 0.9rem);
     line-height: 1.7;
-    max-height: 100%;
+    color: #000;
     overflow-y: auto;
+    scrollbar-width: none;            /* sin barra: studio-fit.js ajusta los anchos para que el texto entre entero */
+    white-space: pre-line;
+    transition: opacity 0.25s ease;
 }
 
-.team-info-content h2 {
+.more-link {
+    align-self: flex-end;
+    margin-top: 15px;
+    background: none;
+    border: none;
+    cursor: var(--cur-touch, pointer);
     font-family: 'titulos', sans-serif;
-    font-size: 1.7rem;
-    color: #000000;
-    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    color: #000;
+    text-decoration: underline;
+    padding: 0;
 }
 
-.team-info-content h3 {
-    font-size: 0.7rem;
-    margin: 1rem 0;
+/* --------------- POP-UP DE INFORMACIÓN --------------- */
+/* Las ventanas emergentes (bios del equipo y formulario de contacto) entran y salen con un
+   fundido suave: el fondo se oscurece y se desenfoca de a poco y la caja sube unos píxeles
+   mientras se aclara y se agranda apenas. Para cambiar el ritmo: --popup-ms y --popup-ease.
+   (Siguen en el documento aunque estén cerradas: "visibility" las vuelve invisibles, sin
+   foco y sin clics; el retraso de "visibility" espera a que termine el fundido de salida.) */
+.info-modal-overlay {
+    --popup-ms: 520ms;
+    --popup-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    display: flex;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0);
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+    align-items: center;
+    justify-content: center;
+    z-index: 3000;
+    padding: 20px;
+    box-sizing: border-box;
+    visibility: hidden;
+    pointer-events: none;
+    transition: background-color var(--popup-ms) ease,
+                backdrop-filter var(--popup-ms) ease,
+                -webkit-backdrop-filter var(--popup-ms) ease,
+                visibility 0s linear var(--popup-ms);
 }
 
-.team-info-content h4 {
+.info-modal-overlay.open {
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    visibility: visible;
+    pointer-events: auto;
+    transition-delay: 0s;
+}
+
+.info-modal-box {
+    position: relative;
+    background-color: #fff;
+    width: min(600px, 90vw);
+    max-height: calc(80 * var(--vh));
+    overflow-y: auto;
+    scrollbar-width: none;            /* sin barra de desplazamiento visible */
+    padding: 40px 30px;
+    box-sizing: border-box;
+    border-radius: 4px;
+    opacity: 0;
+    transform: translateY(18px) scale(0.97);
+    transition: opacity calc(var(--popup-ms) * 0.8) ease,
+                transform var(--popup-ms) var(--popup-ease);
+}
+.info-modal-box::-webkit-scrollbar { display: none; }
+
+.info-modal-overlay.open .info-modal-box {
+    opacity: 1;
+    transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .info-modal-overlay, .info-modal-box { transition-duration: 0.01ms !important; transition-delay: 0s !important; }
+}
+
+.info-modal-close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 1.8rem;
+    line-height: 1;
+    cursor: var(--cur-touch, pointer);
+    color: #000;
+}
+
+.info-modal-title {
+    font-family: 'titulos', sans-serif;
+    font-size: 1.5rem;
+    margin: 0 0 15px 0;
+    color: #000;
+}
+
+.info-modal-text {
     font-family: 'texto', sans-serif;
-    font-size: 0.7rem;
-    color: #8b8b8b;
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: #000;
+    white-space: pre-line;
 }
 
-.team-info-content p {
-    font-family: 'texto', sans-serif;
-    font-size: 0.75rem;
-    margin-bottom: 1rem;
-    text-align: justify;
+.info-panel {
+    max-height: 100%;
 }
 
 /* --------------- DROPDOWNS (ESTILOS UNIFICADOS) --------------- */
 .dropdown, .contact-dropdown {
     position: absolute;
-    bottom: 2vh;
+    bottom: calc(2 * var(--vh));
     right: 2vw;
     z-index: 1000;
 }
@@ -315,7 +607,7 @@ body {
 .categories-icon, .contact-icon {
     height: 32px;
     width: auto;
-    cursor: pointer;
+    cursor: var(--cur-touch, pointer);
     transition: transform 0.3s ease;
 }
 
@@ -344,7 +636,7 @@ body {
     padding: 8px 20px;
     font-family: 'texto', sans-serif;
     font-size: 1.2rem;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: background-color 0.3s ease;   /* solo el fondo del resaltado: la opción no se mueve */
     border-radius: 4px;
     opacity: 0;
     transform: translateY(100%);
@@ -357,10 +649,10 @@ body {
     animation-delay: calc(var(--i) * 0.1s);
 }
 
+/* Resaltado al pasar el mouse: igual que en el menú de idioma de la barra de preferencias
+   (solo aparece el fondo; la opción queda quieta). El color sale de --dd-hover-bg (dark-mode.css). */
 .dropdown-content a:hover, .contact-dropdown-content a:hover {
-    background-color: #f0f0f0;
-    transform: translateX(-8px);
-    padding-right: 1px;
+    background-color: var(--dd-hover-bg, #f0f0f0);
 }
 
 .contact-dropdown-content a img {
@@ -392,6 +684,20 @@ body {
     100% { opacity: 1; transform: translateY(0); }
 }
 
+/* Cierre = exactamente lo opuesto a la apertura de arriba */
+@keyframes itemSlideOut {
+    0% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(100%); }
+}
+
+/* Nota: el contenedor (.dropdown-content) NO se desvanece por separado al cerrar;
+   solo se van los ítems, uno por uno y en orden inverso al que aparecieron.
+   scripts.js oculta el contenedor recién cuando termina el último. */
+.dropdown-content.closing a, .contact-dropdown-content.closing a {
+    animation: itemSlideOut 0.3s ease-in forwards;
+    animation-delay: calc((var(--max-i, 0) - var(--i, 0)) * 0.1s);
+}
+
 /* --------------- MEDIA QUERIES --------------- */
 @media (max-width: 768px) {
     .dropdown-content, .contact-dropdown-content {
@@ -410,11 +716,408 @@ body {
         height: 28px;
     }
     
-    .subsection.right { width: 90vw; }
-    .team-photo { height: 50vh; }
+    .studio-container { width: 90vw; }
 }
 
-@media (orientation: portrait) {
-    .subsections { flex-direction: column; }
-    .subsection.right { height: 50vh; }
+/* =====================================================================
+   PÁGINA DE PROYECTO — VISOR 3D
+   Reutilizable en cada projects/projectX/projectX.html.
+   Usa las mismas fuentes ('titulos' / 'texto') ya definidas arriba,
+   así que no hace falta declararlas de nuevo en cada página de proyecto.
+   ===================================================================== */
+
+.project-page {
+    width: 100vw;
+    min-height: calc(100 * var(--vh));
+    min-height: 100dvh;
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    padding: calc(4 * var(--vh)) 5vw calc(3 * var(--vh));
+    box-sizing: border-box;
 }
+
+.project-header {
+    margin-bottom: calc(3 * var(--vh));
+}
+
+.project-header h1 {
+    font-family: 'titulos', sans-serif;
+    font-weight: normal;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    font-size: 1.6rem;
+    margin: 0;
+    color: #000;
+}
+
+.project-main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 5vw;
+}
+
+/* Columna del visor 3D (reemplaza a la imagen de render estática) */
+.project-visual {
+    flex: 1.3;
+    height: calc(65 * var(--vh));
+    background-color: #f4f4f4;
+    position: relative;
+    overflow: hidden;
+}
+
+.project-visual model-viewer {
+    width: 100%;
+    height: 100%;
+    --poster-color: transparent;
+}
+
+.project-visual .loading-status {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    color: #999;
+    font-family: 'texto', sans-serif;
+    font-size: 0.85rem;
+    pointer-events: none;
+}
+
+/* Columna de texto (Memoria Descriptiva) */
+.project-text {
+    flex: 1;
+    max-width: 480px;
+}
+
+.project-text h2 {
+    font-family: 'titulos', sans-serif;
+    font-weight: normal;
+    font-size: 1.15rem;
+    margin: 0 0 1rem 0;
+    color: #000;
+}
+
+.project-text p {
+    font-family: 'texto', sans-serif;
+    font-size: 0.9rem;
+    line-height: 1.7;
+    text-align: justify;
+    color: #222;
+    margin: 0;
+}
+
+/* Paginación (mismo estilo que .swiper-pagination-bullet del sitio principal) */
+.project-pagination {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-top: calc(3 * var(--vh));
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.project-pagination .dot {
+    width: 15px;
+    height: 2px;
+    background: rgba(0, 0, 0, 0.3);
+    transition: all 0.3s;
+}
+
+.project-pagination .dot.active {
+    background: #000;
+    transform: scaleX(1.5);
+}
+
+@media (max-width: 768px) {
+    .project-main { flex-direction: column; }
+    .project-visual { width: 100%; height: calc(42 * var(--vh)); }
+    .project-text { max-width: none; }
+}
+
+/* =====================================================================
+   FORMULARIO DE CONTACTO
+   Reutiliza la ventana emergente (.info-modal-*) y le suma sus campos.
+   ===================================================================== */
+
+.contact-modal-box {
+    width: min(520px, 92vw);
+    /* SIN barra de desplazamiento: la caja se adapta al alto de la pantalla. Los espacios y el
+       cuadro del mensaje se achican si hace falta (ver .cf-field-grow y las reglas de abajo). */
+    display: flex;
+    flex-direction: column;
+    max-height: calc(calc(100 * var(--vh)) - 40px);
+    max-height: calc(100dvh - 40px);
+    overflow-y: auto;                 /* solo de último recurso (pantallas diminutas); la barra no se ve */
+    padding: clamp(18px, calc(4 * var(--vh)), 40px) 30px;
+}
+.contact-modal-box .info-modal-title { flex: none; margin-bottom: clamp(6px, calc(1.5 * var(--vh)), 15px); }
+.contact-modal-box .contact-form { flex: 1 1 auto; min-height: 0; }
+.contact-modal-box .cf-intro { flex: none; margin-bottom: clamp(8px, calc(2.2 * var(--vh)), 22px); }
+
+.cf-intro {
+    font-family: 'texto', sans-serif;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: #444;
+    margin: 0 0 22px 0;
+}
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(8px, calc(1.8 * var(--vh)), 16px);
+}
+
+.cf-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.cf-field label {
+    font-family: 'titulos', sans-serif;
+    font-size: 0.85rem;
+    color: #000;
+}
+
+/* El <body> tiene user-select:none; en Safari eso impide escribir en los
+   campos, por eso se lo devolvemos a los campos del formulario. */
+.cf-field input,
+.cf-field select,
+.cf-field textarea {
+    font-family: 'texto', sans-serif;
+    font-size: 1rem; /* 16px: evita que el iPhone haga zoom al tocar el campo */
+    color: #000;
+    background: #fff;
+    border: 1px solid #cfcfcf;
+    border-radius: 8px;
+    padding: 11px 12px;
+    width: 100%;
+    box-sizing: border-box;
+    user-select: text;
+    -webkit-user-select: text;
+}
+
+.cf-field textarea { resize: none; min-height: 56px; flex: 1 1 auto; }
+
+/* El cuadro del mensaje se lleva el alto que sobra (y cede si falta) */
+.cf-field-grow { flex: 1 1 auto; min-height: 0; }
+
+/* Pantallas bajas (celular acostado, ventanas chicas): formulario más compacto */
+@media (max-height: 640px) {
+    .contact-modal-box .cf-intro { display: none; }
+    .cf-field input, .cf-field select, .cf-field textarea { padding-top: 8px; padding-bottom: 8px; }
+}
+/* Celular acostado: aún más compacto (el aviso de error ocupa lugar solo cuando hay un error) */
+@media (max-height: 460px) {
+    .contact-modal-box .info-modal-title { font-size: 1.15rem; }
+    .contact-modal-box { padding-top: 14px; padding-bottom: 14px; }
+    .contact-form { gap: 5px; }
+    .cf-field { gap: 3px; }
+    .cf-field label { font-size: 0.78rem; }
+    .cf-error { min-height: 0; }
+    .cf-field input, .cf-field select, .cf-field textarea { padding-top: 6px; padding-bottom: 6px; font-size: 0.9rem; }
+    .cf-submit { padding: 9px 20px; }
+    .cf-alt { display: none; }
+}
+
+.cf-field input:focus,
+.cf-field select:focus,
+.cf-field textarea:focus {
+    outline: none;
+    border-color: #3a3b3b;
+    box-shadow: 0 0 0 3px rgba(58, 59, 59, 0.15);
+}
+
+.cf-field.has-error input,
+.cf-field.has-error select,
+.cf-field.has-error textarea { border-color: #b3261e; }
+
+.cf-error {
+    font-family: 'texto', sans-serif;
+    font-size: 0.78rem;
+    color: #b3261e;
+    min-height: 1em;
+}
+
+/* Campo trampa anti-spam: fuera de pantalla, no es visible para las personas */
+.cf-hp {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+.cf-submit {
+    font-family: 'titulos', sans-serif;
+    font-size: 0.95rem;
+    background: #3a3b3b; /* gris oscuro oficial de la marca */
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 13px 20px;
+    cursor: var(--cur-touch, pointer);
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.cf-submit:hover { transform: translateY(-1px); }
+.cf-submit:disabled { opacity: 0.6; cursor: default; transform: none; }
+
+.cf-status {
+    font-family: 'texto', sans-serif;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    margin: 0;
+    min-height: 1.2em;
+    color: #444;
+}
+.cf-status.error { color: #b3261e; }
+.cf-status.ok { color: #2e6b3a; }
+
+.cf-alt {
+    font-family: 'texto', sans-serif;
+    font-size: 0.8rem;
+    color: #777;
+    margin: 0;
+}
+/* El correo se puede seleccionar y copiar */
+.cf-alt #cf-email-text {
+    user-select: text;
+    -webkit-user-select: text;
+    color: #000;
+}
+
+/* Pantalla de "mensaje enviado": reemplaza al formulario */
+.cf-success { display: none; text-align: center; padding: 10px 0 4px; }
+.cf-success h3 {
+    font-family: 'titulos', sans-serif;
+    font-size: 1.3rem;
+    color: #000;
+    margin: 0 0 10px 0;
+}
+.cf-success p {
+    font-family: 'texto', sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #444;
+    margin: 0 0 22px 0;
+}
+.is-sent .contact-form,
+.is-sent .cf-intro { display: none; }
+.is-sent .cf-success { display: block; }
+
+/* Nombre y Apellido en la misma fila (en pantallas chicas, uno abajo del otro) */
+.cf-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+@media (max-width: 480px) {
+    .cf-row { grid-template-columns: 1fr; }
+}
+
+
+/* -------------------- PROYECTO ABIERTO ENCIMA DE LA PORTADA --------------------
+   (project-layer.js) La página del proyecto se muestra en un marco a pantalla completa
+   sobre la portada, que sigue viva por debajo: así el audio nunca se interrumpe. */
+.project-layer {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    z-index: 5000;
+    /* La página de proyecto es transparente en modo claro: este es su fondo real */
+    background-color: #fff;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.52s ease, background-color 0.6s ease;   /* 0.52 s: igual que FADE_MS en project-layer.js */
+}
+.project-layer.is-open { opacity: 1; pointer-events: auto; }
+[data-theme="dark"] .project-layer { background-color: var(--mjv-dark-bg, #3b3b3b); }
+
+/* Mientras se comprueba/carga el proyecto: cursor de "trabajando" */
+html.project-loading:not(.cur-on), html.project-loading:not(.cur-on) * { cursor: progress !important; }
+
+@media (prefers-reduced-motion: reduce) {
+    .project-layer { transition: none; }
+}
+
+
+
+/* =====================================================================
+   CASITA DE RELLENO DEL LOGO
+   El primer cuadro de la animación (la casita derecha), dibujado en el propio HTML.
+   Se ve mientras el logo animado todavía no está en pantalla: al cargar, durante el
+   cargador, al volver a la sección del logo (mientras se desliza) y al cambiar de idioma.
+   logo-replay.js le saca la clase "is-waiting" al wrap cuando la animación arranca.
+   ===================================================================== */
+.logo-svg-wrap { position: relative; }
+.logo-casita {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1280 / 720;
+    transform: translateX(var(--logo-shift-x));   /* mismo corrimiento que la imagen del logo */
+    fill: #000;
+    opacity: 0;
+    pointer-events: none;
+}
+.logo-svg-wrap.is-waiting .logo-casita { opacity: 1; }
+@media (prefers-reduced-motion: reduce) {
+    .logo-casita { display: none; }               /* con "reducir movimiento" se ve el logo fijo */
+}
+
+/* =====================================================================
+   CARGADOR DE LA PORTADA (loader.js)
+   Tapa toda la página hasta que cargó lo necesario. Muestra solo la casita girando, en el mismo
+   lugar y tamaño que va a tener en el logo (loader.js la ubica sobre ".logo-casita"). Al llegar a
+   100 % termina la vuelta que estaba dando hasta quedar derecha; ahí se le agrega "is-leaving":
+   el fondo se desvanece y debajo ya está la casita de la portada, que se transforma en el logo.
+     --ml-exit   duración del desvanecido final (mantener igual a EXIT_MS en loader.js)
+   La velocidad del giro (SPIN_MS) y su suavidad están en loader.js.
+   ===================================================================== */
+.mjv-loader {
+    --ml-exit: 450ms;
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    background-color: var(--page-bg, #fff);
+    color: #000;
+    user-select: none;
+    -webkit-user-select: none;
+    /* Red de seguridad si el JavaScript fallara: se va solo a los 20 s */
+    animation: mlFailsafe 0.6s ease 20s forwards;
+}
+[data-theme="dark"] .mjv-loader { color: #fff; }
+
+.ml-casita {
+    position: fixed;                 /* loader.js le pone left/top/width/height = los de la casita de la portada */
+    left: 50%; top: 50%;
+    width: min(60vw, 560px);
+    height: auto;
+    aspect-ratio: 1280 / 720;
+    transform: translate(-50%, -50%);
+    overflow: visible;
+    fill: currentColor;
+}
+.ml-casita.is-placed { transform: none; }
+
+.mjv-loader.is-leaving {
+    pointer-events: none;
+    animation: mlFadeOut var(--ml-exit) cubic-bezier(0.4, 0, 0.6, 1) forwards;
+}
+@keyframes mlFadeOut { from { opacity: 1; } to { opacity: 0; } }
+@keyframes mlFailsafe { to { opacity: 0; visibility: hidden; pointer-events: none; } }
+
+
+/* iPhone / iPad (Safari): si un campo de texto tiene letra menor a 16 px, el navegador hace zoom al tocarlo y la página
+   queda movida. Con 16 px en pantallas táctiles no pasa. */
+@media (hover: none) and (pointer: coarse) {
+    .cf-field input, .cf-field select, .cf-field textarea { font-size: 16px !important; }
+}
+
+/* Título para buscadores y lectores de pantalla (no se ve) */
+.seo-h1{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}

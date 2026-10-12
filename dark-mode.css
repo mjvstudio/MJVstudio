@@ -1,0 +1,634 @@
+/* ==========================================================================
+   MODO OSCURO — MJV Studio
+   Este archivo se agrega DESPUÉS del CSS normal de cada página (styles.css
+   o project*.css). No modifica nada existente: todas las reglas de acá
+   están "apagadas" hasta que el <html> tenga el atributo data-theme="dark",
+   que prende y apaga theme.js.
+
+   Para usarlo en una página nueva, alcanza con agregar en el <head>:
+     <link rel="stylesheet" href="RUTA/dark-mode.css">
+     <script src="RUTA/theme.js"></script>
+   (mismo "RUTA" relativo que ya usás para assets/ o styles.css)
+   ========================================================================== */
+
+:root {
+    --mjv-dark-bg: #3b3b3b;
+    --mjv-dark-panel: #464646;
+    --mjv-dark-panel-2: #525252;
+    --mjv-dark-text: #ececec;
+    --mjv-dark-muted: #c2c2c2;
+    --mjv-dark-border: rgba(255, 255, 255, 0.14);
+}
+
+/* -------------------- SITIO PRINCIPAL (index.html) -------------------- */
+
+[data-theme="dark"] body { background-color: var(--mjv-dark-bg); }
+
+[data-theme="dark"] .swiper-slide header,
+[data-theme="dark"] .swiper-slide footer,
+[data-theme="dark"] .swiper-slide main {
+    background-color: var(--mjv-dark-bg);
+    color: var(--mjv-dark-text);
+}
+
+[data-theme="dark"] .project { background-color: var(--mjv-dark-panel); }
+
+/* Color de fondo de la página, para los efectos que lo necesitan (halo del hover de proyectos) */
+:root { --page-bg: #ffffff; }
+[data-theme="dark"] { --page-bg: var(--mjv-dark-bg); }
+
+[data-theme="dark"] .info-panel { background-color: var(--mjv-dark-panel); }
+[data-theme="dark"] .info-panel-text,
+[data-theme="dark"] .more-link { color: var(--mjv-dark-text); }
+
+[data-theme="dark"] .info-modal-box { background-color: var(--mjv-dark-panel); }
+[data-theme="dark"] .info-modal-close,
+[data-theme="dark"] .info-modal-title,
+[data-theme="dark"] .info-modal-text { color: var(--mjv-dark-text); }
+
+/* Desplegables (Categorías, Contacto, Idioma): mismo lenguaje en modo claro y en modo noche.
+   El menú NO lleva fondo propio (solo el texto o los íconos sobre la página) y las opciones
+   quedan quietas: al pasar el mouse solo aparece el fondo de resaltado, el mismo que ya
+   tenían las opciones del menú de idioma. (El color del resaltado: --dd-hover-bg.) */
+:root { --dd-hover-bg: #f0f0f0; }
+[data-theme="dark"] { --dd-hover-bg: var(--mjv-dark-panel); }
+
+[data-theme="dark"] .dropdown-content a,
+[data-theme="dark"] .contact-dropdown-content a,
+[data-theme="dark"] .lang-dropdown-content a { color: var(--mjv-dark-text); }
+
+/* La flechita del globo de diálogo ya no tiene panel al que apuntar */
+[data-theme="dark"] .dropdown-content::before,
+[data-theme="dark"] .contact-dropdown-content::before { display: none; }
+
+/* Íconos SVG negros (categorías, contacto, redes, flechas de navegación, volver):
+   en modo noche se pasan a blanco suave (#ececec, el mismo de la barra de
+   preferencias): invert(1) los vuelve blancos y brightness(.925) los baja a #ececec. */
+[data-theme="dark"] .categories-icon,
+[data-theme="dark"] .contact-icon,
+[data-theme="dark"] .contact-dropdown-content a img,
+[data-theme="dark"] .nav-icon,
+[data-theme="dark"] .back-to-projects-btn img {
+    filter: invert(1) brightness(0.925);
+}
+
+[data-theme="dark"] .swiper-pagination-bullet { background: rgba(255, 255, 255, 0.3) !important; }
+[data-theme="dark"] .swiper-pagination-bullet-active { background: #fff !important; }
+
+/* Mosaico de Studio. (El visor 3D de los proyectos NO lleva fondo: se funde con la página.) */
+[data-theme="dark"] .project-visual { background-color: var(--mjv-dark-panel); }
+
+/* -------------------- PÁGINAS DE PROYECTO -------------------- */
+/* (project20.css y cualquier otra que siga el mismo patrón de clases) */
+
+/* El fondo de la página lo da SOLO el <body>, y siempre es un color sólido (blanco o gris
+   oscuro). Antes, en claro el <body> y el <main> eran transparentes: al pasar de oscuro a
+   claro cada uno se aclaraba "por transparencia" y, como el <main> se apilaba sobre el
+   <body>, durante el fundido aparecía un rectángulo más oscuro (el del <main>) sobre el
+   resto de la página. Con colores sólidos y un único fondo, el cambio es parejo. */
+body:has(.back-to-projects-btn) { background-color: #ffffff; }
+[data-theme="dark"] body:has(.back-to-projects-btn) { background-color: var(--mjv-dark-bg); }
+[data-theme="dark"] body:has(.back-to-projects-btn) .swiper-slide main { background-color: transparent; }
+
+[data-theme="dark"] .project-title h1 { color: var(--mjv-dark-text); }
+
+[data-theme="dark"] .sub-section.right p,
+[data-theme="dark"] .sub-section.right.memoria p,
+[data-theme="dark"] .sub-section.right.detalles p { color: var(--mjv-dark-muted); }
+
+[data-theme="dark"] .gallery-item { background-color: var(--mjv-dark-panel); }
+
+/* Visor de la galería: los símbolos pasan al blanco suave de la marca y su halo al gris de fondo */
+[data-theme="dark"] .gallery-viewer {
+    color: var(--mjv-dark-text);
+    --gv-halo: rgba(59, 59, 59, 0.9);
+}
+
+[data-theme="dark"] .team-info-content { color: var(--mjv-dark-muted) !important; }
+[data-theme="dark"] .team-info-content h2 {
+    color: var(--mjv-dark-text);
+    border-bottom-color: var(--mjv-dark-border);
+}
+[data-theme="dark"] .team-info-content h3 { color: #999; }
+[data-theme="dark"] .team-info-content .destacado {
+    background: var(--mjv-dark-panel-2);
+    box-shadow: none;
+    border: 1px solid var(--mjv-dark-border);
+}
+[data-theme="dark"] .team-info-content ul li::marker { color: #888; }
+
+/* Logo: SVG negro (uno por idioma, assets/mjv-logo-xx.svg). En modo noche se
+   invierte a blanco; así alcanza con un único archivo por idioma, sin duplicarlos. */
+[data-theme="dark"] .logo-svg-wrap img,
+[data-theme="dark"] .logo-casita { filter: invert(1); }
+
+/* -------------------- ALTO DE PANTALLA EN CELULARES --------------------
+   1vh en un celular es el alto con la barra del navegador ESCONDIDA: con la barra visible, lo de abajo queda tapado.
+   --vh vale 1dvh (el alto que realmente se ve) donde el navegador lo soporta, y 1vh donde no. Todo el sitio usa
+   calc(N * var(--vh)) en vez de Nvh. */
+:root { --vh: 1vh; }
+@supports (height: 1dvh) { :root { --vh: 1dvh; } }
+html { overscroll-behavior: none; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
+/* -------------------- BOTÓN DE MODO OSCURO -------------------- */
+/* Vive solo en la portada (sección del Logo). El resto de las páginas
+   solo necesita el CSS y el JS para RESPETAR la elección, sin mostrar
+   el botón. */
+
+/* Contenedor fijo para usar los 3 botones fuera de la portada (páginas de
+   proyecto, que no tienen el mismo esqueleto de header/footer por sección).
+   Misma esquina (abajo a la izquierda) que en la portada. */
+.utility-buttons {
+    position: fixed;
+    bottom: calc(2 * var(--vh));
+    left: 2vw;
+    z-index: 1000;
+    display: flex;
+    gap: 4px;
+    /* TAMAÑO DE LOS ÍCONOS: cambiá solo este número para agrandarlos o achicarlos */
+    --pref-icon-size: 30px;
+}
+@media (orientation: portrait) {
+    /* centrado en el pie de cada sección (alto --ftr-h, ver styles.css) */
+    .utility-buttons { bottom: calc((var(--ftr-h, 58px) - var(--pref-icon-size, 30px) - 10px) / 2 + 4px); left: 2.5vw; }
+}
+/* ventanas bajas en horizontal (celular acostado): centrado en el pie, que ahí mide solo 10 % del alto */
+@media (orientation: landscape) and (max-height: 560px) {
+    .utility-buttons { bottom: calc((var(--ftr-h, 10vh) - var(--pref-icon-size, 30px) - 10px) / 2 + 1px); }
+}
+@media (max-width: 480px) {
+    .utility-buttons { --pref-icon-size: 26px; gap: 0; }
+}
+.utility-buttons .theme-toggle-icon-btn {
+    /* Sin fondo ni borde: se ve solo el ícono. El botón es un poco más
+       grande que el ícono para que sea fácil de tocar. */
+    width: calc(var(--pref-icon-size, 30px) + 10px);
+    height: calc(var(--pref-icon-size, 30px) + 10px);
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    color: #3a3b3b; /* gris oscuro oficial de la marca: el ícono toma este color */
+    cursor: var(--cur-touch, pointer);
+    -webkit-tap-highlight-color: transparent;
+    transition: transform 0.3s ease;
+}
+
+.theme-toggle-icon-btn:hover .pref-icon { transform: scale(1.1); }
+.theme-toggle-icon-btn:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+
+[data-theme="dark"] .theme-toggle-icon-btn {
+    color: var(--mjv-dark-text);
+}
+
+/* ---- Íconos de la barra (Google Material Symbols, en assets/icons/) ----
+   Son archivos SVG de un solo color. Se usan como "máscara": la forma sale
+   del archivo y el color sale de "color" del botón, así cambian solos con
+   el tema. Para cambiar un ícono alcanza con reemplazar el archivo .svg. */
+.pref-icon {
+    display: block;
+    width: var(--pref-icon-size, 30px);
+    height: var(--pref-icon-size, 30px);
+    background-color: currentColor;
+    -webkit-mask-repeat: no-repeat;
+            mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+            mask-position: center;
+    -webkit-mask-size: contain;
+            mask-size: contain;
+    transition: transform 0.3s ease;
+}
+.icon-night      { -webkit-mask-image: url('assets/icons/night_mode.svg');  mask-image: url('assets/icons/night_mode.svg'); }
+.icon-light      { -webkit-mask-image: url('assets/icons/light_mode.svg');  mask-image: url('assets/icons/light_mode.svg'); }
+.icon-volume-on  { -webkit-mask-image: url('assets/icons/volume_on.svg');   mask-image: url('assets/icons/volume_on.svg'); }
+.icon-volume-off { -webkit-mask-image: url('assets/icons/volume_off.svg');  mask-image: url('assets/icons/volume_off.svg'); }
+.icon-grid       { -webkit-mask-image: url('assets/icons/grid_layout.svg');  mask-image: url('assets/icons/grid_layout.svg'); }
+.icon-language   { -webkit-mask-image: url('assets/icons/language.svg');    mask-image: url('assets/icons/language.svg'); }
+
+/* Qué ícono se ve en cada estado (lo decide el CSS, así no hay "parpadeo":
+   theme.js marca <html data-theme> y <html data-sound> antes de pintar).
+   - Tema: en claro muestra la luna (pasar a oscuro); en oscuro, el sol.
+   - Sonido: con sonido muestra el parlante; silenciado, el parlante tachado. */
+
+/* Luna y sol están siempre en el botón, una encima de la otra, y al cambiar de
+   tema se cruzan: la que sale gira y se achica mientras se desvanece, y la que
+   entra gira hasta su lugar. (Antes una desaparecía y la otra aparecía de golpe.)
+   Se usan las propiedades "rotate" y "scale" (sueltas) para que no se pisen con el
+   "transform: scale(1.1)" del hover. */
+.js-theme-toggle .pref-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    transition: opacity 0.5s ease,
+                rotate 0.6s cubic-bezier(0.3, 0.7, 0.2, 1),
+                scale 0.6s cubic-bezier(0.3, 0.7, 0.2, 1),
+                transform 0.3s ease;
+}
+.js-theme-toggle .icon-night { opacity: 1; rotate: 0deg;   scale: 1; }
+.js-theme-toggle .icon-light { opacity: 0; rotate: -90deg; scale: 0.4; }
+[data-theme="dark"] .js-theme-toggle .icon-night { opacity: 0; rotate: 90deg; scale: 0.4; }
+[data-theme="dark"] .js-theme-toggle .icon-light { opacity: 1; rotate: 0deg;  scale: 1; }
+
+.js-sound-toggle .icon-volume-off { display: none; }
+[data-sound="off"] .js-sound-toggle .icon-volume-on { display: none; }
+[data-sound="off"] .js-sound-toggle .icon-volume-off { display: block; }
+
+/* -------------------- SELECTOR DE IDIOMA (despliegue) --------------------
+   Mismo mecanismo y misma animación que Categorías y Contacto (dropdown.js),
+   pero se abre hacia arriba desde el globo, alineado a la izquierda. */
+
+/* Las animaciones se repiten acá (idénticas a las de styles.css) porque las
+   páginas de proyecto no cargan styles.css. */
+@keyframes dropdownSlide {
+    0%   { opacity: 0; transform: translateY(20px) scale(0.95); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes itemSlide {
+    0%   { opacity: 0; transform: translateY(100%); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes itemSlideOut {
+    0%   { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(100%); }
+}
+
+.lang-dropdown { position: relative; }
+
+.lang-dropdown-content {
+    display: none;
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 0;
+    min-width: 140px;
+    padding: 10px 0;
+    border-radius: 8px;
+    text-align: left;
+    transform-origin: bottom left;
+    animation: dropdownSlide 0.4s ease-out forwards;
+}
+
+.lang-dropdown-content a {
+    display: block;
+    width: fit-content;
+    margin-right: auto;
+    padding: 7px 18px;
+    font-family: 'texto', sans-serif;
+    font-size: 1.1rem;
+    color: #000;
+    text-decoration: none;
+    border-radius: 4px;
+    opacity: 0;
+    transform: translateY(100%);
+    animation: itemSlide 0.3s ease-out forwards;
+    animation-delay: calc(var(--i, 0) * 0.1s);
+    transition: background-color 0.3s ease;
+}
+
+.lang-dropdown-content a:hover { background-color: var(--dd-hover-bg, #f0f0f0); }
+
+/* El idioma que está en uso se ve con la tipografía de títulos */
+.lang-dropdown-content a.is-active { font-family: 'titulos', sans-serif; }
+
+/* Cierre: lo opuesto a la apertura, item por item (--max-i lo calcula dropdown.js) */
+.lang-dropdown-content.closing a {
+    animation: itemSlideOut 0.3s ease-in forwards;
+    animation-delay: calc((var(--max-i, 0) - var(--i, 0)) * 0.1s);
+}
+
+/* (en modo noche el menú de idioma no lleva fondo: ver "Desplegables" más arriba) */
+
+/* Respeta "reducir movimiento" del sistema: aparece sin animar */
+@media (prefers-reduced-motion: reduce) {
+    .lang-dropdown-content,
+    .lang-dropdown-content a,
+    .lang-dropdown-content.closing a { animation: none; opacity: 1; transform: none; }
+}
+
+/* -------------------- FORMULARIO DE CONTACTO -------------------- */
+[data-theme="dark"] .cf-intro,
+[data-theme="dark"] .cf-status,
+[data-theme="dark"] .cf-success p { color: var(--mjv-dark-muted); }
+
+[data-theme="dark"] .cf-field label,
+[data-theme="dark"] .cf-success h3,
+[data-theme="dark"] .cf-alt #cf-email-text { color: var(--mjv-dark-text); }
+
+[data-theme="dark"] .cf-alt { color: var(--mjv-dark-muted); }
+
+[data-theme="dark"] .cf-field input,
+[data-theme="dark"] .cf-field select,
+[data-theme="dark"] .cf-field textarea {
+    background: var(--mjv-dark-panel-2);
+    color: var(--mjv-dark-text);
+    border-color: var(--mjv-dark-border);
+}
+
+[data-theme="dark"] .cf-field input:focus,
+[data-theme="dark"] .cf-field select:focus,
+[data-theme="dark"] .cf-field textarea:focus {
+    border-color: #ebe4d8;
+    box-shadow: 0 0 0 3px rgba(235, 228, 216, 0.18);
+}
+
+/* Botón: crema de la paleta oficial sobre el panel oscuro */
+[data-theme="dark"] .cf-submit { background: #ebe4d8; color: #3a3b3b; }
+
+[data-theme="dark"] .cf-error,
+[data-theme="dark"] .cf-status.error { color: #ff8a80; }
+[data-theme="dark"] .cf-field.has-error input,
+[data-theme="dark"] .cf-field.has-error select,
+[data-theme="dark"] .cf-field.has-error textarea { border-color: #ff8a80; }
+[data-theme="dark"] .cf-status.ok { color: #8fd19e; }
+
+/* -------------------- DIRECTRICES (textos de ayuda de la barra) --------------------
+   Al pasar el mouse (o enfocar con el teclado) un botón de la barra, sale de su
+   ícono una "directriz", como la de un plano: un punto, una línea que sube, un
+   codo horizontal y, encima, el texto. Todo toma el color del ícono, no lleva
+   recuadro, y el halo del color de la página mantiene el texto legible si pasa
+   sobre una foto. pref-tips.js arma las piezas y mantiene el texto al día en
+   los 4 idiomas.
+
+   Para ajustar:  --pt-line = largo de la línea (abajo)
+                  font-size del texto = .pt-txt
+                  espera antes de aparecer = el primer "0.26s" (punto) de abajo */
+.utility-buttons { --pref-tip-halo: #ffffff; }
+[data-theme="dark"] .utility-buttons { --pref-tip-halo: var(--mjv-dark-bg); }
+
+.utility-buttons .theme-toggle-icon-btn { position: relative; }
+
+.pref-tip {
+    --pt-line: 26px;
+    position: absolute;
+    left: 50%;
+    bottom: 100%;          /* el punto de partida es el borde superior del botón */
+    width: 0;
+    height: 0;
+    pointer-events: none;
+    font-family: 'texto', 'Helvetica Neue', Arial, sans-serif;
+}
+.pref-tip i { position: absolute; display: block; }
+
+/* Estado de reposo (oculto). Al ocultarse todo se retira rápido. */
+.pt-dot {
+    left: -2px; bottom: -2px;
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0; transform: scale(0);
+    transition: opacity 0.12s ease, transform 0.12s ease;
+}
+.pt-line {
+    left: -0.5px; bottom: 2px;
+    width: 1px; height: calc(var(--pt-line) + 1px);
+    background: currentColor;
+    opacity: 0; transform: scaleY(0); transform-origin: 50% 100%;
+    transition: opacity 0.12s ease, transform 0.12s ease;
+}
+.pt-label {
+    position: absolute; display: block;
+    left: -0.5px;
+    bottom: calc(var(--pt-line) + 2px);
+    white-space: nowrap;
+}
+.pt-label::after {        /* el codo horizontal: se dibuja de izquierda a derecha */
+    content: '';
+    position: absolute; left: 0; bottom: 0;
+    width: 100%; height: 1px;
+    background: currentColor;
+    opacity: 0; transform: scaleX(0); transform-origin: 0 50%;
+    transition: opacity 0.12s ease, transform 0.12s ease;
+}
+.pt-txt {
+    display: block;
+    padding: 0 3px 6px 9px;
+    font-size: 11px;
+    line-height: 1;
+    letter-spacing: 0.045em;
+    color: currentColor;
+    text-shadow: 0 0 3px var(--pref-tip-halo), 0 0 6px var(--pref-tip-halo), 0 0 10px var(--pref-tip-halo);
+    opacity: 0; transform: translateY(4px);
+    transition: opacity 0.12s ease, transform 0.12s ease;
+}
+
+/* Aparece en cadena, como si se dibujara: punto → línea → codo → texto.
+   Con el mouse solo en equipos que realmente lo tienen (en pantallas táctiles
+   no hay "pasar el mouse"); con el teclado (Tab), siempre. */
+@media (hover: hover) and (pointer: fine) {
+.utility-buttons .theme-toggle-icon-btn:hover .pt-dot {
+        opacity: 1; transform: scale(1);
+        transition: opacity 0.1s ease 0.26s, transform 0.18s cubic-bezier(0.3, 1.5, 0.5, 1) 0.26s;
+    }
+    .utility-buttons .theme-toggle-icon-btn:hover .pt-line {
+        opacity: 0.65; transform: scaleY(1);
+        transition: opacity 0.1s ease 0.32s, transform 0.22s cubic-bezier(0.2, 0.7, 0.2, 1) 0.32s;
+    }
+    .utility-buttons .theme-toggle-icon-btn:hover .pt-label::after {
+        opacity: 0.65; transform: scaleX(1);
+        transition: opacity 0.1s ease 0.46s, transform 0.24s cubic-bezier(0.2, 0.7, 0.2, 1) 0.46s;
+    }
+    .utility-buttons .theme-toggle-icon-btn:hover .pt-txt {
+        opacity: 1; transform: none;
+        transition: opacity 0.22s ease 0.56s, transform 0.22s ease 0.56s;
+    }
+}
+.utility-buttons .theme-toggle-icon-btn:focus-visible .pt-dot {
+    opacity: 1; transform: scale(1);
+    transition: opacity 0.1s ease 0.26s, transform 0.18s cubic-bezier(0.3, 1.5, 0.5, 1) 0.26s;
+}
+.utility-buttons .theme-toggle-icon-btn:focus-visible .pt-line {
+    opacity: 0.65; transform: scaleY(1);
+    transition: opacity 0.1s ease 0.32s, transform 0.22s cubic-bezier(0.2, 0.7, 0.2, 1) 0.32s;
+}
+.utility-buttons .theme-toggle-icon-btn:focus-visible .pt-label::after {
+    opacity: 0.65; transform: scaleX(1);
+    transition: opacity 0.1s ease 0.46s, transform 0.24s cubic-bezier(0.2, 0.7, 0.2, 1) 0.46s;
+}
+.utility-buttons .theme-toggle-icon-btn:focus-visible .pt-txt {
+    opacity: 1; transform: none;
+    transition: opacity 0.22s ease 0.56s, transform 0.22s ease 0.56s;
+}
+
+/* Con el teclado, el botón muestra su marco de foco (2 px + 2 px de separación):
+   la directriz sube esos píxeles para que el punto no quede pisando el marco */
+.utility-buttons .theme-toggle-icon-btn:focus-visible .pref-tip { bottom: calc(100% + 8px); }
+
+/* Si el texto cambia mientras se mira (ej. al tocar el botón de tema),
+   el texto nuevo entra con un fundido */
+@keyframes ptSwap {
+    from { opacity: 0; transform: translateY(3px); }
+    to   { opacity: 1; transform: none; }
+}
+/* "backwards": la animación solo manda mientras corre; después vuelve a mandar el estado normal
+   (visible si se está mirando, oculto si no). Con "both" el texto quedaría visible para siempre. */
+.pref-tip.is-swapping .pt-txt { animation: ptSwap 0.28s ease backwards; }
+
+/* Con el menú de idiomas abierto, la directriz del globo se oculta (taparía el menú) */
+.js-lang-toggle[aria-expanded="true"] .pref-tip { display: none; }
+
+/* Quien pidió "reducir movimiento": mismo resultado, sin dibujarse ni deslizarse */
+@media (prefers-reduced-motion: reduce) {
+    .pt-dot, .pt-line, .pt-label::after, .pt-txt {
+        transform: none !important;
+        transition: opacity 0.15s ease !important;
+    }
+    .pref-tip.is-swapping .pt-txt { animation: none; }
+}
+
+
+/* -------------------- CAMBIO DE TEMA GRADUAL --------------------
+   Al tocar el botón de modo claro/oscuro, todos los colores de la página (fondo,
+   textos, bordes, sombras, el logo que pasa de negro a blanco...) cambian de a
+   poco en lugar de saltar de golpe.
+
+   theme.js le pone la clase "theme-fading" a <html> justo antes de cambiar el
+   tema y se la saca cuando termina el fundido. Solo existe durante el cambio: al
+   cargar la página NO hay fundido (aparece directamente en el tema elegido), y el
+   resto del tiempo cada elemento conserva sus propias transiciones.
+
+   Para hacerlo más rápido o más lento: cambiá --theme-fade (theme.js lo lee de acá).
+   Si la persona pidió "reducir movimiento" en su equipo, no se anima nada. */
+:root { --theme-fade: 0.6s; }
+
+html.theme-fading,
+html.theme-fading *:not(.pref-icon),
+html.theme-fading *:not(.pref-icon)::before,
+html.theme-fading *:not(.pref-icon)::after {
+    transition-property: background-color, color, border-color, outline-color, box-shadow,
+                         text-shadow, text-decoration-color, caret-color, fill, stroke, filter !important;
+    transition-duration: var(--theme-fade) !important;
+    transition-timing-function: ease !important;
+    transition-delay: 0s !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html.theme-fading,
+    html.theme-fading * {
+        transition: none !important;
+    }
+    .js-theme-toggle .pref-icon { transition: none; }
+}
+
+/* Botón "reacomodar proyectos": solo en la sección Architecture; gira al usarlo */
+.utility-buttons .js-grid-reset { transition: opacity .3s ease, width .3s ease, margin .3s ease; }
+.utility-buttons:not(.on-architecture) .js-grid-reset { opacity: 0; pointer-events: none; visibility: hidden; }
+.js-grid-reset.is-spinning .pref-icon { animation: gridSpin .6s cubic-bezier(.3,.7,.2,1); }
+@keyframes gridSpin { from { rotate: 0deg; } to { rotate: 360deg; } }
+
+/* -------------------- CONTROL DE VOLUMEN (sound.js) --------------------
+   Aparece arriba del botón de sonido al arrimar el mouse: una línea vertical y un punto.
+     --vol-h     largo de la línea
+     --vol-dot   tamaño del punto */
+.vol-wrap { position: relative; display: flex; --vol-h: 92px; --vol-dot: 12px; }
+.vol-pop {
+    position: absolute;
+    left: 50%;
+    bottom: 100%;
+    width: 34px;
+    height: calc(var(--vol-h) + 22px);
+    margin-left: -17px;
+    padding: 11px 0;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    color: #3a3b3b;
+    cursor: var(--cur-touch, pointer);
+    touch-action: none;
+    outline: none;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(8px);
+    transition: opacity .25s ease, transform .3s cubic-bezier(.3,.7,.2,1), visibility 0s linear .3s;
+    --v: 1;
+}
+[data-theme="dark"] .vol-pop { color: var(--mjv-dark-text, #ececec); }
+.vol-track { position: relative; width: 2px; height: 100%; background: currentColor; opacity: .9; border-radius: 2px; }
+.vol-track::before { content: ""; position: absolute; inset: 0; background: var(--page-bg, #fff); opacity: .65; border-radius: 2px; }   /* tramo "vacío" más tenue */
+.vol-fill { position: absolute; left: 0; right: 0; bottom: 0; height: calc(var(--v) * 100%); background: currentColor; border-radius: 2px; z-index: 1; transition: height .35s cubic-bezier(.3,.7,.2,1); }
+.vol-dot {
+    position: absolute; left: 50%; z-index: 2;
+    bottom: calc(var(--v) * 100%);
+    width: var(--vol-dot); height: var(--vol-dot);
+    margin: 0 0 calc(var(--vol-dot) / -2) calc(var(--vol-dot) / -2);
+    border-radius: 50%;
+    background: currentColor;
+    transition: transform .2s ease, bottom .35s cubic-bezier(.3,.7,.2,1);
+}
+.vol-pop:hover .vol-dot, .vol-pop.is-dragging .vol-dot, .vol-pop:focus-visible .vol-dot { transform: scale(1.3); }
+.vol-pop.is-dragging .vol-dot, .vol-pop.is-dragging .vol-fill { transition: none; }
+/* Se muestra al arrimar el mouse (solo con mouse) o al enfocar con el teclado; el hueco entre el botón y la línea cuenta como "dentro" */
+@media (hover: hover) {
+    .vol-wrap:hover .vol-pop { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; }
+}
+.vol-wrap:has(:focus-visible) .vol-pop, .vol-pop.is-dragging { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; }
+/* Tras hacer clic en el botón (silenciar / activar) el control se esconde y no vuelve hasta que el mouse salga y vuelva a entrar */
+.vol-wrap.is-closed .vol-pop:not(.is-dragging) { opacity: 0; visibility: hidden; transform: translateY(8px); transition-delay: 0s, 0s, 0s; }
+@media (prefers-reduced-motion: reduce) { .vol-pop { transition: none; } }
+
+/* =====================================================================
+   CURSORES (assets/cursors/)
+   Íconos de Google (Material Symbols, grosor 200) con un halo del color contrario, para que se vean
+   sobre fotos y fondos de cualquier color. Hay dos juegos: claro/ (trazo oscuro, para el tema claro)
+   y oscuro/ (trazo claro, para el tema oscuro).
+     (cursor normal)       el del sistema, sin cambios
+     touch_app             el dedo: botones y todo lo que se puede abrir o tocar (proyectos, tarjetas, menús…)
+     pan_tool              la mano: SOLO mientras se arrastra para pasar de una sección a otra
+     3d_rotation           sobre el visor 3D (girar el modelo)
+     progress_activity     girando, al arrimar a algo que está cargando (lo dibuja cursors.js)
+   Los dos números de cada url() son el punto "activo" del cursor. Para cambiar uno, se reemplaza el
+   archivo .svg (mismo nombre) en las dos carpetas. En pantallas táctiles no hay cursor: no cambia nada.
+   (Las variables tienen que usarse solo en archivos que estén en la carpeta principal: la ruta del url()
+   es relativa a este archivo.)
+   ===================================================================== */
+:root {
+    --cur-touch: url('assets/cursors/claro/touch_app.svg') 12 6, pointer;
+    --cur-pan-open: url('assets/cursors/claro/pan_tool.svg') 16 14, grab;
+    --cur-pan:   url('assets/cursors/claro/pan_tool_cerrada.svg') 16 16, grabbing;
+    --cur-3d:    url('assets/cursors/claro/3d_rotation.svg') 16 16, grab;
+    --cur-fg: #1b1b1b;
+    --cur-halo: #ffffff;
+}
+[data-theme="dark"] {
+    --cur-touch: url('assets/cursors/oscuro/touch_app.svg') 12 6, pointer;
+    --cur-pan-open: url('assets/cursors/oscuro/pan_tool.svg') 16 14, grab;
+    --cur-pan:   url('assets/cursors/oscuro/pan_tool_cerrada.svg') 16 16, grabbing;
+    --cur-3d:    url('assets/cursors/oscuro/3d_rotation.svg') 16 16, grab;
+    --cur-fg: #ececec;
+    --cur-halo: #2b2b2b;
+}
+/* Lo que se puede tocar o abrir: el dedo */
+/* Mano abierta sobre lo que se puede arrastrar para pasar de sección / de foto; cerrada mientras se arrastra */
+.swiper-container, .swiper-container .swiper-wrapper, .swiper-container .swiper-slide { cursor: var(--cur-pan-open, grab) !important; }
+:is(a[href], button, [role="button"], summary, label, select, [onclick],
+    [tabindex]:not([tabindex="-1"]):not(model-viewer), .project, .team-card, .gallery-item,
+    .swiper-pagination-bullet, .more-link, .contact-icon, .categories-icon, .back-to-projects-btn,
+    .filter, .vol-pop, input[type="submit"], input[type="checkbox"], input[type="radio"]) {
+    cursor: var(--cur-touch, pointer) !important;
+}
+:is(button, input, select, textarea):disabled { cursor: default !important; }
+/* El visor 3D: el model-viewer cambia su cursor por su cuenta (grab / grabbing); acá se pisa */
+/* Cualquier otro elemento que la página (p. ej. una página de proyecto) ya marca con cursor:pointer: cursors.js
+   lo detecta al pasar el mouse y le pone data-cur-touch */
+[data-cur-touch] { cursor: var(--cur-touch, pointer) !important; }
+model-viewer, .modelo-3d-wrapper, .modelo-3d-wrapper * { cursor: var(--cur-3d, grab) !important; }
+/* Arrastrando para cambiar de sección (cursors.js agrega la clase) */
+html.is-swiping, html.is-swiping * { cursor: var(--cur-pan, grabbing) !important; }
+
+/* Cargando (cursors.js): se oculta el cursor y en su lugar gira "progress_activity" */
+html.cur-busy, html.cur-busy * { cursor: none !important; }
+.cur-spinner {
+    position: fixed; left: 0; top: 0; z-index: 2147483647;
+    width: 32px; height: 32px; margin: -16px 0 0 -16px;
+    pointer-events: none;
+    opacity: 0; transition: opacity .15s ease;
+    will-change: translate;
+}
+.cur-spinner.is-on { opacity: 1; }
+.cur-spinner svg { display: block; width: 100%; height: 100%; animation: curSpin .9s linear infinite; }
+.cur-spinner .halo { fill: var(--cur-halo); stroke: var(--cur-halo); stroke-width: 80; stroke-linejoin: round; }
+.cur-spinner .ink  { fill: var(--cur-fg); }
+@keyframes curSpin { to { transform: rotate(360deg); } }
+@media (hover: none) { .cur-spinner { display: none; } }
+@media (prefers-reduced-motion: reduce) { .cur-spinner svg { animation-duration: 2.4s; } }

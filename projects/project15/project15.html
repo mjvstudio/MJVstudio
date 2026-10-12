@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Casa Murucujá — MJV Studio</title>
+    <meta name="description" content="Casa Murucujá — proyecto de MJV Studio, arquitectura y diseño en Encarnación, Paraguay.">
+    <link rel="canonical" href="https://mjvstudio.com/projects/project15/project15.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="MJV Studio">
+    <meta property="og:title" content="Casa Murucujá — MJV Studio">
+    <meta property="og:description" content="Casa Murucujá — proyecto de MJV Studio, arquitectura y diseño en Encarnación, Paraguay.">
+    <meta property="og:url" content="https://mjvstudio.com/projects/project15/project15.html">
+    <meta property="og:image" content="https://mjvstudio.com/assets/og-image.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="icon" type="image/png" href="../../assets/logo_2.png">
+    <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
+    <link rel="stylesheet" href="../project-simple.css">
+    <link rel="stylesheet" href="../../dark-mode.css">
+
+    <!-- TEMA CLARO/OSCURO: respeta lo elegido en la portada (no tiene botón propio) -->
+    <script src="../../theme.js"></script>
+    <script src="../../sound.js" defer></script>
+    <script src="../../dropdown.js" defer></script>
+    <script src="../../lang.js" defer></script>
+    <script src="../../pref-tips.js" defer></script>
+    <script src="../../analytics.js" defer></script>
+</head>
+<body>
+    <div class="title-header-container">
+        <div class="project-title">
+            <h1>Casa Murucujá</h1>
+        </div>
+    </div>
+
+    <!-- ⚠️ Este link/ícono se repite igual en cada página de proyecto -->
+    <a href="../../index.html#architecture" class="back-to-projects-btn" title="Volver a proyectos">
+        <img src="../../assets/back.svg" alt="Volver">
+    </a>
+
+    <!-- ⚠️ Este bloque de 3 botones se repite igual en cada página de proyecto -->
+    <div class="utility-buttons">
+        <button class="theme-toggle-icon-btn js-theme-toggle" type="button" title="Cambiar a modo oscuro" aria-label="Cambiar a modo oscuro"><span class="pref-icon icon-night" aria-hidden="true"></span><span class="pref-icon icon-light" aria-hidden="true"></span></button>
+        <button class="theme-toggle-icon-btn js-sound-toggle" type="button" title="Silenciar sonido" aria-label="Silenciar sonido"><span class="pref-icon icon-volume-on" aria-hidden="true"></span><span class="pref-icon icon-volume-off" aria-hidden="true"></span></button>
+        <div class="lang-dropdown">
+            <button class="theme-toggle-icon-btn js-lang-toggle" type="button" title="Idioma" aria-label="Idioma" aria-haspopup="true" aria-expanded="false"><span class="pref-icon icon-language" aria-hidden="true"></span></button>
+            <div class="lang-dropdown-content" id="lang-dropdown">
+                <a href="#" data-lang-option="es" lang="es" style="--i: 3;">Español</a>
+                <a href="#" data-lang-option="en" lang="en" style="--i: 2;">English</a>
+                <a href="#" data-lang-option="fr" lang="fr" style="--i: 1;">Français</a>
+                <a href="#" data-lang-option="pt" lang="pt" style="--i: 0;">Português</a>
+            </div>
+        </div>
+    </div>
+
+    <main class="simple-main" id="simple-main" aria-busy="true">
+        <img src="project15_main.webp" alt="Casa Murucujá" decoding="async">
+    </main>
+
+    <script>
+        (function () {
+            var main = document.getElementById('simple-main'), img = main.querySelector('img');
+            function ready() { main.removeAttribute('aria-busy'); main.classList.add('is-ready'); }
+            if (img.complete) ready(); else { img.addEventListener('load', ready); img.addEventListener('error', ready); }
+        })();
+    </script>
+</body>
+</html>

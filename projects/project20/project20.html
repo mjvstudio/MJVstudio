@@ -3,15 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vazquez Automotores</title>
+        <title>Vazquez Automotores — MJV Studio</title>
+    <meta name="description" content="Vazquez Automotores — proyecto de MJV Studio, arquitectura y diseño en Encarnación, Paraguay.">
+    <link rel="canonical" href="https://mjvstudio.com/projects/project20/project20.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="MJV Studio">
+    <meta property="og:title" content="Vazquez Automotores — MJV Studio">
+    <meta property="og:description" content="Vazquez Automotores — proyecto de MJV Studio, arquitectura y diseño en Encarnación, Paraguay.">
+    <meta property="og:url" content="https://mjvstudio.com/projects/project20/project20.html">
+    <meta property="og:image" content="https://mjvstudio.com/assets/og-image.jpg">
+    <meta name="twitter:card" content="summary_large_image">
     <link rel="icon" type="image/png" href="../../assets/logo_2.png">
+    <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
     <link rel="stylesheet" href="project20.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+    <link rel="stylesheet" href="../../dark-mode.css">
+    <link rel="stylesheet" href="swiper-bundle.min.css"/>
+    <script type="module" src="model-viewer.min.js"></script>
+
+    <!-- TEMA CLARO/OSCURO: respeta lo elegido en la portada (no tiene botón propio) -->
+    <script src="../../theme.js"></script>
+    <script src="../../sound.js" defer></script>
+    <script src="../../dropdown.js" defer></script>
+    <script src="../../lang.js" defer></script>
+    <script src="../../pref-tips.js" defer></script>
+    <script src="../../model-loader.js" defer></script>
+    <script src="../../analytics.js" defer></script>
 </head>
 <body>
     <div class="title-header-container">
         <div class="project-title">
             <h1>Vazquez Automotores</h1>
+        </div>
+    </div>
+
+    <!-- ⚠️ Este link/ícono se repite igual en cada página de proyecto -->
+    <a href="../../index.html#architecture" class="back-to-projects-btn" title="Volver a proyectos">
+        <img src="../../assets/back.svg" alt="Volver">
+    </a>
+
+    <!-- ⚠️ Este bloque de 3 botones se repite igual en cada página de proyecto -->
+    <div class="utility-buttons">
+        <button class="theme-toggle-icon-btn js-theme-toggle" type="button" title="Cambiar a modo oscuro" aria-label="Cambiar a modo oscuro"><span class="pref-icon icon-night" aria-hidden="true"></span><span class="pref-icon icon-light" aria-hidden="true"></span></button>
+        <button class="theme-toggle-icon-btn js-sound-toggle" type="button" title="Silenciar sonido" aria-label="Silenciar sonido"><span class="pref-icon icon-volume-on" aria-hidden="true"></span><span class="pref-icon icon-volume-off" aria-hidden="true"></span></button>
+        <div class="lang-dropdown">
+            <button class="theme-toggle-icon-btn js-lang-toggle" type="button" title="Idioma" aria-label="Idioma" aria-haspopup="true" aria-expanded="false"><span class="pref-icon icon-language" aria-hidden="true"></span></button>
+            <div class="lang-dropdown-content" id="lang-dropdown">
+                <a href="#" data-lang-option="es" lang="es" style="--i: 3;">Español</a>
+                <a href="#" data-lang-option="en" lang="en" style="--i: 2;">English</a>
+                <a href="#" data-lang-option="fr" lang="fr" style="--i: 1;">Français</a>
+                <a href="#" data-lang-option="pt" lang="pt" style="--i: 0;">Português</a>
+            </div>
         </div>
     </div>
 
@@ -21,9 +62,35 @@
 <div class="swiper-slide">
     <main>
         <div class="sub-section-container">
-            <!-- Subsección izquierda (imagen estática) -->
+            <!-- Subsección izquierda (VISOR 3D — antes era una imagen estática) -->
             <div class="sub-section left memoria">
-                <img src="project20_main_2.jpg" alt="Imagen principal">
+                <div class="modelo-3d-wrapper swiper-no-swiping">
+                    <div class="loading-status" id="loading-status-memoria">Cargando modelo… 0%</div>
+                    <!--
+                        ⚠️ "modelo_vazquez.glb" es un modelo de PRUEBA para que puedas
+                        ver el visor funcionando ya mismo. Cuando exportes el modelo
+                        real desde SketchUp, subilo a esta misma carpeta con ese
+                        nombre (o cambiá el "src" de abajo por el nombre que uses).
+                    -->
+                    <model-viewer
+                        id="viewer-memoria"
+                        src="modelo_vazquez.glb"
+                        alt="Modelo 3D — Vázquez Automotores"
+                        camera-controls
+                        auto-rotate
+                        auto-rotate-delay="2000"
+                        rotation-per-second="15deg"
+                        shadow-intensity="1"
+                        shadow-softness="0.8"
+                        exposure="1.1"
+                        environment-image="neutral"
+                        camera-orbit="35deg 75deg auto"
+                        min-camera-orbit="auto 55deg auto"
+                        max-camera-orbit="auto 95deg auto"
+                        min-field-of-view="25deg"
+                        max-field-of-view="45deg">
+                    </model-viewer>
+                </div>
             </div>
 
             <!-- Subsección derecha (texto) -->
@@ -42,10 +109,10 @@
             <div class="subsection left">
                 <div class="team-carousel">
                     <div class="team-slide active" data-member="1">
-                        <img src="project20_main_2.jpg" alt="Detalle 1" class="team-photo">
+                        <img src="project20_main_2.webp" alt="Detalle 1" class="team-photo" loading="lazy" decoding="async">
                     </div>
                     <div class="team-slide" data-member="2">
-                        <img src="project20_ubi.png" alt="Detalle 2" class="team-photo">
+                        <img src="project20_ubi.webp" alt="Detalle 2" class="team-photo" loading="lazy" decoding="async">
                     </div>
                 </div>
             </div>
@@ -64,10 +131,10 @@
                 <!-- Botones de navegación -->
                 <div class="button-container">
                     <button id="tech-prev-btn" class="nav-button">
-                        <img src="../../assets/atras.jpg" alt="Atrás" class="nav-icon">
+                        <img src="../../assets/atras.svg" alt="Atrás" class="nav-icon">
                     </button>
                     <button id="tech-next-btn" class="nav-button">
-                        <img src="../../assets/adelante.jpg" alt="Adelante" class="nav-icon">
+                        <img src="../../assets/adelante.svg" alt="Adelante" class="nav-icon">
                     </button>
                 </div>
             </div>
@@ -80,40 +147,40 @@
                 <main>
                     <div class="gallery-grid">
                         <div class="gallery-item img01">
-                            <img src="images/01.png" alt="Imagen 01">
-                            <span>Imaginario 01</span>
+                            <img src="images/01_thumb.webp" srcset="images/01_thumb.webp 640w, images/01.webp 1440w" sizes="(max-width: 1200px) 90vw, 36vw" data-full="images/01.webp" alt="Imagen 01" loading="lazy" decoding="async">
+                            <span data-en="Render 01" data-fr="Rendu 01" data-pt="Render 01">Imaginario 01</span>
                         </div>
                         <div class="gallery-item img02">
-                            <img src="images/02.png" alt="Imagen 02">
-                            <span>Imaginario 02</span>
+                            <img src="images/02_thumb.webp" srcset="images/02_thumb.webp 640w, images/02.webp 1440w" sizes="(max-width: 1200px) 90vw, 12vw" data-full="images/02.webp" alt="Imagen 02" loading="lazy" decoding="async">
+                            <span data-en="Render 02" data-fr="Rendu 02" data-pt="Render 02">Imaginario 02</span>
                         </div>
                         <div class="gallery-item img03">
-                            <img src="images/03.png" alt="Imagen 03">
-                            <span>Imaginario 03</span>
+                            <img src="images/03_thumb.webp" srcset="images/03_thumb.webp 640w, images/03.webp 1440w" sizes="(max-width: 1200px) 90vw, 12vw" data-full="images/03.webp" alt="Imagen 03" loading="lazy" decoding="async">
+                            <span data-en="Render 03" data-fr="Rendu 03" data-pt="Render 03">Imaginario 03</span>
                         </div>
                         <div class="gallery-item img04">
-                            <img src="images/04.png" alt="Imagen 04">
-                            <span>Imaginario 04</span>
+                            <img src="images/04_thumb.webp" srcset="images/04_thumb.webp 640w, images/04.webp 1440w" sizes="(max-width: 1200px) 90vw, 12vw" data-full="images/04.webp" alt="Imagen 04" loading="lazy" decoding="async">
+                            <span data-en="Render 04" data-fr="Rendu 04" data-pt="Render 04">Imaginario 04</span>
                         </div>
                         <div class="gallery-item img05">
-                            <img src="images/05.png" alt="Imagen 05">
-                            <span>Imaginario 05</span>
+                            <img src="images/05_thumb.webp" srcset="images/05_thumb.webp 640w, images/05.webp 1440w" sizes="(max-width: 1200px) 90vw, 12vw" data-full="images/05.webp" alt="Imagen 05" loading="lazy" decoding="async">
+                            <span data-en="Render 05" data-fr="Rendu 05" data-pt="Render 05">Imaginario 05</span>
                         </div>
                         <div class="gallery-item img06">
-                            <img src="images/06.png" alt="Imagen 06">
-                            <span>Imaginario 06</span>
+                            <img src="images/06_thumb.webp" srcset="images/06_thumb.webp 640w, images/06.webp 1440w" sizes="(max-width: 1200px) 90vw, 12vw" data-full="images/06.webp" alt="Imagen 06" loading="lazy" decoding="async">
+                            <span data-en="Render 06" data-fr="Rendu 06" data-pt="Render 06">Imaginario 06</span>
                         </div>
                         <div class="gallery-item img07">
-                            <img src="images/07.png" alt="Imagen 07">
-                            <span>Imaginario 07</span>
+                            <img src="images/07_thumb.webp" srcset="images/07_thumb.webp 640w, images/07.webp 1261w" sizes="(max-width: 1200px) 90vw, 12vw" data-full="images/07.webp" alt="Imagen 07" loading="lazy" decoding="async">
+                            <span data-en="Render 07" data-fr="Rendu 07" data-pt="Render 07">Imaginario 07</span>
                         </div>
                         <div class="gallery-item img08">
-                            <img src="images/08.png" alt="Imagen 08">    
-                            <span>Planta Baja</span>
+                            <img src="images/08_thumb.webp" srcset="images/08_thumb.webp 640w, images/08.webp 2400w" sizes="(max-width: 1200px) 90vw, 12vw" data-full="images/08.webp" alt="Imagen 08" loading="lazy" decoding="async">    
+                            <span data-en="Ground Floor Plan" data-fr="Plan du rez-de-chaussée" data-pt="Planta baixa">Planta Baja</span>
                         </div>
                         <div class="gallery-item img09">
-                            <img src="images/09.png" alt="Imagen 09">
-                            <span>Sección</span>
+                            <img src="images/09_thumb.webp" srcset="images/09_thumb.webp 640w, images/09.webp 2400w" sizes="(max-width: 1200px) 90vw, 12vw" data-full="images/09.webp" alt="Imagen 09" loading="lazy" decoding="async">
+                            <span data-en="Section" data-fr="Coupe" data-pt="Corte">Sección</span>
                         </div>
                     </div>
                 </main>
@@ -122,20 +189,8 @@
         <div class="swiper-pagination"></div>
     </div>
 
-    <!-- Lightbox para la galería -->
-    <div class="lightbox" id="lightbox">
-        <div class="lightbox-content">
-            <span class="close-btn">&times;</span>
-            <div class="swiper lightbox-swiper">
-                <div class="swiper-wrapper"></div>
-                <div class="swiper-button-next"></div>
-                <div class="swiper-button-prev"></div>
-            </div>
-        </div>
-    </div>
-
     <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="swiper-bundle.min.js"></script>
     <script src="project20.js"></script>
 </body>
 </html>

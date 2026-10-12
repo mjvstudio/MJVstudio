@@ -1,0 +1,17 @@
+<h3>Projet :</h3>
+<p>MJVstudio</p>
+
+<h3>Équipe :</h3>
+<p>Arch. María José Vera</p>
+<p>Arch. Martín José Villalba</p>
+<p>Univ. Jessie Diesel</p>
+<p>Univ. Gonzalo Suggasti</p>
+
+<h3>Lieu :</h3>
+<p>Encarnación, Paraguay</p>
+
+<h3>Année :</h3>
+<p>2024</p>
+
+<h3>Surface :</h3>
+<p>350 m²</p>

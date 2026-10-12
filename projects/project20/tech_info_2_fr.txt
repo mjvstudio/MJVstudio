@@ -1,0 +1,8 @@
+<h3>Système structurel</h3>
+<p class="subtitulo">Innovation en acier et béton</p>
+
+<ul>
+  <li><strong>Matériau principal :</strong> acier ASTM A572</li>
+  <li><strong>Résistance :</strong> 345 MPa</li>
+  <li><em>Technique de construction :</em> modules préfabriqués</li>
+</ul>

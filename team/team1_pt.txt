@@ -1,0 +1,35 @@
+<h2>Nossa equipe</h2>
+<p>Na MJV, acreditamos que a arquitetura se constrói por meio da colaboração. Nossa equipe reúne diferentes capacidades, experiências e formas de olhar os espaços, mas compartilha uma mesma maneira de entender o projeto: com sensibilidade, critério e atenção às pessoas que vão habitá-lo.</p>
+<p>Trabalhamos de forma próxima e complementar, integrando arquitetura, design de interiores, gestão e desenvolvimento de projetos para que cada decisão faça sentido dentro de uma visão comum.</p>
+
+<div class="team-member">
+    <h3>Martín Villalba</h3>
+    <h4>Diretor Criativo · Arquiteto</h4>
+    <p>Martín lidera a direção criativa e arquitetônica da MJV. Seu trabalho se concentra em transformar ideias em espaços, desenvolvendo projetos desde sua concepção inicial até as decisões que permitem torná-los realidade.</p>
+    <p>Sua experiência em projeto e obra lhe permite manter uma visão integral do processo, entendendo que uma boa proposta arquitetônica deve encontrar um equilíbrio entre conceito, funcionalidade, materialidade e possibilidades reais de construção.</p>
+    <p>Dentro do escritório, participa ativamente da definição da identidade de cada projeto e das decisões que constroem nossa maneira de fazer arquitetura.</p>
+</div>
+
+<div class="team-member">
+    <h3>María José Vera</h3>
+    <h4>Diretora de Organização e Gestão · Arquiteta</h4>
+    <p>Majo dirige a organização e a gestão dos projetos e do escritório, articulando pessoas, processos e decisões para que cada projeto possa se desenvolver de maneira organizada e coerente.</p>
+    <p>Seu trabalho se concentra especialmente no planejamento, no acompanhamento, na coordenação e na comunicação, conectando as diferentes áreas que fazem parte do processo arquitetônico. Também participa da construção da identidade e da comunicação da MJV, buscando que nossa maneira de trabalhar seja tão coerente quanto a arquitetura que propomos.</p>
+    <p>Seu olhar complementa a dimensão criativa do escritório com uma visão estratégica e humana da gestão, entendendo que, por trás de cada projeto, existem pessoas, necessidades, prazos e decisões que também devem ser acompanhados com cuidado.</p>
+</div>
+
+<div class="team-member">
+    <h3>Gonzalo Sugastti</h3>
+    <h4>Projetista · Arquiteto</h4>
+    <p>Gonzalo é um dos principais projetistas da MJV e trabalha diretamente com a equipe no desenvolvimento arquitetônico dos projetos.</p>
+    <p>Participa das diferentes etapas do processo de projeto, desde a exploração de ideias e conceitos até o desenvolvimento e a resolução das propostas. Seu trabalho combina pensamento arquitetônico, critério espacial e atenção às necessidades concretas de cada projeto.</p>
+    <p>Sua participação na equipe traz um olhar complementar sobre o projeto, que enriquece as decisões de design e permite abordar os projetos a partir de diferentes perspectivas. Para a MJV, a troca entre projetistas é uma parte fundamental do processo criativo: discutir, questionar, desenvolver e repensar uma ideia até encontrar a solução que melhor responde a cada situação.</p>
+</div>
+
+<div class="team-member">
+    <h3>María Benítez</h3>
+    <h4>Designer de Interiores e Projetista · Arquiteta</h4>
+    <p>María integra a arquitetura e o design de interiores no processo de projeto, trabalhando os espaços com um olhar sensível e atento aos detalhes.</p>
+    <p>Sua participação abrange tanto o desenvolvimento dos projetos quanto as decisões relacionadas à configuração dos interiores, aos materiais, às proporções, ao mobiliário e aos elementos que constroem a experiência cotidiana de um espaço.</p>
+    <p>Seu olhar permite compreender a arquitetura e o design de interiores como partes de uma mesma experiência. Em cada projeto, busca relacionar as decisões formais e materiais com a maneira como as pessoas vão viver, percorrer e se apropriar do espaço.</p>
+</div>

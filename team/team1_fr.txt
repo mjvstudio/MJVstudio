@@ -1,0 +1,35 @@
+<h2>Notre équipe</h2>
+<p>Chez MJV, nous croyons que l’architecture se construit par la collaboration. Notre équipe réunit des compétences, des expériences et des façons de regarder les espaces différentes, tout en partageant une même approche du projet : avec sensibilité, discernement et attention aux personnes qui vont l’habiter.</p>
+<p>Nous travaillons en étroite collaboration et de manière complémentaire, en associant architecture, architecture d’intérieur, gestion et développement de projets pour que chaque décision s’inscrive dans une vision commune.</p>
+
+<div class="team-member">
+    <h3>Martín Villalba</h3>
+    <h4>Directeur de création · Architecte</h4>
+    <p>Martín assure la direction créative et architecturale de MJV. Son travail consiste à transformer les idées en espaces, en développant les projets depuis leur conception initiale jusqu’aux décisions qui permettent de les concrétiser.</p>
+    <p>Son expérience en conception et sur les chantiers lui permet de garder une vision globale du processus. Il considère qu’une proposition architecturale de qualité doit trouver un équilibre entre concept, fonctionnalité, matérialité et possibilités réelles de construction.</p>
+    <p>Au sein de l’agence, il participe activement à la définition de l’identité de chaque projet et aux décisions qui façonnent notre manière de faire de l’architecture.</p>
+</div>
+
+<div class="team-member">
+    <h3>María José Vera</h3>
+    <h4>Directrice de l’organisation et de la gestion · Architecte</h4>
+    <p>Majo dirige l’organisation et la gestion des projets et de l’agence, en coordonnant les personnes, les processus et les décisions pour que chaque projet puisse se développer de manière structurée et cohérente.</p>
+    <p>Son travail porte particulièrement sur la planification, le suivi, la coordination et la communication, en reliant les différents domaines qui interviennent dans le processus architectural. Elle participe également à la construction de l’identité et de la communication de MJV, avec le souci de rendre notre manière de travailler aussi cohérente que l’architecture que nous proposons.</p>
+    <p>Son regard complète la dimension créative de l’agence par une vision stratégique et humaine de la gestion. Elle comprend que derrière chaque projet se trouvent des personnes, des besoins, des délais et des décisions qui nécessitent également un accompagnement attentif.</p>
+</div>
+
+<div class="team-member">
+    <h3>Gonzalo Sugastti</h3>
+    <h4>Concepteur de projets · Architecte</h4>
+    <p>Gonzalo est l’un des principaux concepteurs de projets de MJV et travaille directement avec l’équipe au développement architectural des projets.</p>
+    <p>Il participe aux différentes étapes du processus de conception, de l’exploration des idées et des concepts au développement et à la résolution des propositions. Son travail allie réflexion architecturale, discernement spatial et attention aux besoins concrets de chaque projet.</p>
+    <p>Sa contribution apporte à l’équipe un regard complémentaire sur la conception, qui enrichit les décisions de design et permet d’aborder les projets sous différents angles. Pour MJV, les échanges entre concepteurs sont une composante essentielle du processus créatif : discuter, questionner, développer et repenser une idée jusqu’à trouver la solution qui répond le mieux à chaque situation.</p>
+</div>
+
+<div class="team-member">
+    <h3>María Benítez</h3>
+    <h4>Conceptrice d’intérieurs et de projets · Architecte</h4>
+    <p>María associe architecture et architecture d’intérieur au sein du processus de conception, en abordant les espaces avec sensibilité et souci du détail.</p>
+    <p>Elle intervient aussi bien dans le développement des projets que dans les décisions concernant l’aménagement intérieur, les matériaux, les proportions, le mobilier et les éléments qui façonnent l’expérience quotidienne d’un espace.</p>
+    <p>Son regard permet de considérer l’architecture et l’architecture d’intérieur comme les composantes d’une même expérience. Dans chaque projet, elle cherche à relier les choix formels et matériels à la manière dont les personnes vont vivre dans l’espace, le parcourir et se l’approprier.</p>
+</div>

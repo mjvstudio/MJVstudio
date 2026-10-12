@@ -1,0 +1,8 @@
+<h3>Structural System</h3>
+<p class="subtitulo">Innovation in steel and concrete</p>
+
+<ul>
+  <li><strong>Main material:</strong> ASTM A572 steel</li>
+  <li><strong>Yield strength:</strong> 345 MPa</li>
+  <li><em>Construction technique:</em> Prefabricated modules</li>
+</ul>

@@ -4,15 +4,78 @@
     <!-- METADATOS -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MJV Studio</title>
-    <link rel="icon" type="image/png" href="assets/logo_2.png">
+    <title>MJV Studio — Arquitectura y diseño en Encarnación, Paraguay</title>
+    <meta name="description" content="MJV Studio — arquitectura y diseño en Encarnación, Paraguay. Proyectos residenciales, comerciales e industriales, diseño de interiores y visualización 3D.">
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+    <link rel="canonical" href="https://mjvstudio.com/">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="apple-touch-icon" href="assets/icon-180.png">
+    <!-- COMPARTIR (WhatsApp, Instagram, Facebook, LinkedIn…) -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="MJV Studio">
+    <meta property="og:locale" content="es_PY">
+    <meta property="og:title" content="MJV Studio — Arquitectura y diseño">
+    <meta property="og:description" content="MJV Studio — arquitectura y diseño en Encarnación, Paraguay. Proyectos residenciales, comerciales e industriales, diseño de interiores y visualización 3D.">
+    <meta property="og:url" content="https://mjvstudio.com/">
+    <meta property="og:image" content="https://mjvstudio.com/assets/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Logo de MJV Studio — arquitectura y diseño">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="MJV Studio — Arquitectura y diseño">
+    <meta name="twitter:description" content="MJV Studio — arquitectura y diseño en Encarnación, Paraguay. Proyectos residenciales, comerciales e industriales, diseño de interiores y visualización 3D.">
+    <meta name="twitter:image" content="https://mjvstudio.com/assets/og-image.jpg">
+    <!-- DATOS PARA GOOGLE: ficha del estudio. Si cambian el teléfono, la ciudad o las redes, se editan acá. -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ArchitectBusiness",
+      "name": "MJV Studio",
+      "alternateName": "MJV Arquitectura y Diseño",
+      "url": "https://mjvstudio.com/",
+      "logo": "https://mjvstudio.com/assets/icon-512.png",
+      "image": "https://mjvstudio.com/assets/og-image.jpg",
+      "description": "MJV Studio — arquitectura y diseño en Encarnación, Paraguay. Proyectos residenciales, comerciales e industriales, diseño de interiores y visualización 3D.",
+      "telephone": "+595985107042",
+      "address": { "@type": "PostalAddress", "addressLocality": "Encarnación", "addressRegion": "Itapúa", "addressCountry": "PY" },
+      "areaServed": { "@type": "Country", "name": "Paraguay" },
+      "sameAs": ["https://www.instagram.com/mjvstudio.py"]
+    }
+    </script>
+    <link rel="icon" type="image/png" href="assets/logo_2.png"> <!-- respaldo para navegadores que no leen SVG -->
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg"> <!-- se adapta al tema claro/oscuro del navegador -->
     
     <!-- ESTILOS -->
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"/>
+    <link rel="stylesheet" href="dark-mode.css">
+    <link rel="stylesheet" href="swiper-bundle.min.css"/>
+
+    <!-- Sin JavaScript no hay cargador ni casita de relleno: se ve el logo de siempre -->
+    <noscript><style>#mjv-loader, .logo-casita { display: none !important; }</style></noscript>
+
+    <!-- TEMA CLARO/OSCURO (va temprano para evitar el "flash" del tema equivocado) -->
+    <script src="theme.js"></script>
+    <script src="sound.js" defer></script>
+    <script src="dropdown.js" defer></script>
+    <script src="lang.js" defer></script>
+    <script src="pref-tips.js" defer></script>
+    <script src="contact.js" defer></script>
+    <script src="analytics.js" defer></script>
+    <script src="project-layer.js" defer></script>
 </head>
 
 <body>
+    <h1 class="seo-h1">MJV Studio — Arquitectura y diseño en Encarnación, Paraguay</h1>
+    <!-- CARGADOR DE LA PORTADA: solo la casita (el primer cuadro del logo), girando, justo donde va a quedar el logo.
+         Al llegar a 100 % termina la vuelta en curso hasta quedar derecha y ahí se pasa al logo animado
+         (la casita se transforma en el logo y aparece el texto). loader.js lo maneja (progreso real, tiempos
+         mínimo y máximo). El CSS está al final de styles.css. El cargador de los modelos 3D es otro: model-loader.js. -->
+    <div id="mjv-loader" class="mjv-loader" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Cargando">
+        <svg class="ml-casita" viewBox="0 0 1280 720" aria-hidden="true" focusable="false"><g transform="translate(471.4227 173.5280) scale(0.19705116 0.19705113)"><g transform="rotate(180 855.5 943)"><path fill-rule="evenodd" d="M1428,0 L1491,1 L1526,5 L1569,16 L1607,34 L1608,36 L1622,44 L1624,47 L1626,47 L1635,56 L1637,56 L1657,76 L1657,78 L1669,91 L1669,93 L1679,106 L1680,110 L1682,111 L1693,133 L1693,136 L1695,138 L1702,158 L1706,174 L1710,204 L1710,993 L1707,1027 L1700,1063 L1691,1089 L1682,1107 L1680,1108 L1679,1112 L1677,1113 L1676,1117 L1673,1119 L1671,1124 L1663,1132 L1663,1134 L1655,1141 L1655,1143 L1644,1153 L1644,1155 L1629,1169 L1629,1171 L1547,1253 L1545,1253 L1521,1278 L1519,1278 L1470,1327 L1468,1327 L1034,1761 L1034,1763 L1020,1777 L1020,1779 L1017,1780 L1017,1782 L1015,1782 L1007,1791 L1005,1791 L1001,1796 L999,1796 L996,1800 L994,1800 L984,1809 L952,1827 L913,1840 L857,1843 L835,1841 L811,1835 L805,1835 L794,1830 L788,1829 L786,1827 L783,1827 L781,1825 L778,1825 L776,1823 L773,1823 L754,1813 L753,1811 L742,1805 L740,1802 L735,1800 L728,1793 L726,1793 L714,1781 L712,1781 L697,1765 L695,1765 L683,1753 L683,1751 L621,1690 L621,1688 L508,1575 L508,1573 L471,1536 L469,1536 L432,1497 L430,1497 L425,1492 L425,1666 L421,1719 L416,1743 L408,1766 L396,1789 L394,1790 L390,1798 L387,1800 L387,1802 L384,1804 L384,1806 L379,1810 L379,1812 L351,1839 L349,1839 L343,1845 L341,1845 L328,1855 L324,1856 L323,1858 L291,1873 L260,1882 L242,1885 L199,1886 L166,1881 L140,1873 L129,1867 L126,1867 L120,1864 L119,1862 L111,1859 L110,1857 L106,1856 L99,1850 L97,1850 L86,1840 L84,1840 L79,1834 L77,1834 L63,1820 L63,1818 L56,1812 L56,1810 L49,1803 L49,1801 L37,1785 L36,1781 L34,1780 L19,1749 L9,1718 L4,1693 L1,1662 L0,231 L4,184 L13,144 L27,111 L29,110 L31,104 L33,103 L41,89 L54,75 L54,73 L68,59 L70,59 L76,52 L78,52 L85,45 L87,45 L103,33 L107,32 L108,30 L135,17 L155,10 L181,4 L197,2 L1384,2Z"/></g></g></svg>
+    </div>
+    <script src="loader.js"></script>
+
     <!-- CONTENEDOR PRINCIPAL SWIPER -->
     <div class="swiper-container">
         <div class="swiper-wrapper">
@@ -21,133 +84,148 @@
             <div class="swiper-slide">
                 <header></header>
                 <main class="center-logo">
-                    <img src="assets/logo_1.png" alt="Logo MJV Studio" class="logo-main">
+                    <div class="logo-main logo-svg-wrap is-waiting"><!-- Logo animado, uno por idioma: assets/mjv-logo-es.svg, -en, -fr y -pt (si guardás uno de nuevo, la portada cambia sola).
+                             logo-replay.js (justo debajo) elige el del idioma guardado y lo cambia si se cambia de idioma;
+                             también repite la animación al volver a esta sección.
+                             Quien tiene activado "reducir movimiento" ve la versión fija (assets/mjv-logo-xx-fijo.svg). -->
+                        <!-- CASITA DE RELLENO: el primer cuadro de la animación (la casita derecha), dibujado acá mismo para
+                             que se vea desde el primer instante: así la portada nunca se ve vacía mientras el logo carga,
+                             mientras espera el final del cargador o mientras la sección se desliza hacia adentro.
+                             Tiene el mismo lienzo (1280×720) y la misma posición que el logo animado, así que coincide
+                             exacto con su primer cuadro y se oculta cuando la animación arranca (logo-replay.js). -->
+                        <svg class="logo-casita" viewBox="0 0 1280 720" aria-hidden="true" focusable="false"><g transform="translate(471.4227 173.5280) scale(0.19705116 0.19705113)"><g transform="rotate(180 855.5 943)"><path fill-rule="evenodd" d="M1428,0 L1491,1 L1526,5 L1569,16 L1607,34 L1608,36 L1622,44 L1624,47 L1626,47 L1635,56 L1637,56 L1657,76 L1657,78 L1669,91 L1669,93 L1679,106 L1680,110 L1682,111 L1693,133 L1693,136 L1695,138 L1702,158 L1706,174 L1710,204 L1710,993 L1707,1027 L1700,1063 L1691,1089 L1682,1107 L1680,1108 L1679,1112 L1677,1113 L1676,1117 L1673,1119 L1671,1124 L1663,1132 L1663,1134 L1655,1141 L1655,1143 L1644,1153 L1644,1155 L1629,1169 L1629,1171 L1547,1253 L1545,1253 L1521,1278 L1519,1278 L1470,1327 L1468,1327 L1034,1761 L1034,1763 L1020,1777 L1020,1779 L1017,1780 L1017,1782 L1015,1782 L1007,1791 L1005,1791 L1001,1796 L999,1796 L996,1800 L994,1800 L984,1809 L952,1827 L913,1840 L857,1843 L835,1841 L811,1835 L805,1835 L794,1830 L788,1829 L786,1827 L783,1827 L781,1825 L778,1825 L776,1823 L773,1823 L754,1813 L753,1811 L742,1805 L740,1802 L735,1800 L728,1793 L726,1793 L714,1781 L712,1781 L697,1765 L695,1765 L683,1753 L683,1751 L621,1690 L621,1688 L508,1575 L508,1573 L471,1536 L469,1536 L432,1497 L430,1497 L425,1492 L425,1666 L421,1719 L416,1743 L408,1766 L396,1789 L394,1790 L390,1798 L387,1800 L387,1802 L384,1804 L384,1806 L379,1810 L379,1812 L351,1839 L349,1839 L343,1845 L341,1845 L328,1855 L324,1856 L323,1858 L291,1873 L260,1882 L242,1885 L199,1886 L166,1881 L140,1873 L129,1867 L126,1867 L120,1864 L119,1862 L111,1859 L110,1857 L106,1856 L99,1850 L97,1850 L86,1840 L84,1840 L79,1834 L77,1834 L63,1820 L63,1818 L56,1812 L56,1810 L49,1803 L49,1801 L37,1785 L36,1781 L34,1780 L19,1749 L9,1718 L4,1693 L1,1662 L0,231 L4,184 L13,144 L27,111 L29,110 L31,104 L33,103 L41,89 L54,75 L54,73 L68,59 L70,59 L76,52 L78,52 L85,45 L87,45 L103,33 L107,32 L108,30 L135,17 L155,10 L181,4 L197,2 L1384,2Z"/></g></g></svg>
+                        <picture>
+                            <source srcset="assets/mjv-logo-es-fijo.svg" media="(prefers-reduced-motion: reduce)">
+                            <img alt="" width="1280" height="720" decoding="async" fetchpriority="high">
+                        </picture>
+                        <script src="logo-replay.js"></script>
+                        <noscript><img src="assets/mjv-logo-es.svg" alt="MJV arquitectura y diseño" width="1280" height="720"></noscript></div>
                 </main>
                 <footer></footer>
             </div>
 
             <!-- SECCIÓN 2: ARCHITECTURE -->
             <div class="swiper-slide">
-                <header>Architecture</header>
+                <header data-en="Architecture" data-fr="Architecture" data-pt="Arquitetura">Arquitectura</header>
                 <main>
                     <div class="gallery">
                         <!-- PROYECTO 20 -->
-                        <a href="projects/project20/project20.html" class="project comercial">
-                            <img src="projects/project20/project20_main.jpg" alt="Vazquez Automotores">
+                        <a href="projects/project20/project20.html" class="project comercial" data-weight="6">
+                            <img src="projects/project20/project20_thumb.webp" decoding="async" alt="Vazquez Automotores">
                             <span>Vazquez Automotores</span>
                         </a>
 
                         <!-- PROYECTO 19 -->
                         <a href="projects/project19/project19.html" class="project remodelaciones">
-                            <img src="projects/project19/project19_main.jpg" alt="Reforma Cáceres">
+                            <img src="projects/project19/project19_thumb.webp" decoding="async" alt="Reforma Cáceres">
                             <span>Reforma Cáceres</span>
                         </a>
 
                         <!-- PROYECTO 18 -->
                         <a href="projects/project18/project18.html" class="project remodelaciones">
-                            <img src="projects/project18/project18_main.jpg" alt="Reforma Scavenius">
+                            <img src="projects/project18/project18_thumb.webp" decoding="async" alt="Reforma Scavenius">
                             <span>Reforma Scavenius</span>
                         </a>
 
                         <!-- PROYECTO 17 -->
-                        <a href="projects/project17/project17.html" class="project patrimonial">
-                            <img src="projects/project17/project17_main.jpg" alt="Puerto Concepción">
+                        <a href="projects/project17/project17.html" class="project patrimonial" data-weight="4">
+                            <img src="projects/project17/project17_thumb.webp" decoding="async" alt="Puerto Concepción">
                             <span>Puerto Concepción</span>
                         </a>
 
                         <!-- PROYECTO 16 -->
                         <a href="projects/project16/project16.html" class="project remodelaciones">
-                            <img src="projects/project16/project16_main.jpg" alt="Edificio LL">
+                            <img src="projects/project16/project16_thumb.webp" decoding="async" alt="Edificio LL">
                             <span>Edificio LL</span>
                         </a>
 
                         <!-- PROYECTO 15 -->
                         <a href="projects/project15/project15.html" class="project residencial">
-                            <img src="projects/project15/project15_main.jpg" alt="Casa Murucujá">
+                            <img src="projects/project15/project15_thumb.webp" decoding="async" alt="Casa Murucujá">
                             <span>Casa Murucujá</span>
                         </a>
 
                         <!-- PROYECTO 14 -->
                         <a href="projects/project14/project14.html" class="project residencial">
-                            <img src="projects/project14/project14_main.jpg" alt="Casa Mbarete Porã">
+                            <img src="projects/project14/project14_thumb.webp" decoding="async" alt="Casa Mbarete Porã">
                             <span>Casa Mbarete Porã</span>
                         </a>
 
                         <!-- PROYECTO 13 -->
                         <a href="projects/project13/project13.html" class="project remodelaciones">
-                            <img src="projects/project13/project13_main.jpg" alt="Reforma Gini">
+                            <img src="projects/project13/project13_thumb.webp" decoding="async" alt="Reforma Gini">
                             <span>Reforma Gini</span>
                         </a>
 
                         <!-- PROYECTO 12 -->
                         <a href="projects/project12/project12.html" class="project entretenimiento">
-                            <img src="projects/project12/project12_main.jpg" alt="Camp Fire">
+                            <img src="projects/project12/project12_thumb.webp" decoding="async" alt="Camp Fire">
                             <span>Camp Fire</span>
                         </a>
 
                         <!-- PROYECTO 11 -->
                         <a href="projects/project11/project11.html" class="project residencial">
-                            <img src="projects/project11/project11_main.jpg" alt="Casa GJ">
+                            <img src="projects/project11/project11_thumb.webp" decoding="async" alt="Casa GJ">
                             <span>Casa GJ</span>
                         </a>
 
                         <!-- PROYECTO 10 -->
                         <a href="projects/project10/project10.html" class="project deportivo">
-                            <img src="projects/project10/project10_main.jpg" alt="Padel Center Remini">
+                            <img src="projects/project10/project10_thumb.webp" decoding="async" alt="Padel Center Remini">
                             <span>Padel Center Remini</span>
                         </a>
 
                         <!-- PROYECTO 9 -->
                         <a href="projects/project9/project9.html" class="project residencial">
-                            <img src="projects/project9/project9_main.jpg" alt="Casa Asunción">
+                            <img src="projects/project9/project9_thumb.webp" decoding="async" alt="Casa Asunción">
                             <span>Casa Asunción</span>
                         </a>
 
                         <!-- PROYECTO 8 -->
                         <a href="projects/project8/project8.html" class="project interiorismo">
-                            <img src="projects/project8/project8_main.jpg" alt="Oficina Ejecutiva KP">
+                            <img src="projects/project8/project8_thumb.webp" decoding="async" alt="Oficina Ejecutiva KP">
                             <span>Oficina Ejecutiva KP</span>
                         </a>
 
                         <!-- PROYECTO 7 -->
                         <a href="projects/project7/project7.html" class="project residencial">
-                            <img src="projects/project7/project7_main.jpg" alt="Casa 6:40">
+                            <img src="projects/project7/project7_thumb.webp" decoding="async" alt="Casa 6:40">
                             <span>Casa 6:40</span>
                         </a>
 
                         <!-- PROYECTO 6 -->
                         <a href="projects/project6/project6.html" class="project gastronómico">
-                            <img src="projects/project6/project6_main.jpg" alt="Reforma Vikinga">
+                            <img src="projects/project6/project6_thumb.webp" decoding="async" alt="Reforma Vikinga">
                             <span>Reforma Vikinga</span>
                         </a>
 
                         <!-- PROYECTO 5 -->
                         <a href="projects/project5/project5.html" class="project residencial">
-                            <img src="projects/project5/project5_main.jpg" alt="Casa RA">
+                            <img src="projects/project5/project5_thumb.webp" decoding="async" alt="Casa RA">
                             <span>Casa RA</span>
                         </a>
 
                         <!-- PROYECTO 4 -->
                         <a href="projects/project4/project4.html" class="project remodelaciones">
-                            <img src="projects/project4/project4_main.jpg" alt="Reforma LM1">
+                            <img src="projects/project4/project4_thumb.webp" decoding="async" alt="Reforma LM1">
                             <span>Reforma LM1</span>
                         </a>
 
                         <!-- PROYECTO 3 -->
                         <a href="projects/project3/project3.html" class="project cultural">
-                            <img src="projects/project3/project3_main.jpg" alt="Ovy">
+                            <img src="projects/project3/project3_thumb.webp" decoding="async" alt="Ovy">
                             <span>Ovy</span>
                         </a>
 
                         <!-- PROYECTO 2 -->
                         <a href="projects/project2/project2.html" class="project remodelaciones">
-                            <img src="projects/project2/project2_main.jpg" alt="Fachada Andes">
+                            <img src="projects/project2/project2_thumb.webp" decoding="async" alt="Fachada Andes">
                             <span>Fachada Andes</span>
                         </a>
 
                         <!-- PROYECTO 1 -->
                         <a href="projects/project1/project1.html" class="project remodelaciones">
-                            <img src="projects/project1/project1_main.jpg" alt="Fachada Andes">
+                            <img src="projects/project1/project1_thumb.webp" decoding="async" alt="Fachada Andes">
                             <span>Fachada Andes</span>
                         </a>
                     </div>
@@ -156,17 +234,17 @@
                 <!-- FILTRO DE CATEGORÍAS -->
                 <footer class="section-footer">
                     <div class="dropdown">
-                        <img id="categories-button" src="assets/categories.png" alt="Categorías" class="categories-icon">
+                        <img id="categories-button" src="assets/categories.svg" alt="Categorías" class="categories-icon">
                         <div class="dropdown-content" id="categories-dropdown">
-                            <a href="#" class="filter" data-filter="interiorismo" style="--i: 8;">Interiorismo</a>
-                            <a href="#" class="filter" data-filter="remodelaciones" style="--i: 7;">Remodelaciones</a>
-                            <a href="#" class="filter" data-filter="gastronómico" style="--i: 6;">Gastronómico</a>
-                            <a href="#" class="filter" data-filter="deportivo" style="--i: 5;">Deportivo</a>
-                            <a href="#" class="filter" data-filter="cultural" style="--i: 4;">Cultural</a>
-                            <a href="#" class="filter" data-filter="comercial" style="--i: 3;">Comercial</a>
-                            <a href="#" class="filter" data-filter="residencial" style="--i: 2;">Residencial</a>
-                            <a href="#" class="filter" data-filter="entretenimiento" style="--i: 1;">Entretenimiento</a>
-                            <a href="#" class="filter" data-filter="all" style="--i: 0;">Todos</a>
+                            <a href="#" class="filter" data-filter="interiorismo" style="--i: 8;" data-en="Interior Design" data-fr="Design d'intérieur" data-pt="Design de interiores">Interiorismo</a>
+                            <a href="#" class="filter" data-filter="remodelaciones" style="--i: 7;" data-en="Renovations" data-fr="Rénovations" data-pt="Reformas">Remodelaciones</a>
+                            <a href="#" class="filter" data-filter="gastronómico" style="--i: 6;" data-en="Food &amp; Beverage" data-fr="Gastronomie" data-pt="Gastronomia">Gastronómico</a>
+                            <a href="#" class="filter" data-filter="deportivo" style="--i: 5;" data-en="Sports" data-fr="Sport" data-pt="Esportivo">Deportivo</a>
+                            <a href="#" class="filter" data-filter="cultural" style="--i: 4;" data-en="Cultural" data-fr="Culturel" data-pt="Cultural">Cultural</a>
+                            <a href="#" class="filter" data-filter="comercial" style="--i: 3;" data-en="Commercial" data-fr="Commercial" data-pt="Comercial">Comercial</a>
+                            <a href="#" class="filter" data-filter="residencial" style="--i: 2;" data-en="Residential" data-fr="Résidentiel" data-pt="Residencial">Residencial</a>
+                            <a href="#" class="filter" data-filter="entretenimiento" style="--i: 1;" data-en="Entertainment" data-fr="Divertissement" data-pt="Entretenimento">Entretenimiento</a>
+                            <a href="#" class="filter" data-filter="all" style="--i: 0;" data-en="All" data-fr="Tous" data-pt="Todos">Todos</a>
                         </div>
                     </div>
                 </footer>
@@ -174,56 +252,52 @@
 
             <!-- SECCIÓN 3: STUDIO -->
             <div class="swiper-slide">
-                <header>Studio</header>
+                <header data-en="Studio" data-fr="Studio" data-pt="Estúdio">Estudio</header>
                 <main>
-                    <div class="subsections">
-                        <!-- CARRUSEL DE IMÁGENES -->
-                        <div class="subsection left">
-                            <div class="team-carousel">
-                                <div class="team-slide active" data-member="studio-1">
-                                    <img src="assets/team1_photo.png" alt="Miembro 1" class="team-photo">
-                                </div>
-                                <div class="team-slide" data-member="studio-2">
-                                    <img src="assets/team2_photo.png" alt="Miembro 2" class="team-photo">
-                                </div>
+                    <div class="studio-container">
+                        <!-- MOSAICO DE TARJETAS -->
+                        <div class="team-grid">
+                            <div class="team-card card-estudio" data-member="estudio" tabindex="0">
+                                <img src="team/estudio_1.png" alt="Foto del Estudio" class="team-card-img">
+                                <span class="team-card-label" data-en="Studio Photo" data-fr="Photo du studio" data-pt="Foto do estúdio">Foto del Estudio</span>
+                            </div>
+                            <div class="team-card card-majo" data-member="majo" tabindex="0">
+                                <img src="team/majo_1.png" alt="Majo" class="team-card-img">
+                                <span class="team-card-label">Majo</span>
+                            </div>
+                            <div class="team-card card-martin" data-member="martin" tabindex="0">
+                                <img src="team/martin_1.png" alt="Martín" class="team-card-img">
+                                <span class="team-card-label">Martín</span>
+                            </div>
+                            <div class="team-card card-gonza" data-member="gonza" tabindex="0">
+                                <img src="team/gonza_1.png" alt="Gonza" class="team-card-img">
+                                <span class="team-card-label">Gonza</span>
+                            </div>
+                            <div class="team-card card-maria" data-member="maria" tabindex="0">
+                                <img src="team/maria_1.png" alt="María" class="team-card-img">
+                                <span class="team-card-label">María</span>
                             </div>
                         </div>
-                        
-                        <!-- CARRUSEL DE INFORMACIÓN -->
-                        <div class="subsection right">
-                            <div class="info-carousel">
-                                <div class="info-slide active" data-member="studio-1">
-                                    <div class="team-info-content"></div>
-                                </div>
-                                <div class="info-slide" data-member="studio-2">
-                                    <div class="team-info-content"></div>
-                                </div>
-                            </div>
-                            
-                            <!-- BOTONES DE NAVEGACIÓN -->
-                            <div class="button-container">
-                                <button id="studio-prev-btn" class="nav-button">
-                                    <img src="assets/atras.jpg" alt="Atrás" class="nav-icon">
-                                </button>
-                                <button id="studio-next-btn" class="nav-button">
-                                    <img src="assets/adelante.jpg" alt="Adelante" class="nav-icon">
-                                </button>
-                            </div>
+
+                        <!-- PANEL DE TEXTO -->
+                        <div class="info-panel">
+                            <div class="info-panel-text" id="info-panel-text">Cargando...</div>
+                            <button class="more-link" id="more-link" type="button">more</button>
                         </div>
                     </div>
                 </main>
                 <footer class="section-footer">
                     <div class="contact-dropdown">
-                        <img id="studio-contact-button" src="assets/contact.png" alt="Contacto" class="contact-icon">
+                        <img id="studio-contact-button" src="assets/contact.svg" alt="Contacto" class="contact-icon">
                         <div class="contact-dropdown-content" id="studio-contact-dropdown">
-                            <a href="mailto:tucorreo@example.com" style="--i: 0;">
-                                <img src="assets/email.png" alt="Email">
+                            <a href="mailto:tucorreo@example.com" id="open-contact-form" style="--i: 0;">
+                                <img src="assets/email.svg" alt="Email">
                             </a>
                             <a href="https://wa.me/595985107042" target="_blank" style="--i: 1;">
-                                <img src="assets/whatsapp.png" alt="WhatsApp">
+                                <img src="assets/whatsapp.svg" alt="WhatsApp">
                             </a>
                             <a href="https://www.instagram.com/mjvstudio.py?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" style="--i: 2;">
-                                <img src="assets/instagram.png" alt="Instagram">
+                                <img src="assets/instagram.svg" alt="Instagram">
                             </a>
                         </div>
                     </div>
@@ -235,8 +309,103 @@
         <div class="swiper-pagination"></div>
     </div>
 
+    <!-- BARRA DE PREFERENCIAS: fuera del carrusel, así queda en el mismo
+         lugar exacto sin importar qué sección esté activa -->
+    <div class="utility-buttons">
+        <button class="theme-toggle-icon-btn js-theme-toggle" type="button" title="Cambiar a modo oscuro" aria-label="Cambiar a modo oscuro"><span class="pref-icon icon-night" aria-hidden="true"></span><span class="pref-icon icon-light" aria-hidden="true"></span></button>
+        <button class="theme-toggle-icon-btn js-sound-toggle" type="button" title="Silenciar sonido" aria-label="Silenciar sonido"><span class="pref-icon icon-volume-on" aria-hidden="true"></span><span class="pref-icon icon-volume-off" aria-hidden="true"></span></button>
+        <div class="lang-dropdown">
+            <button class="theme-toggle-icon-btn js-lang-toggle" type="button" title="Idioma" aria-label="Idioma" aria-haspopup="true" aria-expanded="false"><span class="pref-icon icon-language" aria-hidden="true"></span></button>
+            <div class="lang-dropdown-content" id="lang-dropdown">
+                <a href="#" data-lang-option="es" lang="es" style="--i: 3;">Español</a>
+                <a href="#" data-lang-option="en" lang="en" style="--i: 2;">English</a>
+                <a href="#" data-lang-option="fr" lang="fr" style="--i: 1;">Français</a>
+                <a href="#" data-lang-option="pt" lang="pt" style="--i: 0;">Português</a>
+            </div>
+        </div>
+        <button class="theme-toggle-icon-btn js-grid-reset" type="button" title="Reacomodar proyectos" aria-label="Reacomodar proyectos"><span class="pref-icon icon-grid" aria-hidden="true"></span></button>
+    </div>
+
+    <!-- POP-UP DE INFORMACIÓN DEL EQUIPO/ESTUDIO -->
+    <div class="info-modal-overlay" id="info-modal-overlay">
+        <div class="info-modal-box">
+            <button class="info-modal-close" id="info-modal-close" type="button" aria-label="Cerrar">&times;</button>
+            <h2 class="info-modal-title" id="info-modal-title"></h2>
+            <div class="info-modal-text" id="info-modal-text"></div>
+        </div>
+    </div>
+
+    <!-- FORMULARIO DE CONTACTO (se abre desde el sobre del menú de contacto en Studio) -->
+    <div class="info-modal-overlay" id="contact-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="contact-modal-title">
+        <div class="info-modal-box contact-modal-box">
+            <button class="info-modal-close" id="contact-modal-close" type="button" aria-label="Cerrar">&times;</button>
+            <h2 class="info-modal-title" id="contact-modal-title" data-en="Let's talk" data-fr="Parlons-en" data-pt="Vamos conversar">Hablemos</h2>
+            <p class="cf-intro" data-en="Tell us briefly what you have in mind and we'll get back to you soon. All fields are required." data-fr="Dites-nous brièvement ce que vous avez en tête et nous vous répondrons rapidement. Tous les champs sont obligatoires." data-pt="Conte-nos brevemente o que você tem em mente e responderemos em breve. Todos os campos são obrigatórios.">Contanos brevemente qué tenés en mente y te respondemos a la brevedad. Todos los campos son obligatorios.</p>
+
+            <form id="contact-form" class="contact-form" novalidate>
+                <div class="cf-row">
+                    <div class="cf-field">
+                        <label for="cf-name" data-en="First name" data-fr="Prénom" data-pt="Nome">Nombre</label>
+                        <input id="cf-name" name="nombre" type="text" maxlength="60" autocomplete="given-name" required>
+                        <span class="cf-error" aria-live="polite"></span>
+                    </div>
+
+                    <div class="cf-field">
+                        <label for="cf-lastname" data-en="Last name" data-fr="Nom" data-pt="Sobrenome">Apellido</label>
+                        <input id="cf-lastname" name="apellido" type="text" maxlength="60" autocomplete="family-name" required>
+                        <span class="cf-error" aria-live="polite"></span>
+                    </div>
+                </div>
+
+                <div class="cf-field">
+                    <label for="cf-contact" data-en="Email or phone number" data-fr="E-mail ou numéro de téléphone" data-pt="E-mail ou telefone">Email o teléfono de contacto</label>
+                    <input id="cf-contact" name="contacto" type="text" maxlength="80" autocomplete="off" required>
+                    <span class="cf-error" aria-live="polite"></span>
+                </div>
+
+                <div class="cf-field">
+                    <label for="cf-service" data-en="Service of interest" data-fr="Service souhaité" data-pt="Serviço de interesse">Servicio de interés</label>
+                    <select id="cf-service" name="servicio" required>
+                        <option value="" disabled selected data-en="Choose an option" data-fr="Choisissez une option" data-pt="Escolha uma opção">Elegí una opción</option>
+                        <option value="Proyecto" data-en="Architectural project" data-fr="Projet d'architecture" data-pt="Projeto de arquitetura">Proyecto</option>
+                        <option value="Reforma" data-en="Renovation" data-fr="Rénovation" data-pt="Reforma">Reforma</option>
+                        <option value="Gestión de obra" data-en="Construction management" data-fr="Gestion de chantier" data-pt="Gestão de obra">Gestión de obra</option>
+                        <option value="Visualización 3D" data-en="3D visualization" data-fr="Visualisation 3D" data-pt="Visualização 3D">Visualización 3D</option>
+                    </select>
+                    <span class="cf-error" aria-live="polite"></span>
+                </div>
+
+                <div class="cf-field cf-field-grow">
+                    <label for="cf-message" data-en="Message" data-fr="Message" data-pt="Mensagem">Mensaje</label>
+                    <textarea id="cf-message" name="mensaje" rows="5" maxlength="1500" required
+                        placeholder="Contanos brevemente qué tenés en mente"
+                        data-en-placeholder="Tell us briefly what you have in mind" data-fr-placeholder="Dites-nous brièvement ce que vous avez en tête" data-pt-placeholder="Conte-nos brevemente o que você tem em mente"></textarea>
+                    <span class="cf-error" aria-live="polite"></span>
+                </div>
+
+                <!-- Campo trampa contra spam: las personas no lo ven, los robots sí lo completan -->
+                <div class="cf-hp" aria-hidden="true">
+                    <label>Website <input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+                </div>
+
+                <button type="submit" class="cf-submit" id="cf-submit" data-en="Send message" data-fr="Envoyer le message" data-pt="Enviar mensagem">Enviar mensaje</button>
+                <p class="cf-status" id="cf-status" role="status" aria-live="polite"></p>
+                <p class="cf-alt"><span data-en="Or write to us directly:" data-fr="Ou écrivez-nous directement :" data-pt="Ou escreva para nós diretamente:">O escribinos directo:</span> <span id="cf-email-text"></span></p>
+            </form>
+
+            <div class="cf-success" role="status">
+                <h3 data-en="Message sent" data-fr="Message envoyé" data-pt="Mensagem enviada">¡Mensaje enviado!</h3>
+                <p data-en="Thanks for reaching out. We'll get back to you soon." data-fr="Merci de nous avoir écrit. Nous vous répondrons rapidement." data-pt="Obrigado por entrar em contato. Responderemos em breve.">Gracias por escribirnos. Te respondemos a la brevedad.</p>
+                <button type="button" class="cf-submit" id="cf-close-success" data-en="Close" data-fr="Fermer" data-pt="Fechar">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
     <!-- SCRIPTS -->
-    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script src="swiper-bundle.min.js"></script>
+    <script src="cursors.js"></script>
+    <script src="grid.js"></script>
+    <script src="studio-fit.js"></script>
     <script src="scripts.js"></script>
 </body>
 </html>
