@@ -107,6 +107,13 @@ function setupAnimatedDropdown(buttonEl, dropdownEl) {
         }
     });
 
+    // Tocar o empezar a arrastrar en cualquier otra parte (por ejemplo para pasar a la sección siguiente) también cierra la lista
+    document.addEventListener('pointerdown', (e) => {
+        if (!isOpen()) return;
+        if (!buttonEl.contains(e.target) && !dropdownEl.contains(e.target)) closeAnimated();
+    }, true);
+    document.addEventListener('mjvsectionchange', closeAnimated);
+
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') closeAnimated();
     });

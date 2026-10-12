@@ -157,7 +157,7 @@
             }
         }
         box.classList.toggle('studio-scroll', !found);
-        textEl.classList.toggle('swiper-no-swiping', !found);   // si el texto se desplaza, el dedo lo mueve a él y no cambia de sección       // último recurso: si de verdad no entra, vuelve la barra (finita)
+        textEl.classList.remove('swiper-no-swiping');          // el texto se desplaza hacia arriba/abajo y el deslizamiento horizontal sigue cambiando de sección
         void box.offsetWidth;
         if (firstFit) { firstFit = false; requestAnimationFrame(function () { box.classList.remove('is-fitting'); }); }
         else box.classList.remove('is-fitting');
