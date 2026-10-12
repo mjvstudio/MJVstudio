@@ -2,7 +2,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Configuración del Swiper principal
     const mainSwiper = new Swiper('.swiper-container', {
-        direction: 'vertical',
+        direction: 'horizontal',   // siempre en horizontal (PC y celular)
         loop: true,
         slidesPerView: 1,
         mousewheel: {
@@ -25,7 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
         effect: 'slide',
         breakpoints: {
             768: {
-                direction: 'horizontal',
                 mousewheel: {
                     forceToAxis: false,
                     sensitivity: 0.5
