@@ -39,7 +39,7 @@
    ===================================================================== */
 
 var MJV_ANALYTICS = {
-    websiteId: '',   // ← pegá acá tu "Website ID" de Umami
+    websiteId: 'a8e0cb79-93f4-4bba-b0a9-206c45b722b1',   // ← pegá acá tu "Website ID" de Umami
     scriptUrl: 'https://cloud.umami.is/script.js',
     // Solo se cuenta en estos dominios (agregá otro si publicás en uno nuevo)
     hostnames: ['www.mjvstudio.com', 'mjvstudio.com'],
