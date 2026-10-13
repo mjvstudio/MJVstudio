@@ -142,10 +142,24 @@ body {
     transform: translateX(var(--logo-shift-x));
     -webkit-user-drag: none;
 }
+/* ALINEACIÓN CON EL CARGADOR. Al arrancar, la casita del logo está en el CENTRO de la pantalla (igual que la del cargador):
+   por eso, mientras espera ("is-waiting") el lienzo NO lleva corrimiento. Una vez que arranca la animación, todo el lienzo
+   se corre hacia el costado (hasta --logo-shift-x) al mismo tiempo y con la misma curva que el símbolo dentro del SVG
+   (de 50,54 % a 93,55 % de los 4,65 s), así el logo termina centrado en la pantalla. Se reinicia solo cada vez que se
+   quita "is-waiting" (al volver a la sección o al cambiar de idioma). */
+@keyframes logoRecentrar {
+    0%, 50.54%     { transform: translateX(0); }
+    93.55%, 100%   { transform: translateX(var(--logo-shift-x)); }
+}
+.logo-svg-wrap img,
+.logo-svg-wrap .logo-casita { animation: logoRecentrar 4.65s cubic-bezier(.42, 0, .58, 1) both; }
+.logo-svg-wrap.is-waiting img,
+.logo-svg-wrap.is-waiting .logo-casita { animation: none; transform: translateX(0); }
 
 /* "Reducir movimiento": la página muestra el logo fijo del idioma (mjv-logo-xx-fijo.svg, dibujado
    justo al tamaño del logo, sin lienzo ni corrimiento) y sin "respiración". */
 @media (prefers-reduced-motion: reduce) {
+    .logo-svg-wrap img { animation: none; }
     .logo-svg-wrap { animation: none; }
     .logo-main,
     .logo-main[data-logo-lang] {

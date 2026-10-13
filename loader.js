@@ -10,7 +10,8 @@
    - Al llegar a 100 % la casita sigue girando (saltos de 90°) hasta quedar derecha. Ahí el
      fondo se desvanece y, a la vez, arranca la animación del logo de la portada (aviso
      "mjvloaderdone", lo recibe logo-replay.js): la casita se transforma en el logo y aparece el
-     texto. La casita de relleno de la portada ya está debajo, en el mismo lugar, así que no hay salto.
+     texto. La casita de relleno de la portada ya está debajo, en el mismo lugar (centro de la pantalla), así que no hay
+     salto; el logo se corre hacia el costado durante su propia animación (styles.css).
    - El cargador de los modelos 3D de los proyectos es otro: model-loader.js.
 
    Se salta (sin cargador) cuando:
@@ -62,10 +63,9 @@
     paint(0);
     root.style.setProperty('--ml-exit', EXIT_MS + 'ms');
 
-    // Mientras carga, la casita va en el CENTRO de la pantalla (mismo tamaño que tendrá en el logo). Cuando termina de
-    // cargar, se desliza hasta su lugar en el logo de la portada (justo encima de la casita de relleno) y recién ahí
-    // se desvanece el fondo: no hay salto.
-    var phase = 'center';              // 'center' = cargando; 'glide' = yendo a su lugar en el logo
+    // La casita del cargador va en el CENTRO de la pantalla, exactamente donde está la casita del logo mientras espera
+    // (sin corrimiento: ver "ALINEACIÓN CON EL CARGADOR" en styles.css). Al terminar de cargar no se mueve: se desvanece el
+    // fondo y arranca la animación del logo desde ese mismo punto; después el logo se corre hacia el costado por sí solo.
     function place() {
         var ref = document.querySelector('.logo-casita');
         if (!ref || !casita) return;
@@ -73,30 +73,19 @@
         if (!r.width) return;
         casita.classList.add('is-placed');
         casita.style.width = r.width + 'px';
-        if (phase === 'glide') {
-            casita.style.left = r.left + 'px';
-            casita.style.top = r.top + 'px';
-            return;
-        }
-        var h = r.height || r.width * 720 / 1280;
-        casita.style.left = Math.round((window.innerWidth - r.width) / 2) + 'px';
-        casita.style.top = Math.round((window.innerHeight - h) / 2) + 'px';
+        casita.style.left = r.left + 'px';
+        casita.style.top = r.top + 'px';
     }
     place();
     window.addEventListener('resize', place);
     document.addEventListener('DOMContentLoaded', place);
-    var GLIDE_MS = 520;
     var exiting = false;
-    function exit() {                  // lleva la casita a su lugar y después sale
+    function exit() {                  // la casita ya está en su lugar: solo sale
         if (exiting || left) return;
         exiting = true;
         clearTimeout(stepTimer);
-        if (!casita || !casita.classList.contains('is-placed')) { leave(); return; }
         if (angle !== 0 && casita) { casita.style.rotate = '0deg'; angle = 0; }
-        casita.style.transition = 'left ' + GLIDE_MS + 'ms cubic-bezier(.65,0,.2,1), top ' + GLIDE_MS + 'ms cubic-bezier(.65,0,.2,1)';
-        phase = 'glide';
-        place();
-        setTimeout(leave, reduced ? 0 : GLIDE_MS + 40);
+        leave();
     }
 
     // Giro EN SALTOS DE 90°, igual que en la animación del logo (assets/mjv-logo-xx.svg): cada cuadro dura
