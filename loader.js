@@ -62,29 +62,52 @@
     paint(0);
     root.style.setProperty('--ml-exit', EXIT_MS + 'ms');
 
-    // La casita se ubica EXACTAMENTE sobre la casita de relleno del logo (misma posición y tamaño)
+    // Mientras carga, la casita va en el CENTRO de la pantalla (mismo tamaño que tendrá en el logo). Cuando termina de
+    // cargar, se desliza hasta su lugar en el logo de la portada (justo encima de la casita de relleno) y recién ahí
+    // se desvanece el fondo: no hay salto.
+    var phase = 'center';              // 'center' = cargando; 'glide' = yendo a su lugar en el logo
     function place() {
         var ref = document.querySelector('.logo-casita');
         if (!ref || !casita) return;
         var r = ref.getBoundingClientRect();
         if (!r.width) return;
         casita.classList.add('is-placed');
-        casita.style.left = r.left + 'px';
-        casita.style.top = r.top + 'px';
         casita.style.width = r.width + 'px';
+        if (phase === 'glide') {
+            casita.style.left = r.left + 'px';
+            casita.style.top = r.top + 'px';
+            return;
+        }
+        var h = r.height || r.width * 720 / 1280;
+        casita.style.left = Math.round((window.innerWidth - r.width) / 2) + 'px';
+        casita.style.top = Math.round((window.innerHeight - h) / 2) + 'px';
     }
     place();
     window.addEventListener('resize', place);
     document.addEventListener('DOMContentLoaded', place);
+    var GLIDE_MS = 520;
+    var exiting = false;
+    function exit() {                  // lleva la casita a su lugar y después sale
+        if (exiting || left) return;
+        exiting = true;
+        clearTimeout(stepTimer);
+        if (!casita || !casita.classList.contains('is-placed')) { leave(); return; }
+        if (angle !== 0 && casita) { casita.style.rotate = '0deg'; angle = 0; }
+        casita.style.transition = 'left ' + GLIDE_MS + 'ms cubic-bezier(.65,0,.2,1), top ' + GLIDE_MS + 'ms cubic-bezier(.65,0,.2,1)';
+        phase = 'glide';
+        place();
+        setTimeout(leave, reduced ? 0 : GLIDE_MS + 40);
+    }
 
     // Giro EN SALTOS DE 90°, igual que en la animación del logo (assets/mjv-logo-xx.svg): cada cuadro dura
     // STEP_MS (0,5 s) y la casita avanza un cuarto de vuelta hacia la derecha. Derecha (0°) = la posición del logo.
+    var left = false;
     var angle = 0, stepTimer = 0, ready = false, stepAt = performance.now();
     function step() {
         angle = (angle + 90) % 360;
         stepAt = performance.now();
         if (casita) casita.style.rotate = angle + 'deg';
-        if (angle === 0 && ready) { leave(); return; }          // volvió a la posición del logo: ahí sigue el logo animado
+        if (angle === 0 && ready) { exit(); return; }          // volvió a la posición del logo: ahí sigue el logo animado
         stepTimer = setTimeout(step, STEP_MS);
     }
     if (!reduced) stepTimer = setTimeout(step, STEP_MS);
@@ -179,12 +202,11 @@
     setTimeout(function () { if (!leaving) { leaving = true; paint(100); finishSpin(); } }, MAX_MS + 1500);
 
     // Al 100 %: la casita sigue girando hasta quedar en la posición del logo (0°) y recién ahí se sale
-    var left = false;
     function finishSpin() {
         ready = true;
-        if (reduced) { leave(); return; }
-        if (angle === 0 && performance.now() - stepAt < 150) { leave(); return; }   // justo acaba de llegar
-        setTimeout(function () { leave(); }, STEP_MS * 5 + 400);   // red de seguridad (pestaña en segundo plano)
+        if (reduced) { exit(); return; }
+        if (angle === 0 && performance.now() - stepAt < 150) { exit(); return; }   // justo acaba de llegar
+        setTimeout(function () { exit(); }, STEP_MS * 5 + 400);   // red de seguridad (pestaña en segundo plano)
     }
 
     // ---- salida ----

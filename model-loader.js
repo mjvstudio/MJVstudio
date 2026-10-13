@@ -54,6 +54,7 @@
         '.mjv-mloader{--mm-size:clamp(64px,7vw,104px);position:absolute;inset:0;z-index:5;display:flex;align-items:center;justify-content:center;',
         'background:var(--page-bg,#fff);color:#000;user-select:none;-webkit-user-select:none;pointer-events:none;}',
         '[data-theme="dark"] .mjv-mloader{color:#fff;}',
+        '@media (orientation:portrait){.mjv-mloader{--mm-size:clamp(72px,20vw,110px);}}',
         '.mjv-mloader .mm-center{display:flex;flex-direction:column;align-items:center;gap:clamp(14px,2.6vh,24px);}',
         '.mjv-mloader .mm-logo{display:block;width:var(--mm-size);height:auto;overflow:visible;fill:currentColor;transform-origin:50% 50%;}',
         '.mjv-mloader .mm-piece{fill-rule:evenodd;opacity:0;animation:mmPiece ' + LOOP_MS + 'ms cubic-bezier(.22,1,.36,1) infinite;}',
@@ -111,6 +112,11 @@
         viewer.addEventListener('load', function () { loaded = true; real = 1; });
         viewer.addEventListener('error', function () { failed = true; });
         if (viewer.loaded) { loaded = true; real = 1; }
+        // por si el aviso "load" se perdió (modelo en caché que llegó antes de armar el cargador)
+        var poll = setInterval(function () {
+            if (viewer.loaded) { loaded = true; real = 1; }
+            if (leaving || loaded || failed) clearInterval(poll);
+        }, 400);
 
         function paint(n) { pctEl.textContent = fmt(n); root.setAttribute('aria-valuenow', String(n)); }
         function leave() {
@@ -130,6 +136,8 @@
             var dt = Math.min(100, now - last); last = now;
             var byTime = Math.min(1, (Date.now() - started) / MIN_MS);
             var t = Math.min(real, byTime) * 100;
+            // hasta que el visor avise su primer avance, el número avanza un poco solo (hasta 10 %): así no parece trabado
+            if (!loaded && t < 10) t = Math.max(t, Math.min(10, (Date.now() - started) / 1000 * 2.5));
             if (t > shown) shown += Math.max((t - shown) * (1 - Math.exp(-dt / 140)), dt * 0.012);
             if (shown > t) shown = t;
             var n = Math.min(100, Math.floor(shown + 0.0001));
