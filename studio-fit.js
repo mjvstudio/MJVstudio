@@ -68,7 +68,7 @@
         // alto disponible para el texto = el del panel menos el padding y la fila de "more"
         var pcs = getComputedStyle(panel);
         var avail = panel.clientHeight - parseFloat(pcs.paddingTop) - parseFloat(pcs.paddingBottom)
-                  - (more ? more.offsetHeight + parseFloat(getComputedStyle(more).marginTop) : 0);
+                  - (more && more.offsetHeight ? more.offsetHeight + parseFloat(getComputedStyle(more).marginTop) : 0);
         var list = texts.length ? texts : [textEl.textContent];
         for (var i = 0; i < list.length; i++) {
             probe.textContent = list[i];
@@ -144,7 +144,13 @@
             var Hmax = Math.min(bh - GAP - 120, (bw - SG + 0.75 * SG) / (r + 0.25));
             var H = Math.max(120, Math.min(Hmax, bh * 0.6 - GAP));
             box.style.setProperty('--team-h', Math.round(H) + 'px');
-            geom(H, 1);
+            // El mosaico usa TODO el ancho disponible (como la galería de los proyectos): la columna del equipo se ensancha
+            // (tarjetas hasta 1,6 veces más anchas que altas) y la foto del Estudio toma el resto, recortándose apenas.
+            var cardH = (H - 3 * SG) / 4;
+            var colW = Math.min(cardH * 1.6, Math.max(cardH, bw - SG - r * H));
+            grid.style.setProperty('--col-w', colW.toFixed(1) + 'px');
+            grid.style.setProperty('--est-w', (bw - SG - colW).toFixed(1) + 'px');
+            setW(bw);
             box.style.setProperty('--info-fs', '0.9rem');
             found = fits();
             if (!found) {

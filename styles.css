@@ -185,7 +185,7 @@ body {
 /* --------------- HEADER Y FOOTER --------------- */
 .swiper-slide header, .swiper-slide footer {
     width: 90vw;
-    background-color: rgb(255, 255, 255);
+    background-color: transparent;   /* el color de fondo lo pone solo <body>: así el cambio claro/oscuro es parejo en toda la pantalla */
     display: flex;
     align-items: center;
     margin: 0 auto;
@@ -223,7 +223,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: rgb(255, 255, 255);
+    background-color: transparent;   /* ídem: lo pinta <body> */
     margin: 0 auto;
 }
 
@@ -1135,3 +1135,317 @@ html.project-loading:not(.cur-on), html.project-loading:not(.cur-on) * { cursor:
 
 /* Título para buscadores y lectores de pantalla (no se ve) */
 .seo-h1{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
+
+/* =====================================================================
+   POP-UP DEL EQUIPO / ESTUDIO (scripts.js)
+   Fotos a color en galería de un lado y el texto del otro; el fondo queda desenfocado.
+   - Computadora: se abre con "more" (arriba del texto van las pestañas Estudio / personas).
+   - Celular: no hay "more"; se toca una foto del mosaico y se abre el pop-up de esa persona.
+   - En vertical (celular parado) las fotos van arriba, en una tira que se desliza hacia el costado, y el texto abajo.
+   ===================================================================== */
+.team-popup {
+    background: rgba(0, 0, 0, 0);
+}
+.team-popup.open {
+    background: rgba(0, 0, 0, 0.42);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+.team-popup-box {
+    width: min(1100px, 92vw);
+    height: calc(82 * var(--vh));
+    max-height: calc(82 * var(--vh));
+    padding: 0;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+}
+.tp-gallery {
+    min-width: 0;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: none;
+    padding: 14px;
+    box-sizing: border-box;
+    background: rgba(0, 0, 0, 0.04);
+}
+.tp-gallery-cols { column-count: 2; column-gap: 10px; }
+.tp-gallery::-webkit-scrollbar { display: none; }
+.tp-gallery img {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 0 0 10px;
+    break-inside: avoid;
+    background: rgba(0, 0, 0, 0.08);
+    opacity: 0;
+    transition: opacity 0.45s ease;
+    -webkit-user-drag: none;
+    user-select: none;
+}
+.tp-gallery img.is-loaded { opacity: 1; }
+.tp-side {
+    min-width: 0;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: none;
+    padding: 40px 34px 30px;
+    box-sizing: border-box;
+}
+.tp-side::-webkit-scrollbar { display: none; }
+.tp-tabs {
+    display: none;
+    position: absolute;
+    left: 50%;
+    bottom: calc(2.2 * var(--vh));
+    transform: translateX(-50%);
+    max-width: 92vw;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px 26px;
+    z-index: 2;
+}
+.team-popup.has-tabs .tp-tabs { display: flex; }
+.tp-tab {
+    background: none;
+    border: 0;
+    padding: 4px 2px;
+    font-family: 'titulos', sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    color: #fff;
+    opacity: 0.6;
+    cursor: var(--cur-touch, pointer);
+    transition: opacity 0.25s ease, font-weight 0.2s ease;
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.35);
+}
+.tp-tab:hover, .tp-tab:focus-visible { opacity: 0.9; }
+.tp-tab.is-active { opacity: 1; font-weight: 700; }
+.team-popup-box .info-modal-close { z-index: 2; }
+
+@media (orientation: portrait) {
+    .team-popup { padding: 12px; }
+    .team-popup-box {
+        width: 94vw;
+        height: calc(88 * var(--vh));
+        max-height: calc(88 * var(--vh));
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: minmax(0, 46%) minmax(0, 1fr);
+    }
+    .tp-gallery {
+        overflow-x: auto;
+        overflow-y: hidden;
+        scroll-snap-type: x mandatory;
+        padding: 10px;
+    }
+    .tp-gallery-cols {
+        column-count: auto;
+        display: flex;
+        gap: 8px;
+        height: 100%;
+    }
+    .tp-gallery img {
+        flex: none;
+        width: auto;
+        height: 100%;
+        max-width: none;
+        margin: 0;
+        scroll-snap-align: center;
+    }
+    .tp-side { padding: 18px 20px 22px; }
+}
+/* Celular: no hay "more" (el pop-up se abre tocando la foto) */
+@media (hover: none) {
+    .more-link { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .tp-gallery img, .tp-tab { transition: none; }
+}
+/* Cerrar: misma posición que el botón de atrás de los proyectos, sin círculo */
+.team-popup .tp-close {
+    position: absolute;
+    top: 0;
+    right: calc(5vw - 7px);
+    width: 42px;
+    height: var(--hdr-h);
+    padding: 0;
+    background: none;
+    border: 0;
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    z-index: 3;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform 0.3s ease;
+}
+.team-popup .tp-close:hover { transform: scale(1.12); }
+.team-popup .tp-close:focus, .team-popup .tp-close:focus-visible { outline: none; }
+.team-popup .tp-close:focus-visible { transform: scale(1.12); }
+
+/* ---- Fotos del mosaico: dos capas que se funden (scripts.js) y rótulo de la persona elegida ---- */
+.team-card-img { transition: filter 0.5s ease, opacity 0.6s ease; }
+.team-card-img-b { position: absolute; inset: 0; }
+.team-card-img.layer-hidden { opacity: 0; }
+.team-card.is-selected .team-card-label { opacity: 1; }
+
+/* ---- Pop-up: el collage de fotos llena el cuadrado, sin desplazamiento ---- */
+.tp-gallery { overflow: hidden; }
+.tp-gallery-cols { position: relative; width: 100%; height: 100%; column-count: auto; }
+.tp-gallery-cols img {
+    position: absolute;
+    display: block;
+    margin: 0;
+    max-width: none;
+    object-fit: cover;
+    break-inside: auto;
+}
+.team-popup-box { --tp-sq: min(calc(82 * var(--vh)), 62vw); }
+@media (orientation: landscape) {
+    .team-popup-box {
+        width: min(calc(var(--tp-sq) + 480px), 92vw);
+        grid-template-columns: var(--tp-sq) minmax(0, 1fr);
+    }
+    .tp-gallery { width: var(--tp-sq); }
+}
+@media (orientation: portrait) {
+    .team-popup-box {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: min(94vw, calc(0.55 * 88 * var(--vh))) minmax(0, 1fr);
+    }
+    .tp-gallery {
+        width: auto;
+        height: 100%;
+        aspect-ratio: 1 / 1;
+        justify-self: center;
+        overflow: hidden;
+        scroll-snap-type: none;
+        padding: 10px;
+    }
+    .tp-gallery-cols { display: block; height: 100%; gap: 0; }
+    .tp-gallery-cols img { flex: none; height: auto; scroll-snap-align: none; }
+}
+
+
+/* ---- Celular: los botones de contacto / categorías miden lo mismo (a la vista) que los de la barra de preferencias.
+   Los íconos de la barra son más chicos que su caja (el dibujo ocupa ~77 %), por eso su caja es menor. ---- */
+@media (max-width: 768px) {
+    .categories-icon, .contact-icon { width: auto; height: 23px; }
+    .dropdown, .contact-dropdown { bottom: calc(var(--ftr-h, 58px) / 2 + 4px - 11.5px); }
+}
+@media (max-width: 480px) {
+    .categories-icon, .contact-icon { height: 20px; }
+    .dropdown, .contact-dropdown { bottom: calc(var(--ftr-h, 58px) / 2 + 4px - 10px); }
+}
+
+
+/* =====================================================================
+   POP-UP DEL EQUIPO — integrado al resto del sitio
+   Es otra "página" del sitio: mismo fondo, misma fila de título arriba (con la X en el lugar del botón de atrás),
+   el contenido en el medio y las pestañas abajo, como el pie de la portada. Sin caja ni panel aparte.
+   ===================================================================== */
+:root { --tp-fg: #000; }
+[data-theme="dark"] { --tp-fg: var(--mjv-dark-text); }
+.team-popup {
+    padding: 0;
+    flex-direction: column;
+    background: rgba(255, 255, 255, 0);
+    background: color-mix(in srgb, var(--page-bg) 0%, transparent);
+    color: var(--tp-fg);
+}
+.team-popup.open {
+    background: rgba(255, 255, 255, 1);
+    background: var(--page-bg);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+}
+.team-popup .tp-title {
+    position: absolute;
+    top: 0;
+    left: 5vw;
+    height: var(--hdr-h);
+    margin: 0;
+    padding: 0 56px 0 0;
+    display: flex;
+    align-items: center;
+    font-family: 'titulos', sans-serif;
+    font-size: max(1.15rem, 2vw);
+    font-weight: normal;
+    line-height: 1.2;
+    color: var(--tp-fg);
+    z-index: 3;
+}
+.team-popup .tp-close { color: var(--tp-fg); }
+.team-popup-box {
+    width: 90vw;
+    height: var(--main-h);
+    max-height: var(--main-h);
+    background: none;
+    box-shadow: none;
+    border-radius: 0;
+    transform: none;
+    overflow: visible;
+}
+.team-popup-box { --tp-sq: min(var(--main-h), 56vw); }
+.tp-gallery { background: none; padding: 0; overflow: visible; }
+.tp-gallery-cols img { background: rgba(128, 128, 128, 0.12); }
+.tp-side {
+    padding: 0 0 0 clamp(20px, 3vw, 56px);
+    color: var(--tp-fg);
+    display: flex;
+    align-items: center;
+}
+.tp-side .info-modal-text {
+    color: var(--tp-fg);
+    max-width: 560px;
+    max-height: 100%;
+    overflow-y: auto;
+    scrollbar-width: none;
+}
+.tp-side .info-modal-text::-webkit-scrollbar { display: none; }
+.team-popup .tp-tabs {
+    bottom: 0;
+    height: var(--ftr-h);
+    align-items: center;
+}
+.tp-tab { color: var(--tp-fg); text-shadow: none; opacity: 0.45; }
+.tp-tab:hover, .tp-tab:focus-visible { opacity: 0.8; }
+.tp-tab.is-active { opacity: 1; font-weight: 700; }
+@media (orientation: landscape) {
+    .team-popup-box {
+        width: 90vw;
+        grid-template-columns: var(--tp-sq) minmax(0, 1fr);
+    }
+}
+@media (orientation: portrait) {
+    .team-popup-box {
+        width: 90vw;
+        height: var(--main-h);
+        max-height: var(--main-h);
+        grid-template-rows: min(90vw, calc(0.58 * var(--main-h))) minmax(0, 1fr);
+        row-gap: 14px;
+    }
+    .tp-gallery { padding: 0; }
+    .tp-side { padding: 0; align-items: flex-start; }
+    .tp-side .info-modal-text { max-width: none; }
+}
+
+/* Más fluido: sin desenfoque (el fondo ya es casi opaco, el blur solo costaba rendimiento) y capas listas para animar */
+.team-popup, .team-popup.open { backdrop-filter: none; -webkit-backdrop-filter: none; }
+.tp-gallery-cols img { will-change: translate, scale, opacity; }
+.team-card { will-change: auto; }
+.gallery .project { backface-visibility: hidden; }
+
+/* Pestañas del pop-up en celular: ocupan el lugar de la barra de abajo, en una sola línea */
+@media (max-width: 700px) {
+    .team-popup .tp-tabs {
+        flex-wrap: nowrap;
+        gap: 0 18px;
+        width: 90vw;
+        max-width: 90vw;
+        justify-content: center;
+    }
+    .tp-tab { font-size: 0.92rem; white-space: nowrap; padding: 8px 2px; }
+}
+@media (max-width: 400px) { .team-popup .tp-tabs { gap: 0 12px; } .tp-tab { font-size: 0.85rem; } }

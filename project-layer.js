@@ -40,10 +40,76 @@
     var pushed = false;                      // ¿se agregó una entrada al historial del navegador?
     var baseTitle = document.title;
     var loadTimer = 0;
+        var openedAt = 0;
+    var SHOW_AFTER_MS = 700;                 // el proyecto aparece cuando los cuadros ya empezaron a abrirse
 
     var reduce = function () {
         return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
     };
+
+
+    /* ---------- Animación de los cuadros de la portada ----------
+       Al abrir: el cuadro elegido se agranda y se esfuma, y los demás salen hacia afuera (cada uno en la dirección
+       en que está respecto al elegido) y se esfuman, uno tras otro. Al volver (atrás): hacen el camino inverso y se
+       reacomodan en su lugar. Usa las propiedades "translate" / "scale" / "opacity", que se suman a lo que grid.js
+       ya les puso, sin pisarlo. En pantallas táctiles y en computadora funciona igual. */
+    function visibleTiles(sel) {
+        var vw = window.innerWidth, vh = window.innerHeight;
+        return Array.prototype.filter.call(document.querySelectorAll(sel), function (el) {
+            var r = el.getBoundingClientRect();
+            return r.width > 0 && r.height > 0 && r.right > 0 && r.left < vw && r.bottom > 0 && r.top < vh;
+        });
+    }
+    function planOf(sel, chosenEl) {
+        var tiles = visibleTiles(sel);
+        if (!tiles.length) return [];
+        var vw = window.innerWidth, vh = window.innerHeight;
+        var c = chosenEl && chosenEl.getBoundingClientRect ? chosenEl.getBoundingClientRect() : null;
+        var cx = c ? c.left + c.width / 2 : vw / 2, cy = c ? c.top + c.height / 2 : vh / 2;
+        var dist = Math.min(vw, vh) * 0.42;
+        var items = tiles.map(function (el) {
+            var r = el.getBoundingClientRect();
+            var dx = r.left + r.width / 2 - cx, dy = r.top + r.height / 2 - cy;
+            var d = Math.sqrt(dx * dx + dy * dy);
+            var chosen = el === chosenEl || (chosenEl && chosenEl.contains && chosenEl.contains(el));
+            var ux = d > 1 ? dx / d : 0, uy = d > 1 ? dy / d : 0;
+            return { el: el, d: d, chosen: chosen, x: chosen ? 0 : ux * dist, y: chosen ? 0 : uy * dist };
+        });
+        var maxD = Math.max.apply(null, items.map(function (i) { return i.d; })) || 1;
+        items.forEach(function (i) { i.t = i.d / maxD; });
+        return items;
+    }
+    function outState(i) {
+        return i.chosen ? { translate: '0px 0px', scale: 1.12, opacity: 0 }
+                        : { translate: i.x + 'px ' + i.y + 'px', scale: 0.55, opacity: 0 };
+    }
+    /* Efecto reutilizable: fx(selector, elegido).out() saca los cuadros; .back() los devuelve. */
+    function makeFx(sel, getChosen) {
+        var anims = [];
+        function cancel() { anims.forEach(function (a) { try { a.cancel(); } catch (e) {} }); anims = []; }
+        return {
+            active: function () { return anims.length > 0; },
+            out: function () {
+                cancel();
+                if (reduce() || !Element.prototype.animate) return;
+                anims = planOf(sel, getChosen()).map(function (i) {
+                    return i.el.animate([{ translate: '0px 0px', scale: 1, opacity: 1 }, outState(i)],
+                        { duration: 750, delay: i.t * 220, easing: 'cubic-bezier(.65,0,.35,1)', fill: 'both' });
+                });
+            },
+            back: function () {
+                var had = anims.length > 0;
+                cancel();                                   // primero se sueltan, para medir las posiciones reales
+                if (!had || reduce() || !Element.prototype.animate) return;
+                planOf(sel, getChosen()).forEach(function (i) {
+                    i.el.animate([outState(i), { translate: '0px 0px', scale: 1, opacity: 1 }],
+                        { duration: 950, delay: 120 + (1 - i.t) * 260, easing: 'cubic-bezier(.33,1,.68,1)', fill: 'backwards' });
+                });
+            }
+        };
+    }
+    var tileFx = makeFx('.gallery .project', function () { return trigger; });
+    window.mjvFx = { make: makeFx };
 
     /* El resto de la página no debe poder recibir foco ni clics mientras el proyecto está arriba */
     function setInert(flag) {
@@ -83,8 +149,13 @@
         if (!frame) return;
         busy = false;
         root.classList.remove('project-loading');
-        frame.classList.add('is-open');
-        try { frame.contentWindow.focus(); } catch (e) {}
+        var f = frame;
+        var wait = tileFx.active() ? Math.max(0, SHOW_AFTER_MS - (Date.now() - openedAt)) : 0;
+        setTimeout(function () {
+            if (frame !== f) return;
+            f.classList.add('is-open');
+            try { f.contentWindow.focus(); } catch (e) {}
+        }, wait);
     }
 
     function openLayer(href, push) {
@@ -121,6 +192,7 @@
         clearTimeout(loadTimer);
         root.classList.remove('project-loading');
         f.classList.remove('is-open');
+        tileFx.back();
         setInert(false);
         document.title = baseTitle;
         if (trigger && trigger.focus) { try { trigger.focus({ preventScroll: true }); } catch (e) {} }
@@ -133,7 +205,9 @@
         root.classList.add('project-loading');
         exists(href).then(function (ok) {
             if (!ok) { busy = false; root.classList.remove('project-loading'); location.href = href; return; }
-            openLayer(href, true);
+            openedAt = Date.now();
+            tileFx.out();
+            setTimeout(function () { openLayer(href, true); }, tileFx.active() ? 380 : 0);
         });
     }
 

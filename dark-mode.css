@@ -27,8 +27,7 @@
 [data-theme="dark"] .swiper-slide header,
 [data-theme="dark"] .swiper-slide footer,
 [data-theme="dark"] .swiper-slide main {
-    background-color: var(--mjv-dark-bg);
-    color: var(--mjv-dark-text);
+    color: var(--mjv-dark-text);        /* el fondo lo pone <body> (ver styles.css) */
 }
 
 [data-theme="dark"] .project { background-color: var(--mjv-dark-panel); }
@@ -647,3 +646,7 @@ html.cur-busy, html.cur-busy * { cursor: none !important; }
 @media (prefers-reduced-motion: reduce) {
     main, .title-header-container, .swiper-pagination { transition: none; }
 }
+
+/* POP-UP DEL EQUIPO / ESTUDIO */
+[data-theme="dark"] .tp-gallery { background: rgba(0, 0, 0, 0.18); }
+[data-theme="dark"] .tp-gallery img { background: rgba(255, 255, 255, 0.06); }

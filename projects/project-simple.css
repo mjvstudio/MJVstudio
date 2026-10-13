@@ -14,13 +14,12 @@ html, body { height: 100%; height: 100dvh; margin: 0; overflow: hidden; }
 body { display: flex; flex-direction: column; }
 ::-webkit-scrollbar { display: none; }
 
-.title-header-container { flex: 0 0 auto; width: 90%; max-width: 1400px; margin: 0 auto; padding: 1.5rem 56px 1.5rem 0; box-sizing: border-box; }
-.project-title h1 {
-    font-size: 1.4rem; letter-spacing: 1px; margin: 0 0 0 25px; color: #1a1a1a;
-    text-transform: uppercase; font-weight: 500; transition: all 0.3s ease;
-}
-@media (min-width: 768px)  { .project-title h1 { margin-left: 40px; } }
-@media (min-width: 1200px) { .project-title h1 { margin-left: 60px; } }
+/* Misma fila que los encabezados de las secciones de la portada (alto, ancho, tamaño y estilo de letra) */
+:root { --hdr-h: calc(10 * var(--vh)); }
+@media (orientation: portrait) { :root { --hdr-h: max(calc(6 * var(--vh)), 44px); } }
+.title-header-container { flex: 0 0 auto; width: 90vw; height: var(--hdr-h); margin: 0 auto; padding: 0 56px 0 0; box-sizing: border-box; display: flex; align-items: center; }
+.project-title { margin: 0; }
+.project-title h1 { font-size: max(1.15rem, 2vw); line-height: 1.2; letter-spacing: normal; margin: 0; color: black; text-transform: none; font-weight: normal; }
 
 /* La imagen ocupa todo el espacio disponible, entera (sin recortes) y centrada */
 .simple-main {
@@ -32,7 +31,7 @@ body { display: flex; flex-direction: column; }
 .simple-main.is-ready img { opacity: 1; }
 
 .back-to-projects-btn {
-    position: fixed; top: 25px; right: 25px; z-index: 1000; width: 42px; height: 42px;
+    position: fixed; top: 0; right: calc(5vw - 7px); z-index: 1000; width: 42px; height: var(--hdr-h);
     display: flex; align-items: center; justify-content: center; background: none;
     -webkit-tap-highlight-color: transparent; transition: transform 0.3s ease;
 }
