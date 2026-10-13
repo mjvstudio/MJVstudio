@@ -270,8 +270,8 @@
                         <!-- MOSAICO DE TARJETAS -->
                         <div class="team-grid">
                             <div class="team-card card-estudio" data-member="estudio" tabindex="0">
-                                <img src="team/estudio_1.png" alt="MJV arquitectura y diseño" class="team-card-img">
-                                <span class="team-card-label" data-en="MJV architecture and design" data-fr="MJV architecture et design" data-pt="MJV arquitetura e design">MJV arquitectura y diseño</span>
+                                <img src="team/estudio_1.png" alt="Nosotros" class="team-card-img">
+                                <span class="team-card-label" data-en="About us" data-fr="Nous" data-pt="Nós">Nosotros</span>
                             </div>
                             <div class="team-card card-majo" data-member="majo" tabindex="0">
                                 <img src="team/majo_1.png" alt="Majo" class="team-card-img">
@@ -295,6 +295,17 @@
                         <div class="info-panel">
                             <div class="info-panel-text" id="info-panel-text">Cargando...</div>
                             <button class="more-link" id="more-link" type="button">more</button>
+                        </div>
+
+                        <!-- FICHA DEL EQUIPO / ESTUDIO: reemplaza al mosaico en su mismo lugar (scripts.js).
+                             Las fotos se piden como team/<miembro>_1.png, _2.png... (cuántas: PHOTOS_PER_MEMBER en scripts.js) -->
+                        <div class="team-detail" id="info-modal-overlay" role="region" aria-labelledby="info-modal-title" aria-hidden="true">
+                            <h2 class="td-sr" id="info-modal-title"></h2>
+                            <div class="td-content">
+                                <div class="td-gallery" id="info-modal-gallery"></div>
+                                <div class="td-side"><div class="td-text" id="info-modal-text"></div></div>
+                            </div>
+                            <nav class="td-tabs" id="info-modal-tabs" aria-label="Estudio y equipo"></nav>
                         </div>
                     </div>
                 </main>
@@ -338,21 +349,8 @@
         <button class="theme-toggle-icon-btn js-grid-reset" type="button" title="Reacomodar proyectos" aria-label="Reacomodar proyectos"><span class="pref-icon icon-grid" aria-hidden="true"></span></button>
     </div>
 
-    <!-- POP-UP DEL EQUIPO/ESTUDIO: las fotos (a color) en galería de un lado y el texto del otro.
-         En computadora se abre con "more"; en celular, tocando una foto del mosaico. (scripts.js)
-         Las fotos se piden como team/<miembro>_1.png, _2.png... (cuántas: PHOTOS_PER_MEMBER en scripts.js) -->
-    <div class="info-modal-overlay team-popup" id="info-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="info-modal-title">
-        <button class="info-modal-close tp-close" id="info-modal-close" type="button" aria-label="Cerrar"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
-        <h2 class="info-modal-title tp-title" id="info-modal-title"></h2>
-        <div class="info-modal-box team-popup-box">
-            <div class="tp-gallery" id="info-modal-gallery"></div>
-            <div class="tp-side">
-                <div class="info-modal-text" id="info-modal-text"></div>
-            </div>
-        </div>
-        <!-- Barra independiente debajo del pop-up (solo computadora): cambia rápido entre el estudio y las personas -->
-        <nav class="tp-tabs" id="info-modal-tabs" aria-label="Estudio y equipo"></nav>
-    </div>
+    <!-- Botón de volver de la ficha del equipo (mismo lugar y mismo ícono que el de las páginas de proyecto) -->
+    <button class="td-back" id="info-modal-close" type="button" aria-label="Volver al estudio" title="Volver al estudio"><img src="assets/back.svg" alt=""></button>
 
     <!-- FORMULARIO DE CONTACTO (se abre desde el sobre del menú de contacto en Studio) -->
     <div class="info-modal-overlay" id="contact-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="contact-modal-title">

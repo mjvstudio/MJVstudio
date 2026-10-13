@@ -60,8 +60,16 @@ html, body, .swiper-slide, .gallery {
 }
 
 /*-------- Paginación --------*/
+/* Misma posición que en la portada (styles.css): 10 px del borde de la pantalla; en vertical, 4 px.
+   Va fija a la pantalla (no al contenedor, que deja un espacio abajo para la barra de preferencias). */
 .swiper-pagination {
+    position: fixed !important;
+    left: 0;
+    width: 100%;
     bottom: 10px !important;
+}
+@media (orientation: portrait) {
+    .swiper-pagination { bottom: 4px !important; }
 }
 
 .swiper-pagination-bullet {
@@ -464,7 +472,6 @@ html, body, .swiper-slide, .gallery {
 .gv-btn:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; border-radius: 4px; }
 .gv-prev { left: 0;  top: 50%; margin-top: -24px; }
 .gv-next { right: 0; top: 50%; margin-top: -24px; }
-.gv-close { right: 0; top: 0; }
 
 /* Los símbolos son archivos .svg usados como "máscara": toman el color del texto,
    así cambian solos con el tema (igual que los íconos de la barra de preferencias) */
@@ -479,7 +486,6 @@ html, body, .swiper-slide, .gallery {
 }
 .gv-prev .gv-icon  { -webkit-mask-image: url('../../assets/atras.svg');       mask-image: url('../../assets/atras.svg'); }
 .gv-next .gv-icon  { -webkit-mask-image: url('../../assets/adelante.svg');    mask-image: url('../../assets/adelante.svg'); }
-.gv-close .gv-icon { -webkit-mask-image: url('../../assets/icons/close.svg'); mask-image: url('../../assets/icons/close.svg'); width: 26px; height: 26px; }
 
 @media (max-width: 768px) {
     .gallery-viewer { width: 94vw; }
@@ -686,7 +692,6 @@ html, body, .swiper-slide, .gallery {
    ===================================================================== */
 body { padding-bottom: var(--ftr-h, 10vh); box-sizing: border-box; }
 .swiper-container { position: relative; }
-.swiper-container .swiper-pagination { bottom: 6px !important; }
 .swiper-slide main { position: relative; }
 
 @media (orientation: portrait) {
@@ -775,3 +780,10 @@ body { padding-bottom: var(--ftr-h, 10vh); box-sizing: border-box; }
     .gallery-item, .gallery-item.img01 { aspect-ratio: auto; max-width: none; min-height: 0; }
     .gallery-item img { object-fit: cover; }
 }
+
+/* Puntos de la galería de fotos: es la misma barra de la parte de abajo (.swiper-pagination); mientras se ve una foto,
+   la barra marca en qué foto se está y reemplaza a las flechas. */
+.swiper-pagination.gv-pagination { opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 0.4s ease, visibility 0s linear 0.4s; }
+.swiper-pagination.gv-pagination .swiper-pagination-bullet { cursor: pointer; margin: 0 4px; }
+html.gv-open .swiper-pagination.gv-pagination { opacity: 1; visibility: visible; pointer-events: auto; transition: opacity 0.4s ease, visibility 0s; z-index: 11; }
+html.gv-open .swiper-pagination:not(.gv-pagination) { opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 0.4s ease, visibility 0s linear 0.4s; }

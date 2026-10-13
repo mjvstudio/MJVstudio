@@ -100,21 +100,44 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
         <button type="button" class="gv-btn gv-prev"><span class="gv-icon" aria-hidden="true"></span></button>
         <button type="button" class="gv-btn gv-next"><span class="gv-icon" aria-hidden="true"></span></button>
-        <button type="button" class="gv-btn gv-close"><span class="gv-icon" aria-hidden="true"></span></button>`;
+`;
     const layers = Array.from(viewer.querySelectorAll('.gv-img'));
     const stage = viewer.querySelector('.gv-stage');
     const btnPrev = viewer.querySelector('.gv-prev');
     const btnNext = viewer.querySelector('.gv-next');
-    const btnClose = viewer.querySelector('.gv-close');
 
     const setLabels = () => {
         viewer.setAttribute('aria-label', T({ es: 'Galería de imágenes', en: 'Image gallery', fr: 'Galerie d\'images', pt: 'Galeria de imagens' }));
         btnPrev.setAttribute('aria-label', T({ es: 'Imagen anterior', en: 'Previous image', fr: 'Image précédente', pt: 'Imagem anterior' }));
         btnNext.setAttribute('aria-label', T({ es: 'Imagen siguiente', en: 'Next image', fr: 'Image suivante', pt: 'Imagem seguinte' }));
-        btnClose.setAttribute('aria-label', T({ es: 'Cerrar', en: 'Close', fr: 'Fermer', pt: 'Fechar' }));
     };
     setLabels();
     document.addEventListener('mjvlangchange', setLabels);
+
+    // Barra de puntos (la misma de abajo de la página): marca en qué foto se está
+    const dotsBar = document.createElement('div');
+    dotsBar.className = 'swiper-pagination gv-pagination swiper-pagination-clickable swiper-pagination-bullets';
+    dotsBar.addEventListener('click', (e) => {
+        const b = e.target.closest && e.target.closest('.swiper-pagination-bullet');
+        if (!b) return;
+        e.stopPropagation();
+        const i = Number(b.dataset.i);
+        if (i !== current) showImage(i);
+    });
+    const buildDots = (n) => {
+        dotsBar.textContent = '';
+        for (let i = 0; i < n; i++) {
+            const b = document.createElement('span');
+            b.className = 'swiper-pagination-bullet';
+            b.dataset.i = i;
+            dotsBar.appendChild(b);
+        }
+        const host = document.querySelector('.swiper-container');
+        if (host && dotsBar.parentNode !== host) host.appendChild(dotsBar);
+    };
+    const markDot = (index) => {
+        Array.prototype.forEach.call(dotsBar.children, (b, i) => b.classList.toggle('swiper-pagination-bullet-active', i === index));
+    };
 
     let items = [];          // las fotos de la grilla de la sección que está abierta
     let grid = null;
@@ -148,6 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         front ^= 1;
         current = index;
+        markDot(index);
 
         const big = new Image();
         big.src = fullSrcOf(img);
@@ -175,16 +199,21 @@ document.addEventListener('DOMContentLoaded', () => {
         layers.forEach((l) => { l.classList.remove('on'); l.removeAttribute('src'); });
         viewer.classList.add('is-open');
         viewer.setAttribute('aria-hidden', 'false');
+        buildDots(items.length);
+        document.documentElement.classList.add('gv-open');
+        if (mainSwiper.mousewheel) mainSwiper.mousewheel.disable();      // la ruedita pasa de foto, no de sección
         grid.classList.add('is-covered');
         if (mainSwiper.keyboard) mainSwiper.keyboard.disable();     // ← → son para las fotos, no para cambiar de sección
         showImage(items.indexOf(item));
-        (fromKeyboard ? btnClose : viewer).focus({ preventScroll: true });
+        viewer.focus({ preventScroll: true });
     };
 
     const closeViewer = () => {
         if (!isOpen()) return;
         viewer.classList.remove('is-open');
         viewer.setAttribute('aria-hidden', 'true');
+        document.documentElement.classList.remove('gv-open');
+        if (mainSwiper.mousewheel) mainSwiper.mousewheel.enable();
         if (grid) grid.classList.remove('is-covered');
         if (mainSwiper.keyboard) mainSwiper.keyboard.enable();
         if (opener) { opener.focus({ preventScroll: true }); opener = null; }
@@ -225,9 +254,33 @@ document.addEventListener('DOMContentLoaded', () => {
         else if (e.key === 'Escape') closeViewer();
     });
 
+    // Ruedita del mouse / trackpad: cambia de foto (hacia abajo = siguiente). Se junta un poco de movimiento para que un
+    // solo giro no salte varias fotos.
+    let wheelAcc = 0, wheelAt = 0;
+    const onWheel = (e) => {
+        if (!isOpen()) return;
+        e.preventDefault();
+        e.stopPropagation();          // que no llegue a Swiper (no cambia de sección)
+        e.stopImmediatePropagation();
+        const now = Date.now();
+        if (now - wheelAt > 250) wheelAcc = 0;
+        wheelAt = now;
+        wheelAcc += Math.abs(e.deltaY) >= Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
+        if (Math.abs(wheelAcc) >= 30) { go(wheelAcc > 0 ? 1 : -1); wheelAcc = 0; }
+    };
+    viewer.addEventListener('wheel', onWheel, { passive: false });
+    document.addEventListener('wheel', onWheel, { passive: false, capture: true });
     btnPrev.addEventListener('click', () => go(-1));
     btnNext.addEventListener('click', () => go(1));
-    btnClose.addEventListener('click', closeViewer);
+    // El único botón de volver es el de arriba (el de la página): con una foto abierta cierra la foto; si no, vuelve a proyectos.
+    // (Se escucha en la fase de captura y antes que el de la portada, así que lo frena si hay una foto abierta.)
+    document.addEventListener('click', (e) => {
+        const back = e.target.closest && e.target.closest('.back-to-projects-btn');
+        if (!back || !isOpen()) return;
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        closeViewer();
+    }, true);
 
     // Deslizar con el dedo (o arrastrar con el mouse) hacia los costados
     let dragX = null, dragY = null;

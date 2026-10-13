@@ -648,5 +648,11 @@ html.cur-busy, html.cur-busy * { cursor: none !important; }
 }
 
 /* POP-UP DEL EQUIPO / ESTUDIO */
-[data-theme="dark"] .tp-gallery { background: rgba(0, 0, 0, 0.18); }
-[data-theme="dark"] .tp-gallery img { background: rgba(255, 255, 255, 0.06); }
+
+
+
+/* El pop-up del equipo no lleva panel propio: usa el fondo de la página */
+
+
+/* Ficha del equipo: el botón de volver toma el color del texto en modo noche (igual que el de los proyectos) */
+[data-theme="dark"] .td-back img { filter: invert(1) brightness(0.925); }

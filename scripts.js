@@ -157,6 +157,7 @@ document.addEventListener('DOMContentLoaded', function () {
         pt: 'Texto indisponível no momento.'
     };
     // window.mjvLang.pick({...}) devuelve el texto del idioma actual
+    const STUDIO_CARD = { es: 'Nosotros', en: 'About us', fr: 'Nous', pt: 'Nós' };
     const STUDIO_SHORT = { es: 'Estudio', en: 'Studio', fr: 'Studio', pt: 'Estúdio' };
     const pickLang = (dict) => (window.mjvLang ? window.mjvLang.pick(dict) : dict.es);
     const PERSON_NAMES = { majo: 'Majo', martin: 'Martín', gonza: 'Gonza', maria: 'María' };
@@ -210,7 +211,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Si cambia el idioma (botón EN/ES), volvemos a pedir los textos (y se actualizan los rótulos de las tarjetas)
     const labelCards = () => cards.forEach(c => {
         const l = c.querySelector('.team-card-label');
-        if (l && c.dataset.member === DEFAULT_MEMBER) l.textContent = memberLabel(DEFAULT_MEMBER);
+        if (l && c.dataset.member === DEFAULT_MEMBER) l.textContent = pickLang(STUDIO_CARD);
     });
     document.addEventListener('mjvlangchange', () => { labelCards(); loadAllMemberTexts(); });
     labelCards();
@@ -301,7 +302,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (isTouch()) { openModal(member); return; }
             selectedMember = member;           // computadora: tocar una foto es lo mismo que "more" para esa persona
             refreshPanel();
-            openModal(member, true);
+            openModal(member);
         };
         card.addEventListener('click', choose);
         card.addEventListener('keydown', (e) => {
@@ -311,7 +312,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Botón "more" (solo computadora): abre el pop-up con las fotos y el texto de la persona elegida (al principio, el estudio)
     if (moreLink) {
-        moreLink.addEventListener('click', () => openModal(selectedMember, true));
+        moreLink.addEventListener('click', () => openModal(selectedMember));
     }
 
     // --- Pop-up: galería de fotos a color + texto ---
@@ -325,7 +326,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let heldCard = null, heldAnim = null, modalReady = Promise.resolve();
     const whenReady = (fn) => Promise.race([modalReady, new Promise(r => setTimeout(r, 900))]).then(() => requestAnimationFrame(() => requestAnimationFrame(fn)));
     const reduceMotion = () => window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-    function collageImgs() { return Array.prototype.slice.call(modalGallery ? modalGallery.querySelectorAll('.tp-gallery-cols img') : []); }
+    function collageImgs() { return Array.prototype.slice.call(modalGallery ? modalGallery.querySelectorAll('.td-cols:not(.is-staging) img') : []); }
     function awayVector(im, gr) {
         const l = parseFloat(im.style.left), t = parseFloat(im.style.top);
         const cx = (isNaN(l) ? 0 : l) + (parseFloat(im.style.width) || 0) / 2 - gr.width / 2;
@@ -350,6 +351,7 @@ document.addEventListener('DOMContentLoaded', function () {
             im.animate([{ translate: v.x + 'px ' + v.y + 'px', scale: 0.7, opacity: 0 }, { translate: '0px 0px', scale: 1, opacity: 1 }],
                 { duration: 1000, delay: 120 + i * 110, easing: 'cubic-bezier(.33,1,.68,1)', fill: 'backwards' });
         });
+        Array.prototype.forEach.call(modalGallery.querySelectorAll('.pre-enter'), c => c.classList.remove('pre-enter'));
     }
     function exitImgs(ms) {
         const gr = modalGallery.getBoundingClientRect();
@@ -366,6 +368,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (m === modalMember) return;
         if (reduceMotion() || !Element.prototype.animate || !modalOverlay.classList.contains('open')) { showMember(m); return; }
         const my = ++switching;
+        modalText.classList.add('is-swapping');      // el texto se desvanece mientras salen las fotos
         exitImgs(560);
         if (heldAnim && heldCard) {
             try { heldAnim.cancel(); } catch (e) {}
@@ -375,15 +378,33 @@ document.addEventListener('DOMContentLoaded', function () {
         heldAnim = heldCard ? heldCard.animate([{ scale: 1, opacity: 1 }, { scale: 1.5, opacity: 0 }],
             { duration: 800, easing: 'cubic-bezier(.65,0,.35,1)', fill: 'both' }) : null;
         modalTabs && Array.prototype.forEach.call(modalTabs.children, b => b.classList.toggle('is-active', b.dataset.member === m));
-        setTimeout(() => {
+        // Las fotos de la nueva persona se preparan (y decodifican) escondidas mientras salen las anteriores:
+        // así, cuando entran, ya están listas y no hay tirones.
+        const stage = buildCols(m);
+        stage.cols.classList.add('is-staging');
+        modalGallery.appendChild(stage.cols);
+        queueLayout();
+        const exitDone = new Promise(r => setTimeout(r, 560 + 50 * 5 + 80));
+        const decoded = Promise.race([stage.ready, new Promise(r => setTimeout(r, 2500))]);
+        Promise.all([exitDone, decoded]).then(() => {
             if (my !== switching) return;
-            showMember(m);
-            whenReady(enterImgs);
-        }, 700);
+            Array.prototype.forEach.call(modalGallery.querySelectorAll('.td-cols:not(.is-staging)'), c => c.parentNode.removeChild(c));
+            modalMember = m;
+            modalTitle.textContent = memberLabel(m);
+            modalText.textContent = memberTexts[m] || pickLang(NOT_AVAILABLE);
+            modalText.scrollTop = 0;
+            fitText();
+            modalReady = stage.ready;
+            layoutCollage();
+            stage.cols.classList.remove('is-staging');
+            enterImgs();
+            setTimeout(() => { if (my === switching) modalText.classList.remove('is-swapping'); }, 250);   // y reaparece con las fotos nuevas              // en el mismo cuadro: las fotos nuevas nunca se ven "paradas" antes de moverse
+        });
     }
     function exitFx() {
         if (reduceMotion() || !Element.prototype.animate) { if (heldAnim) { try { heldAnim.cancel(); } catch (e) {} heldAnim = null; } return; }
         switching++;
+        modalText.classList.remove('is-swapping');
         exitImgs(640);
         if (heldAnim && heldCard) {
             try { heldAnim.cancel(); } catch (e) {}
@@ -399,7 +420,7 @@ document.addEventListener('DOMContentLoaded', function () {
         allMembers.forEach(m => {
             const b = document.createElement('button');
             b.type = 'button';
-            b.className = 'tp-tab';
+            b.className = 'td-tab';
             b.dataset.member = m;
             b.textContent = (m === 'estudio' && matchMedia('(max-width: 700px)').matches) ? pickLang(STUDIO_SHORT) : memberLabel(m);
             b.addEventListener('click', () => { if (window.mjvSound) window.mjvSound.click(); switchMember(m); });
@@ -419,24 +440,62 @@ document.addEventListener('DOMContentLoaded', function () {
         });
         if (modalGallery) {
             modalGallery.textContent = '';
-            const cols = document.createElement('div');        // las fotos se acomodan juntas dentro del cuadrado, sin desplazamiento
-            cols.className = 'tp-gallery-cols';
-            modalGallery.appendChild(cols);
-            for (let i = 1; i <= photosOf(member); i++) {
-                const im = document.createElement('img');
-                im.alt = memberLabel(member) + ' ' + i;
-                im.decoding = 'async';
-                im.draggable = false;
-                im.addEventListener('load', () => { im.classList.add('is-loaded'); queueLayout(); });
-                im.addEventListener('error', () => { if (im.parentNode) im.parentNode.removeChild(im); queueLayout(); });   // foto que todavía no existe: se omite
-                im.src = `team/${member}_${i}.png`;
-                cols.appendChild(im);
-            }
+            const built = buildCols(member);
+            if (!reduceMotion() && Element.prototype.animate && modalOverlay && !modalOverlay.classList.contains('open')) built.cols.classList.add('pre-enter');
+            modalGallery.appendChild(built.cols);
+            modalReady = built.ready;
             queueLayout();
-            const imgsNow = Array.prototype.slice.call(cols.children);
-            modalReady = Promise.all(imgsNow.map(im => (im.decode ? im.decode().catch(() => {}) : Promise.resolve())));
         }
+        fitText();
     }
+
+    // Arma el collage de una persona (las fotos se acomodan juntas dentro del cuadrado, sin desplazamiento).
+    function buildCols(member) {
+        const cols = document.createElement('div');
+        cols.className = 'td-cols';
+        for (let i = 1; i <= photosOf(member); i++) {
+            const im = document.createElement('img');
+            im.alt = memberLabel(member) + ' ' + i;
+            im.decoding = 'async';
+            im.draggable = false;
+            im.addEventListener('load', () => { im.classList.add('is-loaded'); queueLayout(); });
+            im.addEventListener('error', () => { if (im.parentNode) im.parentNode.removeChild(im); queueLayout(); });   // foto que todavía no existe: se omite
+            im.src = `team/${member}_${i}.png`;
+            cols.appendChild(im);
+        }
+        const imgsNow = Array.prototype.slice.call(cols.children);
+        const ready = Promise.all(imgsNow.map(im => (im.decode ? im.decode().catch(() => {}) : Promise.resolve())));
+        return { cols: cols, ready: ready };
+    }
+
+    // Texto de la ficha (computadora): misma letra que en los proyectos (fija, no se escala); lo que se ajusta es el ANCHO de la
+    // columna de texto (entre 30 % y 50 % del espacio) para que llene casi todo el alto; las fotos toman el resto.
+    function fitText() {
+        if (!modalText || !modalGallery || !modalOverlay) return;
+        const box = modalOverlay.querySelector('.td-content');
+        modalText.style.removeProperty('width'); modalText.style.removeProperty('max-height'); modalText.style.removeProperty('overflow-y');
+        if (!box) return;
+        box.style.removeProperty('--td-text-w');
+        if (matchMedia('(orientation: portrait), (max-width: 700px)').matches) return;
+        const A = box.clientWidth, H = box.clientHeight;
+        if (!A || !H) return;
+        const pad = parseFloat(getComputedStyle(modalText.parentNode).paddingLeft) || 0;
+        const minC = A * 0.3, maxC = A * 0.5, target = H * 0.94;
+        modalText.style.maxHeight = 'none';
+        const heightAt = (c) => { modalText.style.width = (c - pad) + 'px'; return modalText.scrollHeight; };
+        let c = maxC;
+        if (heightAt(maxC) <= target) {
+            let lo = minC, hi = maxC;
+            while (hi - lo > 6) { const mid = (lo + hi) / 2; if (heightAt(mid) <= target) hi = mid; else lo = mid; }
+            c = hi;
+        }
+        box.style.setProperty('--td-text-w', Math.round(c) + 'px');
+        modalText.style.width = Math.round(c - pad) + 'px';
+        modalText.style.maxHeight = H + 'px';
+        modalText.style.overflowY = 'auto';
+    }
+    let fitRaf = 0;
+    function queueFit() { cancelAnimationFrame(fitRaf); fitRaf = requestAnimationFrame(fitText); }
 
     // Collage: reparte las fotos (en su orden) en filas que llenan el cuadrado. Prueba todas las formas de cortar el orden en
     // filas y se queda con la que menos hay que estirar/recortar para llenar el cuadro (cada foto se recorta apenas, nunca se deforma).
@@ -444,8 +503,10 @@ document.addEventListener('DOMContentLoaded', function () {
     let layoutRaf = 0;
     function queueLayout() { cancelAnimationFrame(layoutRaf); layoutRaf = requestAnimationFrame(layoutCollage); }
     function layoutCollage() {
-        const cols = modalGallery && modalGallery.querySelector('.tp-gallery-cols');
-        if (!cols) return;
+        if (!modalGallery) return;
+        Array.prototype.forEach.call(modalGallery.querySelectorAll('.td-cols'), layoutOne);
+    }
+    function layoutOne(cols) {
         const imgs = Array.prototype.slice.call(cols.children);
         const n = imgs.length, W = cols.clientWidth, H = cols.clientHeight;
         if (!n || W <= 0 || H <= 0) return;
@@ -477,28 +538,52 @@ document.addEventListener('DOMContentLoaded', function () {
             y += h + g;
         });
     }
-    if (window.ResizeObserver && modalGallery) new ResizeObserver(queueLayout).observe(modalGallery);
-    window.addEventListener('resize', queueLayout);
+    if (window.ResizeObserver && modalGallery) new ResizeObserver(() => { queueLayout(); queueFit(); }).observe(modalGallery);
+    window.addEventListener('resize', () => { queueLayout(); queueFit(); });
 
-    function openModal(member, withTabs) {
-        if (!modalOverlay) return;
+    const studioGrid = document.querySelector('.team-grid');
+    const studioPanel = document.querySelector('.info-panel');
+    const rootEl = document.documentElement;
+    function setBehindInert(flag) {
+        [studioGrid, studioPanel].forEach(el => { if (!el) return; if (flag) el.setAttribute('inert', ''); else el.removeAttribute('inert'); });
+    }
+
+    let openIndex = -1;
+    function openModal(member) {
+        if (!modalOverlay || modalOverlay.classList.contains('open')) return;
         if (window.mjvSound) window.mjvSound.pop();
         modalOpener = document.activeElement;
+        { const sc = document.querySelector('.swiper-container'); openIndex = sc && sc.swiper ? sc.swiper.realIndex : -1; }
         enterFx(member);
-        modalOverlay.classList.add('has-tabs');
         buildTabs();
         showMember(member);
         modalOverlay.classList.add('open');
+        modalOverlay.setAttribute('aria-hidden', 'false');
+        rootEl.classList.add('td-open');
+        setBehindInert(true);
         if (modalCloseBtn) { try { modalCloseBtn.focus({ preventScroll: true }); } catch (e) {} }
     }
 
     function closeModal() {
         if (!modalOverlay || !modalOverlay.classList.contains('open')) return;
         modalOverlay.classList.remove('open');
+        modalOverlay.setAttribute('aria-hidden', 'true');
+        rootEl.classList.remove('td-open');
+        setBehindInert(false);
         exitFx();
-        if (modalOpener && modalOpener.focus) { try { modalOpener.focus({ preventScroll: true }); } catch (e) {} }
+        // el foco vuelve a la foto del mosaico (solo si está en esta sección: así la página nunca salta a otra)
+        if (modalOpener && modalOpener.focus && modalOpener.closest && modalOpener.closest('.studio-container')) {
+            try { modalOpener.focus({ preventScroll: true }); } catch (e) {}
+        }
         modalOpener = null;
     }
+
+    // Si se cambia de sección con la ficha abierta, se cierra
+    (function hookSwiper() {
+        const sc = document.querySelector('.swiper-container');
+        if (sc && sc.swiper) { sc.swiper.on('slideChange', () => { if (sc.swiper.realIndex !== openIndex) closeModal(); }); return; }
+        setTimeout(hookSwiper, 400);
+    })();
 
     // Si se cambia de idioma con el pop-up abierto, se actualizan sus textos
     document.addEventListener('mjvlangchange', () => {
@@ -509,17 +594,11 @@ document.addEventListener('DOMContentLoaded', function () {
             modalTitle.textContent = memberLabel(m);
             modalText.textContent = memberTexts[m] || pickLang(NOT_AVAILABLE);
             if (modalTabs) Array.prototype.forEach.call(modalTabs.children, b => b.classList.toggle('is-active', b.dataset.member === m));
+            fitText();
         });
     });
 
     if (modalCloseBtn) modalCloseBtn.addEventListener('click', closeModal);
-
-    if (modalOverlay) {
-        // Cerrar al hacer click fuera de la caja (pero no adentro de ella)
-        modalOverlay.addEventListener('click', (e) => {
-            if (e.target === modalOverlay) closeModal();
-        });
-    }
 
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') closeModal();
