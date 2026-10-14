@@ -16,8 +16,9 @@
     <meta name="twitter:card" content="summary_large_image">
     <link rel="icon" type="image/png" href="../../assets/logo_2.png">
     <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
-    <link rel="stylesheet" href="../project-simple.css">
+    <link rel="stylesheet" href="project14.css">
     <link rel="stylesheet" href="../../dark-mode.css">
+    <link rel="stylesheet" href="../../swiper-bundle.min.css"/>
 
     <!-- TEMA CLARO/OSCURO: respeta lo elegido en la portada (no tiene botón propio) -->
     <script src="../../theme.js"></script>
@@ -54,16 +55,82 @@
         </div>
     </div>
 
-    <main class="simple-main" id="simple-main" aria-busy="true">
-        <img src="project14_main.webp" alt="Casa Mbarete Porã" decoding="async">
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+            <!-- Slide 1: Render 1 + memoria descriptiva -->
+<div class="swiper-slide">
+    <main>
+        <div class="sub-section-container">
+            <div class="sub-section left memoria">
+                <img src="images/01.webp" alt="Casa Mbarete Porã — render 01" decoding="async">
+            </div>
+            <!-- Texto: memoria14.txt (+ _en, _fr, _pt). Datos del proyecto: editar acá. -->
+            <div class="sub-section right memoria">
+                <p class="si-type" data-en="Country house" data-fr="Maison de campagne" data-pt="Casa de campo">Casa de Campo</p>
+                <dl class="si-meta">
+                    <div><dt data-en="Designers" data-fr="Conception" data-pt="Projetistas">Proyectistas</dt><dd><span class="si-line" data-en="Arch. Martín José Villalba" data-fr="Arch. Martín José Villalba" data-pt="Arq. Martín José Villalba">Arq. Martín José Villalba</span><span class="si-line" data-en="Arch. María José Vera" data-fr="Arch. María José Vera" data-pt="Arq. María José Vera">Arq. María José Vera</span></dd></div>
+                    <div><dt data-en="Location" data-fr="Lieu" data-pt="Localização">Ubicación</dt><dd>María Auxiliadora, Itapúa, Py</dd></div>
+                    <div><dt data-en="Year" data-fr="Année" data-pt="Ano">Año</dt><dd>2021</dd></div>
+                </dl>
+                <div class="si-text" id="memoria-text"></div>
+            </div>
+        </div>
     </main>
+</div>
 
-    <script>
-        (function () {
-            var main = document.getElementById('simple-main'), img = main.querySelector('img');
-            function ready() { main.removeAttribute('aria-busy'); main.classList.add('is-ready'); }
-            if (img.complete) ready(); else { img.addEventListener('load', ready); img.addEventListener('error', ready); }
-        })();
-    </script>
+<!-- Slide 2: Galería -->
+            <div class="swiper-slide">
+                <main>
+                    <div class="gallery-grid">
+                        <div class="gallery-item img01">
+                            <img src="images/01_thumb.webp" srcset="images/01_thumb.webp 640w, images/01.webp 1672w" sizes="(max-width: 1200px) 90vw, 36vw" data-full="images/01.webp" alt="Imagen 01" loading="lazy" decoding="async">
+                            <span data-en="Render 01" data-fr="Rendu 01" data-pt="Render 01">Imaginario 01</span>
+                        </div>
+                        <div class="gallery-item img02">
+                            <img src="images/02_thumb.webp" srcset="images/02_thumb.webp 640w, images/02.webp 1672w" sizes="(max-width: 1200px) 90vw, 12vw" data-full="images/02.webp" alt="Imagen 02" loading="lazy" decoding="async">
+                            <span data-en="Render 02" data-fr="Rendu 02" data-pt="Render 02">Imaginario 02</span>
+                        </div>
+                        <div class="gallery-item img03">
+                            <img src="images/03_thumb.webp" srcset="images/03_thumb.webp 640w, images/03.webp 1672w" sizes="(max-width: 1200px) 90vw, 12vw" data-full="images/03.webp" alt="Imagen 03" loading="lazy" decoding="async">
+                            <span data-en="Render 03" data-fr="Rendu 03" data-pt="Render 03">Imaginario 03</span>
+                        </div>
+                        <div class="gallery-item img04">
+                            <img src="images/04_thumb.webp" srcset="images/04_thumb.webp 640w, images/04.webp 1672w" sizes="(max-width: 1200px) 90vw, 12vw" data-full="images/04.webp" alt="Imagen 04" loading="lazy" decoding="async">
+                            <span data-en="Render 04" data-fr="Rendu 04" data-pt="Render 04">Imaginario 04</span>
+                        </div>
+                        <div class="gallery-item img05">
+                            <img src="images/05_thumb.webp" srcset="images/05_thumb.webp 640w, images/05.webp 1672w" sizes="(max-width: 1200px) 90vw, 12vw" data-full="images/05.webp" alt="Imagen 05" loading="lazy" decoding="async">
+                            <span data-en="Render 05" data-fr="Rendu 05" data-pt="Render 05">Imaginario 05</span>
+                        </div>
+                        <div class="gallery-item img06">
+                            <img src="images/06_thumb.webp" srcset="images/06_thumb.webp 640w, images/06.webp 1672w" sizes="(max-width: 1200px) 90vw, 12vw" data-full="images/06.webp" alt="Imagen 06" loading="lazy" decoding="async">
+                            <span data-en="Render 06" data-fr="Rendu 06" data-pt="Render 06">Imaginario 06</span>
+                        </div>
+                        <div class="gallery-item img07">
+                            <img src="images/07_thumb.webp" srcset="images/07_thumb.webp 640w, images/07.webp 1672w" sizes="(max-width: 1200px) 90vw, 12vw" data-full="images/07.webp" alt="Imagen 07" loading="lazy" decoding="async">
+                            <span data-en="Render 07" data-fr="Rendu 07" data-pt="Render 07">Imaginario 07</span>
+                        </div>
+                        <div class="gallery-item img08">
+                            <img src="images/08_thumb.webp" srcset="images/08_thumb.webp 640w, images/08.webp 1672w" sizes="(max-width: 1200px) 90vw, 12vw" data-full="images/08.webp" alt="Imagen 08" loading="lazy" decoding="async">
+                            <span data-en="Render 08" data-fr="Rendu 08" data-pt="Render 08">Imaginario 08</span>
+                        </div>
+                        <div class="gallery-item img09">
+                            <img src="images/09_thumb.webp" srcset="images/09_thumb.webp 640w, images/09.webp 1080w" sizes="(max-width: 1200px) 90vw, 12vw" data-full="images/09.webp" alt="Imagen 09" loading="lazy" decoding="async">
+                            <span data-en="Ground Floor Plan" data-fr="Plan du rez-de-chaussée" data-pt="Planta baixa">Planta Baja</span>
+                        </div>
+                        <div class="gallery-item img10">
+                            <img src="images/10_thumb.webp" srcset="images/10_thumb.webp 640w, images/10.webp 1066w" sizes="(max-width: 1200px) 90vw, 12vw" data-full="images/10.webp" alt="Imagen 10" loading="lazy" decoding="async">
+                            <span data-en="Section" data-fr="Coupe" data-pt="Corte">Sección</span>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+        <div class="swiper-pagination"></div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../../swiper-bundle.min.js"></script>
+    <script src="project14.js"></script>
 </body>
 </html>

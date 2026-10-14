@@ -38,3 +38,22 @@ body { display: flex; flex-direction: column; }
 .back-to-projects-btn:hover { transform: scale(1.12); }
 .back-to-projects-btn:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; border-radius: 4px; }
 .back-to-projects-btn img { width: 28px; height: auto; display: block; }
+
+/* ===== Memoria descriptiva (páginas con texto) ===== */
+.simple-main.has-info { display: grid; grid-template-columns: minmax(0, 1fr) clamp(260px, 30%, 400px); gap: 3vw; align-items: center; }
+.simple-main.has-info img { justify-self: center; }
+.simple-info { align-self: stretch; min-height: 0; overflow-y: auto; overscroll-behavior: contain; display: flex; flex-direction: column; justify-content: center; color: black; font-family: 'texto', sans-serif; font-size: 0.75rem; line-height: 1.5; padding: 0 4px; opacity: 0; transition: opacity 0.6s ease 0.15s; }
+.simple-main.is-ready .simple-info { opacity: 1; }
+.simple-info .si-type { margin: 0 0 0.9em; font-size: 0.85rem; }
+.simple-info .si-meta { margin: 0 0 1.2em; }
+.simple-info .si-meta > div { display: flex; gap: 0.6em; margin: 0 0 0.35em; }
+.simple-info .si-meta dt { flex: 0 0 6.2em; opacity: 0.55; }
+.simple-info .si-meta dd { margin: 0; }
+.simple-info .si-line { display: block; }
+.simple-info .si-text p { margin: 0 0 1em; text-align: justify; hyphens: auto; }
+.simple-info .si-text p:last-child { margin-bottom: 0; }
+@media (orientation: portrait), (max-width: 700px) {
+    .simple-main.has-info { display: flex; flex-direction: column; align-items: stretch; gap: 14px; padding-bottom: 4rem; }
+    .simple-main.has-info img { flex: 0 1 38%; min-height: 0; max-width: 100%; object-fit: contain; align-self: center; }
+    .simple-info { flex: 1 1 0; justify-content: flex-start; font-size: 0.85rem; }
+}

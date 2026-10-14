@@ -26,8 +26,9 @@
     <script src="../../lang.js" defer></script>
     <script src="../../pref-tips.js" defer></script>
     <script src="../../analytics.js" defer></script>
+    <script src="../project-simple.js" defer></script>
 </head>
-<body>
+<body data-project="16">
     <div class="title-header-container">
         <div class="project-title">
             <h1>Edificio LL</h1>
@@ -54,8 +55,18 @@
         </div>
     </div>
 
-    <main class="simple-main" id="simple-main" aria-busy="true">
+    <main class="simple-main has-info" id="simple-main" aria-busy="true">
         <img src="project16_main.webp" alt="Edificio LL" decoding="async">
+        <!-- Memoria descriptiva: el texto está en memoria16.txt (+ _en, _fr, _pt). Datos del proyecto: editar acá. -->
+        <aside class="simple-info" id="simple-info">
+            <p class="si-type" data-en="Renovation" data-fr="Rénovation" data-pt="Reforma">Reforma</p>
+            <dl class="si-meta">
+                <div><dt data-en="Designers" data-fr="Conception" data-pt="Projetistas">Proyectistas</dt><dd><span class="si-line" data-en="Arch. Martín José Villalba" data-fr="Arch. Martín José Villalba" data-pt="Arq. Martín José Villalba">Arq. Martín José Villalba</span><span class="si-line" data-en="Arch. María José Vera" data-fr="Arch. María José Vera" data-pt="Arq. María José Vera">Arq. María José Vera</span></dd></div>
+                <div><dt data-en="Location" data-fr="Lieu" data-pt="Localização">Ubicación</dt><dd>Mayor Otaño, Itapúa, Py</dd></div>
+                <div><dt data-en="Year" data-fr="Année" data-pt="Ano">Año</dt><dd>2024</dd></div>
+            </dl>
+            <div class="si-text" id="memoria-text"></div>
+        </aside>
     </main>
 
     <script>

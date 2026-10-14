@@ -136,11 +136,59 @@ document.addEventListener('DOMContentLoaded', function () {
 /* --------------- MOSAICO DE STUDIO (fotos que rotan + panel de texto + pop-up) --------------- */
 document.addEventListener('DOMContentLoaded', function () {
 
-    // Cuántas fotos tiene cada tarjeta: team/<miembro>_1.png ... team/<miembro>_N.png
+    // Cuántas fotos tiene cada tarjeta: team/<miembro>_1.webp ... team/<miembro>_N.webp
     // (si una persona tiene distinta cantidad, anotarla en PHOTOS_OF; ej. { martin: 4 })
     const PHOTOS_PER_MEMBER = 5;
-    const PHOTOS_OF = {};
+    const PHOTOS_OF = { estudio: 7, majo: 4, martin: 4, gonza: 3, maria: 4 };
+
+    // Dónde están las caras / lo importante de cada foto: [x, y, ancho, alto] como fracción de la foto (0 a 1).
+    // Cuando una foto se recorta (en el mosaico o en el collage), el recorte se centra en este recuadro, así nadie sale cortado.
+    // Si agregás o cambiás fotos, ajustá acá su recuadro (las que no figuran se centran un poco hacia arriba).
+    const FOCUS = {
+        estudio_1: [0.22, 0.22, 0.58, 0.34], estudio_2: [0.10, 0.15, 0.80, 0.60], estudio_3: [0.18, 0.58, 0.62, 0.14],
+        estudio_4: [0.28, 0.40, 0.52, 0.14], estudio_5: [0.02, 0.34, 0.78, 0.22], estudio_6: [0.10, 0.10, 0.80, 0.70],
+        estudio_7: [0.00, 0.28, 0.95, 0.18],
+        majo_1: [0.50, 0.17, 0.32, 0.20], majo_2: [0.00, 0.25, 1.00, 0.25], majo_3: [0.50, 0.25, 0.40, 0.20], majo_4: [0.30, 0.20, 0.40, 0.22],
+        martin_1: [0.62, 0.22, 0.30, 0.24], martin_2: [0.05, 0.42, 0.85, 0.15], martin_3: [0.05, 0.35, 0.35, 0.20], martin_4: [0.08, 0.43, 0.85, 0.16],
+        gonza_1: [0.40, 0.12, 0.35, 0.22], gonza_2: [0.00, 0.10, 0.22, 0.16], gonza_3: [0.38, 0.10, 0.32, 0.18],
+        maria_1: [0.40, 0.26, 0.35, 0.20], maria_2: [0.02, 0.03, 0.35, 0.22], maria_3: [0.38, 0.25, 0.25, 0.20], maria_4: [0.35, 0.10, 0.28, 0.19]
+    };
+    const DEFAULT_FOCUS = [0.25, 0.10, 0.50, 0.50];
+    const focusKeyOf = (src) => { const m = /team\/([a-z]+_\d+)\.webp/.exec(src || ''); return m ? m[1] : ''; };
+    // Dado el tamaño de la foto (iw × ih) y del recuadro donde se muestra recortada (bw × bh, estilo "cover"):
+    // devuelve la posición (px, py en %) que centra el recuadro de caras y qué parte de ese recuadro queda a la vista (vis, 0 a 1).
+    function focusFit(iw, ih, bw, bh, f) {
+        f = f || DEFAULT_FOCUS;
+        const s = Math.max(bw / iw, bh / ih), sw = iw * s, sh = ih * s;
+        const place = (c, size, win) => { const o = Math.min(Math.max(c * size - win / 2, 0), Math.max(size - win, 0)); return o; };
+        const ox = place(f[0] + f[2] / 2, sw, bw), oy = place(f[1] + f[3] / 2, sh, bh);
+        const vx = Math.max(0, Math.min(f[0] * sw + f[2] * sw, ox + bw) - Math.max(f[0] * sw, ox)) / (f[2] * sw || 1);
+        const vy = Math.max(0, Math.min(f[1] * sh + f[3] * sh, oy + bh) - Math.max(f[1] * sh, oy)) / (f[3] * sh || 1);
+        return { px: sw > bw ? ox / (sw - bw) * 100 : 50, py: sh > bh ? oy / (sh - bh) * 100 : 50, vis: Math.min(vx, 1) * Math.min(vy, 1) };
+    }
+    // Aplica ese encuadre a una imagen que llena su contenedor (tarjetas del mosaico)
+    function applyFocus(im) {
+        if (!im || !im.naturalWidth) return;
+        const w = im.clientWidth, h = im.clientHeight;
+        if (!w || !h) return;
+        const r = focusFit(im.naturalWidth, im.naturalHeight, w, h, FOCUS[focusKeyOf(im.getAttribute('src'))]);
+        im.style.objectPosition = r.px.toFixed(1) + '% ' + r.py.toFixed(1) + '%';
+    }
     const photosOf = (member) => PHOTOS_OF[member] || PHOTOS_PER_MEMBER;
+    // Si agregás más fotos de una persona (team/<miembro>_6.webp, _7.webp...) se detectan solas: se prueba la siguiente
+    // hasta que no exista. PHOTOS_OF queda como cantidad inicial (evita pedidos de más).
+    const probeMore = (member) => {
+        const next = () => {
+            const i = photosOf(member) + 1;
+            if (i > 30) return;
+            const im = new Image();
+            im.onload = () => { PHOTOS_OF[member] = i; next(); };
+            im.onerror = () => {};
+            im.src = `team/${member}_${i}.webp`;
+        };
+        next();
+    };
+    ['estudio', 'majo', 'martin', 'gonza', 'maria'].forEach(probeMore);
     const CYCLE_MS = 1500;                  // cada cuánto cambia la foto mientras el cursor está encima
     // Celular/tablet (sin cursor): no hay "hover" ni botón "more"; se toca la foto y se abre el pop-up
     const touchMQ = window.matchMedia ? window.matchMedia('(hover: none)') : { matches: false };
@@ -221,7 +269,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const preloadMember = (member) => {
         if (preloaded.has(member)) return;
         preloaded.add(member);
-        for (let i = 1; i <= photosOf(member); i++) { const im = new Image(); im.decoding = 'async'; im.src = `team/${member}_${i}.png`; }
+        for (let i = 1; i <= photosOf(member); i++) { const im = new Image(); im.decoding = 'async'; im.src = `team/${member}_${i}.webp`; }
     };
     if (!isTouch()) {
         // en computadora: apenas la portada terminó de cargar, en un rato libre
@@ -246,16 +294,20 @@ document.addEventListener('DOMContentLoaded', function () {
         const st = { timer: null, cur: 1, front: 0, token: 0, bad: new Set() };
         cardState.set(card, st);
         const layers = [imgA, imgB];
+        imgA.addEventListener('load', () => applyFocus(imgA));
+        if (imgA.complete) applyFocus(imgA);
+        if (window.ResizeObserver) new ResizeObserver(() => { applyFocus(layers[st.front]); }).observe(card);
 
         // muestra la foto número idx fundiéndola sobre la actual
         const swapTo = (idx) => {
             if (idx === st.cur) return Promise.resolve(true);
             const token = ++st.token;
             const back = layers[1 - st.front], front = layers[st.front];
-            back.src = `team/${member}_${idx}.png`;
+            back.src = `team/${member}_${idx}.webp`;
             const ready = back.decode ? back.decode() : new Promise((res, rej) => { back.onload = res; back.onerror = rej; });
             return ready.then(() => {
                 if (token !== st.token) return false;
+                applyFocus(back);
                 back.classList.remove('layer-hidden');
                 front.classList.add('layer-hidden');
                 st.front = 1 - st.front; st.cur = idx;
@@ -460,9 +512,22 @@ document.addEventListener('DOMContentLoaded', function () {
             im.draggable = false;
             im.addEventListener('load', () => { im.classList.add('is-loaded'); queueLayout(); });
             im.addEventListener('error', () => { if (im.parentNode) im.parentNode.removeChild(im); queueLayout(); });   // foto que todavía no existe: se omite
-            im.src = `team/${member}_${i}.png`;
+            im.src = `team/${member}_${i}.webp`;
             cols.appendChild(im);
         }
+        // por si hay más fotos que las conocidas todavía (todavía no terminó la detección): se suman al collage
+        const extend = () => {
+            const i = photosOf(member) + 1;
+            if (i > 30 || !cols.isConnected && cols.dataset.dead) return;
+            const im = document.createElement('img');
+            im.alt = memberLabel(member) + ' ' + i; im.decoding = 'async'; im.draggable = false;
+            im.addEventListener('load', () => {
+                if (i > photosOf(member)) PHOTOS_OF[member] = i;
+                cols.appendChild(im); im.classList.add('is-loaded'); queueLayout(); extend();
+            });
+            im.src = `team/${member}_${i}.webp`;
+        };
+        extend();
         const imgsNow = Array.prototype.slice.call(cols.children);
         const ready = Promise.all(imgsNow.map(im => (im.decode ? im.decode().catch(() => {}) : Promise.resolve())));
         return { cols: cols, ready: ready };
@@ -520,7 +585,16 @@ document.addEventListener('DOMContentLoaded', function () {
             let sumH = 0;
             const hs = rows.map(r => { const A = r.reduce((t, i) => t + asp[i], 0); const h = (W - (r.length - 1) * g) / A; sumH += h; return h; });
             const f = (H - (rows.length - 1) * g) / sumH;
-            const score = Math.abs(Math.log(f));
+            let score = Math.abs(Math.log(f));
+            rows.forEach((r, ri) => {
+                const h = hs[ri] * f, A = r.reduce((t, i) => t + asp[i], 0), availW = W - (r.length - 1) * g;
+                r.forEach(i => {
+                    const im = imgs[i];
+                    if (!im.naturalWidth) return;
+                    const v = focusFit(im.naturalWidth, im.naturalHeight, asp[i] / A * availW, h, FOCUS[focusKeyOf(im.getAttribute('src'))]).vis;
+                    score += (1 - v) * 1.5;
+                });
+            });
             if (!best || score < best.score) best = { score, rows, hs, f };
         }
         let y = 0;
@@ -533,6 +607,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 const w = asp[i] / A * availW, st = imgs[i].style;
                 st.left = x.toFixed(1) + 'px'; st.top = y.toFixed(1) + 'px';
                 st.width = w.toFixed(1) + 'px'; st.height = h.toFixed(1) + 'px';
+                const im = imgs[i];
+                if (im.naturalWidth) { const q = focusFit(im.naturalWidth, im.naturalHeight, w, h, FOCUS[focusKeyOf(im.getAttribute('src'))]); st.objectPosition = q.px.toFixed(1) + '% ' + q.py.toFixed(1) + '%'; }
                 x += w + g;
             });
             y += h + g;

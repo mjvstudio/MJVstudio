@@ -1,0 +1,7 @@
+Memorias descriptivas reservadas (todavía no tienen proyecto en el sitio).
+Cuando pases las fotos de cada uno se crea su página y se mueve el texto a projectN/memoriaN.txt
+(más memoriaN_en.txt, memoriaN_fr.txt y memoriaN_pt.txt con sus traducciones).
+
+reforma-ms.txt        Reforma MS (Encarnación, 2024)
+ophelia-boutique.txt  Ophelia Boutique (Asunción, 2025)
+l3m84.txt             Vivienda L3M84 (San Juan del Paraná, 2025)

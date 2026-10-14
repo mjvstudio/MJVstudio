@@ -90,9 +90,12 @@ body:has(.back-to-projects-btn) { background-color: #ffffff; }
 [data-theme="dark"] body:has(.back-to-projects-btn) .swiper-slide main { background-color: transparent; }
 
 [data-theme="dark"] .project-title h1 { color: var(--mjv-dark-text); }
+[data-theme="dark"] .simple-info { color: var(--mjv-dark-text); }
 
 [data-theme="dark"] .sub-section.right p,
 [data-theme="dark"] .sub-section.right.memoria p,
+[data-theme="dark"] .sub-section.right.memoria .si-type,
+[data-theme="dark"] .sub-section.right.memoria .si-meta { color: var(--mjv-dark-muted); }
 [data-theme="dark"] .sub-section.right.detalles p { color: var(--mjv-dark-muted); }
 
 [data-theme="dark"] .gallery-item { background-color: var(--mjv-dark-panel); }

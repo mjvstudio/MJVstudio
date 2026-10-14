@@ -1,0 +1,809 @@
+/*-------- Fuentes personalizadas --------*/
+@font-face {
+    font-family: 'titulos';
+    src: url('../../assets/fonts/titulos/titulos.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'texto';
+    src: url('../../assets/fonts/texto/texto.otf') format('opentype');
+}
+
+/*-------- Estilos de texto --------*/
+h1, h2, h3 {
+    font-family: 'titulos', sans-serif;
+}
+
+p, span, a {
+    font-family: 'texto', sans-serif;
+}
+
+/*-------- Estructura de la página (sin números "a ojo") --------*/
+html, body {
+    height: 100%;
+    height: 100dvh;   /* celular: el alto que realmente se ve (con la barra del navegador) */
+    margin: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+/*-------- Swiper Container --------*/
+.swiper-container {
+    width: 100vw;
+    flex: 1 1 auto;
+    min-height: 0; /* necesario para que flex pueda encoger el swiper correctamente */
+    overflow: hidden;
+}
+
+.swiper-slide main {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    width: 90%;
+    max-width: 1400px;
+}
+
+/*-------- Scrollbar --------*/
+html, body, .swiper-slide, .gallery {
+    overflow: hidden !important;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+/*-------- Paginación --------*/
+/* Misma posición que en la portada (styles.css): 10 px del borde de la pantalla; en vertical, 4 px.
+   Va fija a la pantalla (no al contenedor, que deja un espacio abajo para la barra de preferencias). */
+.swiper-pagination {
+    position: fixed !important;
+    left: 0;
+    width: 100%;
+    bottom: 10px !important;
+}
+@media (orientation: portrait) {
+    .swiper-pagination { bottom: 4px !important; }
+}
+
+.swiper-pagination-bullet {
+    width: 15px !important;
+    height: 2px !important;
+    background: rgba(0,0,0,0.3) !important;
+    border-radius: 0 !important;
+    opacity: 1 !important;
+    transition: all 0.3s !important;
+}
+
+.swiper-pagination-bullet-active {
+    background: #000 !important;
+    transform: scaleX(1.5) !important;
+}
+
+/*-------- Sub-secciones --------*/
+.sub-section-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 90%;
+    max-width: 1400px;
+    margin: 0 auto;
+    height: auto;
+}
+
+.sub-section {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: calc(75 * var(--vh));
+}
+
+/*-------- Subsección (Memoria) --------*/
+.sub-section.left.memoria {
+    flex: 1 1 0;
+    min-width: 0;
+    position: relative;
+}
+
+.sub-section.left.memoria img {
+    max-height: calc(75 * var(--vh));
+    height: auto;
+    width: 100%;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+}
+
+/* Visor 3D — ocupa el mismo espacio que antes ocupaba la imagen principal */
+/* Sin fondo, sin bordes redondeados y sin sombra de caja: el modelo "flota" sobre el
+   fondo de la página (blanco en modo claro, gris oscuro en modo noche) y no se ve
+   ningún marco alrededor. */
+.modelo-3d-wrapper {
+    position: relative;
+    height: calc(75 * var(--vh));
+    width: 42vw;
+    max-width: 100%;
+    margin: 0 auto;
+    background: transparent;
+}
+
+.modelo-3d-wrapper model-viewer {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    --poster-color: transparent;
+    --progress-bar-color: transparent;   /* sin la barrita de carga: ya hay un "Cargando modelo… %" */
+    outline: none;                        /* sin el recuadro de foco al tocar el modelo */
+}
+
+.modelo-3d-wrapper .loading-status {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'texto', sans-serif;
+    font-size: 0.85rem;
+    color: #999;
+    pointer-events: none;
+}
+
+.sub-section.right.memoria {
+    width: auto;
+    flex: 0 0 clamp(240px, 26vw, 360px);
+    overflow-y: auto;
+    text-align: justify;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    font-size: 0.75rem; /* Tamaño de fuente unificado */
+    line-height: 1.5; /* Espaciado entre líneas */
+    overflow-wrap: break-word; /* Evita que el texto se salga del contenedor */
+    word-wrap: break-word; /* Compatibilidad con navegadores más antiguos */
+    hyphens: auto; /* Agrega guiones automáticamente para palabras largas */
+}
+
+.sub-section.right.memoria p {
+    margin-top: auto;
+    color: #333; /* Color de texto diferente */
+    font-size: inherit; /* Hereda el tamaño de fuente del contenedor */
+    margin: 0; /* Elimina el margen predeterminado del párrafo */
+    padding: 0 10px; /* Añade un poco de padding para que el texto no toque los bordes */
+}
+
+.sub-section.right.memoria p {
+    margin-top: auto;
+    color: #333; /* Color de texto diferente */
+}
+
+/*-------- Subsección (Detalles técnicos) --------*/
+.sub-section.left.detalles {
+    flex: 0 0 auto;
+    position: relative;
+}
+
+.sub-section.left.detalles img {
+    height: calc(75 * var(--vh));
+    width: auto;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+}
+
+.sub-section.right.detalles {
+    width: 18.5vw;
+    overflow-y: auto;
+    text-align: justify;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-bottom: 25px;
+}
+
+.sub-section.right.detalles p {
+    margin-top: auto;
+}
+
+/*-------- Galería --------*/
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    grid-template-areas:
+        "img01 img01 img01 img02 img03"
+        "img01 img01 img01 img04 img05"
+        "img06 img07 img08 img09 img10";
+    gap: 10px;
+    padding: 20px;
+    width: 76vw;
+    height: calc(75 * var(--vh));
+    margin: auto;
+    place-items: stretch;
+}
+
+.gallery-item {
+    background-color: white;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
+    position: relative;
+    z-index: 1;
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(100%);
+    transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+.gallery-item span {
+    display: none;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.568), rgba(0, 0, 0, 0.13), transparent);
+    color: white;
+    padding: 10px;
+    text-align: center;
+    transition: all 0.3s ease;
+    font-size: 0.8rem;
+}
+
+.gallery-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 2;
+}
+
+.gallery-item:hover img {
+    filter: grayscale(0%);
+}
+
+.gallery-item:hover span {
+    display: block;
+    transform: translateY(0);
+}
+
+.img01 { grid-area: img01; }
+.img02 { grid-area: img02; }
+.img03 { grid-area: img03; }
+.img04 { grid-area: img04; }
+.img05 { grid-area: img05; }
+.img06 { grid-area: img06; }
+.img07 { grid-area: img07; }
+.img08 { grid-area: img08; }
+.img09 { grid-area: img09; }
+.img10 { grid-area: img10; }
+
+/*-------- Media Queries --------*/
+@media (max-width: 1200px) {
+    .sub-section-container {
+        flex-direction: column;
+        width: 100%;
+        gap: 30px;
+        padding: 40px 20px;
+        min-height: calc(90 * var(--vh));
+    }
+    
+    .sub-section.left, 
+    .sub-section.right {
+        width: 100% !important;
+    }
+    
+    .sub-section.left img {
+        max-height: calc(50 * var(--vh));
+    }
+
+    .modelo-3d-wrapper {
+        width: 100%;
+        height: calc(50 * var(--vh));
+    }
+    
+    .sub-section.right {
+        padding: 20px 0;
+        justify-content: flex-start;
+    }
+
+    .sub-section.right p {
+        margin-top: 0;
+    }
+
+    .gallery-grid {
+        width: 90vw;
+        height: auto;
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "img01"
+            "img02"
+            "img03"
+            "img04"
+            "img05"
+            "img06"
+            "img07"
+            "img08"
+            "img09"
+            "img10";
+    }
+
+    .gallery-item {
+        aspect-ratio: 1;
+        max-width: 100%;
+        height: auto;
+    }
+    
+    .gallery-item img {
+        object-fit: contain;
+    }
+}
+
+/* Misma fila que los encabezados de las secciones de la portada (alto, ancho, tamaño y estilo de letra) */
+:root { --hdr-h: calc(10 * var(--vh)); }
+@media (orientation: portrait) { :root { --hdr-h: max(calc(6 * var(--vh)), 44px); } }
+.title-header-container {
+    flex: 0 0 auto;
+    width: 90vw;
+    height: var(--hdr-h);
+    margin: 0 auto;
+    padding: 0 56px 0 0;             /* a la derecha queda libre el botón de volver */
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+}
+.project-title { margin: 0; }
+.project-title h1 {
+    font-family: 'titulos', sans-serif;
+    font-size: max(1.15rem, 2vw);
+    line-height: 1.2;
+    letter-spacing: normal;
+    margin: 0;
+    color: black;
+    text-transform: none;
+    font-weight: normal;
+}
+
+/*-------- Botón "Volver a proyectos" --------*/
+/* Solo el símbolo (sin círculo ni sombra de fondo). El área de clic sigue siendo de
+   42 × 42 px para que sea fácil de tocar. */
+.back-to-projects-btn {
+    position: fixed;
+    top: 0;
+    right: calc(5vw - 7px);         /* el símbolo (28 px) queda alineado con el borde derecho de los títulos */
+    z-index: 1000;
+    width: 42px;
+    height: var(--hdr-h);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform 0.3s ease;
+}
+
+.back-to-projects-btn:hover { transform: scale(1.12); }
+.back-to-projects-btn:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; border-radius: 4px; }
+
+.back-to-projects-btn img {
+    width: 28px;
+    height: auto;
+    display: block;
+}
+
+/*-------- Galería: la foto se abre en el mismo espacio --------*/
+/* Al tocar una foto de la grilla, se abre en el espacio central de la sección (donde
+   estaba la grilla), ocupando siempre todo el ALTO disponible; el ancho se adapta a
+   cada foto. Con las flechitas se pasa a otra, con un fundido suave entre fotos.
+   Solo los símbolos: sin círculos de fondo. (El código está en project20.js) */
+.gallery-grid { transition: opacity 0.45s ease, visibility 0s; }
+.gallery-grid.is-covered {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.45s ease, visibility 0s linear 0.45s;
+}
+
+.gallery-item { cursor: pointer; }
+.gallery-item:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+
+.gallery-viewer {
+    --gv-halo: rgba(255, 255, 255, 0.9);        /* halo para que los símbolos se lean sobre las fotos */
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: min(88vw, 1300px);
+    height: min(calc(75 * var(--vh)), calc(100% - 24px));
+    transform: translate(-50%, -50%);
+    color: #3a3b3b;                              /* gris oscuro de la marca, como los demás íconos */
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.5s ease, visibility 0s linear 0.5s;
+    z-index: 5;
+    touch-action: pan-y pinch-zoom;
+}
+
+.gallery-viewer:focus { outline: none; }
+
+.gallery-viewer.is-open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transition: opacity 0.5s ease, visibility 0s;
+}
+
+.gv-stage { position: absolute; inset: 0; }
+
+/* Dos capas apiladas del mismo tamaño: una sale mientras la otra entra, y como las
+   dos ocupan el mismo cuadro, la foto siempre queda centrada. */
+.gv-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    opacity: 0;
+    transition: opacity 0.7s ease;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+.gv-img.on { opacity: 1; }
+
+.gv-btn {
+    position: absolute;
+    z-index: 2;
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0.85;
+    -webkit-tap-highlight-color: transparent;
+    transition: opacity 0.3s ease, scale 0.3s ease;
+}
+.gv-btn:hover { opacity: 1; scale: 1.15; }
+.gv-btn:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; border-radius: 4px; }
+.gv-prev { left: 0;  top: 50%; margin-top: -24px; }
+.gv-next { right: 0; top: 50%; margin-top: -24px; }
+
+/* Los símbolos son archivos .svg usados como "máscara": toman el color del texto,
+   así cambian solos con el tema (igual que los íconos de la barra de preferencias) */
+.gv-icon {
+    display: block;
+    width: 22px;
+    height: 33px;
+    background-color: currentColor;
+    filter: drop-shadow(0 0 3px var(--gv-halo));
+    -webkit-mask: center / contain no-repeat;
+            mask: center / contain no-repeat;
+}
+.gv-prev .gv-icon  { -webkit-mask-image: url('../../assets/atras.svg');       mask-image: url('../../assets/atras.svg'); }
+.gv-next .gv-icon  { -webkit-mask-image: url('../../assets/adelante.svg');    mask-image: url('../../assets/adelante.svg'); }
+
+@media (max-width: 768px) {
+    .gallery-viewer { width: 94vw; }
+    .gv-btn { width: 44px; height: 44px; }
+    .gv-prev { margin-top: -22px; }
+    .gv-next { margin-top: -22px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .gallery-viewer, .gallery-grid, .gv-img, .gv-btn { transition: none !important; }
+}
+
+/*-------- Carrusel --------*/
+/* Carrusel técnico */
+/* --------------- SECCIÓN TÉCNICA (CARRUSEL IDÉNTICO A EQUIPO) --------------- */
+.subsections {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 90vw;
+    margin: 0 auto;
+}
+
+/* Contenedor del carrusel */
+.team-carousel, .info-carousel {
+    position: relative;
+    width: 100%;
+    height: calc(70 * var(--vh));
+}
+
+/* Slides individuales */
+.team-slide, .info-slide {
+    display: none;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.team-slide.active, .info-slide.active {
+    display: block;
+    opacity: 1;
+}
+
+/* Subsección izquierda (imágenes) */
+.subsection.left {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: calc(70 * var(--vh));
+    flex: 1;
+    width: 45%;
+}
+
+.subsection.left img {
+    max-height: 100%;
+    width: auto;
+    object-fit: contain;
+}
+
+/* Subsección derecha (contenido) */
+.subsection.right {
+    position: relative;
+    height: calc(70 * var(--vh));
+    width: 55%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+/* Botones de navegación idénticos */
+/* Botones de navegación (solo imagen) */
+
+.nav-button {
+    padding: 10px; /* Ajusta el padding para que las imágenes queden bien */
+    background-color: transparent; /* Fondo transparente */
+    border: none;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.nav-button:hover {
+    transform: scale(1.1); /* Efecto de escala al pasar el mouse */
+}
+
+.nav-icon {
+    height: 32px; /* Tamaño fijo para las imágenes */
+    width: auto; /* Mantiene la proporción de la imagen */
+    display: block; /* Asegura que la imagen se comporte como un bloque */
+}
+
+.button-container {
+    position: absolute;
+    bottom: 10px;
+    right: 400px;
+    display: flex;
+    gap: 10px;
+}   
+
+/* Contenido de texto idéntico */
+.team-info-content {
+    color: #333 !important;
+    font-size: 0.9rem;
+    line-height: 1;
+    width: 100%;
+    
+    h2 {
+        font-family: 'titulos', sans-serif;
+        font-size: 1.8rem;
+        color: #000;
+        margin-bottom: 0.5rem;
+        letter-spacing: -0.5px;
+    }
+    
+    h3 {
+        font-size: 0.95rem;
+        color: #444;
+    }
+    
+    p {
+        font-family: 'texto', sans-serif;
+        font-size: 0.85rem;
+        margin-bottom: 0.1rem;
+        text-align: justify;
+    }
+}
+
+/* Responsive idéntico */
+@media (max-width: 768px) {
+    .subsections {
+        flex-direction: column;
+        width: 95vw;
+    }
+    
+    .subsection.left, 
+    .subsection.right {
+        width: 100% !important;
+        height: auto !important;
+    }
+    
+    .subsection.left {
+        height: calc(50 * var(--vh)) !important;
+    }
+    
+    .subsection.right {
+        padding: 20px 0;
+        height: auto;
+    }
+    
+    .button-container {
+        position: relative;
+        justify-content: flex-end;
+        bottom: auto;
+        right: auto;
+        margin-top: 15px;
+    }
+}
+/* Estilos para contenido dinámico */
+.team-info-content {
+    h2 {
+      color: #2a2a2a;
+      border-bottom: 2px solid #000;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+  
+    .destacado {
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      
+      p {
+        margin: 0.5rem 0;
+      }
+    }
+  
+    ul {
+      li {
+        margin-bottom: 0.8rem;
+        &::marker {
+          color: #666;
+        }
+      }
+    }
+  }
+
+/*-------- Galería: en pantallas táctiles no hay "pasar el mouse", así que se ve a color --------*/
+@media (hover: none) {
+    .gallery-item img { filter: grayscale(0%); }
+}
+
+
+/* =====================================================================
+   REVISIÓN DE DISEÑO (PC y celular)
+   - Las secciones se recorren siempre en horizontal.
+   - Barra de preferencias: ocupa su propia franja al pie (el contenido no pasa por debajo).
+   - Celular / pantalla vertical / ventana angosta: el visor 3D arriba y el texto abajo, mitad y mitad.
+   ===================================================================== */
+body { padding-bottom: var(--ftr-h, 10vh); box-sizing: border-box; }
+.swiper-container { position: relative; }
+.swiper-slide main { position: relative; }
+
+@media (orientation: portrait) {
+    .swiper-slide main { width: 90%; align-items: stretch; padding-bottom: 22px; box-sizing: border-box; }
+
+    .sub-section-container {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);   /* mitad y mitad */
+        gap: 12px;
+        width: 100%;
+        height: 100%;
+        min-height: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    .sub-section.left.memoria,
+    .sub-section.right.memoria {
+        width: 100% !important;
+        height: 100%;
+        min-height: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    .modelo-3d-wrapper { width: 100%; height: 100%; }
+    .sub-section.right.memoria {
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+        justify-content: flex-start;
+        font-size: 0.9rem;
+        line-height: 1.55;
+    }
+    .sub-section.right.memoria p { margin-top: 0; padding: 0 4px; }
+
+    /* Galería: dos columnas dentro del espacio disponible; se desplaza hacia abajo si no entra */
+    .gallery-grid {
+        width: 100%;
+        height: 100%;
+        padding: 0 0 8px;
+        box-sizing: border-box;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: none;
+        grid-auto-rows: auto;
+        grid-template-areas:
+            "img01 img01"
+            "img02 img03"
+            "img04 img05"
+            "img06 img07"
+            "img08 img08"
+            "img09 img10";
+        gap: 8px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        touch-action: pan-y;
+        align-content: start;
+    }
+    .gallery-item { aspect-ratio: 4 / 3; }
+    .gallery-item.img01 { aspect-ratio: 16 / 10; }
+    .gallery-item img { object-fit: cover; }
+}
+
+/* Pantalla horizontal angosta (celular acostado, tableta chica): lado a lado, el visor 3D primero */
+@media (max-width: 1200px) and (orientation: landscape) {
+    .swiper-slide main { padding-bottom: 20px; box-sizing: border-box; align-items: stretch; }
+    .sub-section-container {
+        display: flex; flex-direction: row; gap: 16px;
+        width: 100%; height: 100%; min-height: 0; padding: 0; box-sizing: border-box;
+    }
+    .sub-section.left.memoria { flex: 1 1 0; min-width: 0; width: auto !important; height: 100%; padding: 0; }
+    .modelo-3d-wrapper { width: 100%; height: 100%; }
+    .sub-section.right.memoria {
+        flex: 0 0 38%; width: 38% !important; height: 100%; padding: 0;
+        overflow-y: auto; justify-content: flex-start; font-size: 0.85rem; line-height: 1.5; overscroll-behavior: contain;
+    }
+    .sub-section.right.memoria p { margin-top: 0; }
+    .gallery-grid {
+        width: 100%; height: 100%; padding: 0 0 6px; box-sizing: border-box;
+        grid-template-columns: repeat(5, minmax(0, 1fr)); grid-template-rows: repeat(3, minmax(0, 1fr));
+        grid-template-areas:
+            "img01 img01 img01 img02 img03"
+            "img01 img01 img01 img04 img05"
+            "img06 img07 img08 img09 img10";
+        gap: 8px;
+    }
+    .gallery-item, .gallery-item.img01 { aspect-ratio: auto; max-width: none; min-height: 0; }
+    .gallery-item img { object-fit: cover; }
+}
+
+/* Puntos de la galería de fotos: es la misma barra de la parte de abajo (.swiper-pagination); mientras se ve una foto,
+   la barra marca en qué foto se está y reemplaza a las flechas. */
+.swiper-pagination.gv-pagination { opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 0.4s ease, visibility 0s linear 0.4s; }
+.swiper-pagination.gv-pagination .swiper-pagination-bullet { cursor: pointer; margin: 0 4px; }
+html.gv-open .swiper-pagination.gv-pagination { opacity: 1; visibility: visible; pointer-events: auto; transition: opacity 0.4s ease, visibility 0s; z-index: 11; }
+html.gv-open .swiper-pagination:not(.gv-pagination) { opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 0.4s ease, visibility 0s linear 0.4s; }
+
+
+/* ===== Casa Mbarete Porã: ficha + memoria descriptiva (texto plano) ===== */
+@media (min-width: 1201px) and (orientation: landscape) { .sub-section.right.memoria { justify-content: safe center; } }
+.sub-section.right.memoria .si-type { margin: 0 0 0.9em; padding: 0 10px; font-size: 0.85rem; color: #333; }
+.sub-section.right.memoria .si-meta { margin: 0 0 1.2em; padding: 0 10px; color: #333; }
+.sub-section.right.memoria .si-meta > div { display: flex; gap: 0.6em; margin: 0 0 0.35em; }
+.sub-section.right.memoria .si-meta dt { flex: 0 0 6.2em; opacity: 0.55; }
+.sub-section.right.memoria .si-meta dd { margin: 0; }
+.sub-section.right.memoria .si-line { display: block; }
+.sub-section.right.memoria .si-text p { margin: 0 0 1em; }
+.sub-section.right.memoria .si-text p:last-child { margin-bottom: 0; }
+@media (orientation: portrait) { .sub-section.right.memoria .si-text p { margin-bottom: 0.9em; } }
+
+/* planta y corte: se ven enteros (no se recortan) */
+.gallery-item.img09 img, .gallery-item.img10 img { object-fit: contain; background: #fff; }
