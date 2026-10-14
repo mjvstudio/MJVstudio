@@ -1,0 +1,135 @@
+/* =====================================================================
+   PÁGINAS PRIVADAS (proyectos que se comparten con un link) — MJV Studio
+   Lo usan todas las carpetas de private/<proyecto>/index.html.
+   Dos secciones: 1) galería de fotos  2) recorrido 360 (exportado de Marzipano, en la carpeta 360/).
+   Mismo estilo del sitio: título arriba, barra de preferencias, botón de contacto y barra de puntos abajo.
+   ===================================================================== */
+@font-face { font-family: 'titulos'; src: url('../assets/fonts/titulos/titulos.ttf') format('truetype'); }
+@font-face { font-family: 'texto';   src: url('../assets/fonts/texto/texto.otf') format('opentype'); }
+h1, h2, h3 { font-family: 'titulos', sans-serif; }
+p, span, a { font-family: 'texto', sans-serif; }
+
+html, body { height: 100%; height: 100dvh; margin: 0; overflow: hidden; background: #fff; }
+body { display: flex; flex-direction: column; padding-bottom: var(--ftr-h, 10vh); box-sizing: border-box; }
+::-webkit-scrollbar { display: none; }
+
+/* Medidas de las franjas: las mismas que en las páginas de proyecto */
+:root { --hdr-h: calc(10 * var(--vh)); --ftr-h: calc(10 * var(--vh)); }
+@media (orientation: portrait) { :root { --hdr-h: max(calc(6 * var(--vh)), 44px); --ftr-h: max(calc(6 * var(--vh)), 58px); } }
+@media (orientation: landscape) and (max-height: 560px) { :root { --ftr-h: 10vh; } }
+
+.title-header-container { flex: 0 0 auto; width: 90vw; height: var(--hdr-h); margin: 0 auto; padding: 0 56px 0 0; box-sizing: border-box; display: flex; align-items: center; }
+.project-title { margin: 0; }
+.project-title h1 { font-family: 'titulos', sans-serif; font-size: max(1.15rem, 2vw); line-height: 1.2; letter-spacing: normal; margin: 0; color: black; text-transform: none; font-weight: normal; }
+
+.swiper-container { width: 100vw; flex: 1 1 auto; min-height: 0; overflow: hidden; position: relative; }
+.swiper-slide { overflow: hidden; }
+.swiper-slide main { position: relative; display: flex; height: 100%; align-items: center; justify-content: center; margin: 0 auto; width: 90%; max-width: 1400px; padding-bottom: 10px; box-sizing: border-box; }
+@media (orientation: portrait) { .swiper-slide main { padding-bottom: 22px; } }
+
+/* Barra de puntos: misma posición que en el resto del sitio */
+.swiper-pagination { position: fixed !important; left: 0; width: 100%; bottom: 10px !important; }
+@media (orientation: portrait) { .swiper-pagination { bottom: 4px !important; } }
+.swiper-pagination-bullet { width: 15px !important; height: 2px !important; background: rgba(0,0,0,0.3) !important; border-radius: 0 !important; opacity: 1 !important; transition: all 0.3s !important; }
+.swiper-pagination-bullet-active { background: #000 !important; transform: scaleX(1.5) !important; }
+.swiper-pagination.gv-pagination { opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 0.4s ease, visibility 0s linear 0.4s; }
+.swiper-pagination.gv-pagination .swiper-pagination-bullet { cursor: pointer; margin: 0 4px; }
+html.gv-open .swiper-pagination.gv-pagination { opacity: 1; visibility: visible; pointer-events: auto; transition: opacity 0.4s ease, visibility 0s; z-index: 11; }
+html.gv-open .swiper-pagination:not(.gv-pagination) { opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 0.4s ease, visibility 0s linear 0.4s; }
+
+/* ---------- Galería: las fotos llenan el espacio, acomodadas en filas (private.js) ---------- */
+.pg-gallery { position: relative; width: 100%; height: 100%; transition: opacity 0.45s ease, visibility 0s; }
+.pg-gallery.is-covered { opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 0.45s ease, visibility 0s linear 0.45s; }
+.pg-gallery img { position: absolute; display: block; object-fit: cover; cursor: pointer; opacity: 0; transition: opacity 0.6s ease, transform 0.3s ease, box-shadow 0.3s ease; background: #eee; }
+.pg-gallery img.is-loaded { opacity: 1; }
+.pg-gallery img:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+@media (hover: hover) {
+    .pg-gallery img:hover { transform: scale(1.03); box-shadow: 0 4px 8px rgba(0,0,0,0.2); z-index: 2; }
+}
+.pg-empty { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; text-align: center; padding: 0 24px; font-family: 'texto', sans-serif; font-size: 0.95rem; color: #777; }
+.pg-empty[hidden] { display: none; }
+
+/* Visor de foto: se abre en el mismo espacio de la galería */
+.gallery-viewer {
+    --gv-halo: rgba(255, 255, 255, 0.9);
+    position: absolute; left: 50%; top: 50%; width: min(88vw, 1300px); height: calc(100% - 24px);
+    transform: translate(-50%, -50%); color: #3a3b3b;
+    opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 0.5s ease, visibility 0s linear 0.5s; z-index: 5; touch-action: pan-y pinch-zoom;
+}
+.gallery-viewer:focus { outline: none; }
+.gallery-viewer.is-open { opacity: 1; visibility: visible; pointer-events: auto; transition: opacity 0.5s ease, visibility 0s; }
+.gv-stage { position: absolute; inset: 0; touch-action: none; transform-origin: 50% 50%; will-change: transform; }
+.gallery-viewer { touch-action: none; }
+.gallery-viewer.is-zoomed .gv-stage { cursor: grab; }
+.gv-stage.is-panning { cursor: grabbing !important; }
+.gv-zoom { position: absolute; top: 6px; right: 6px; z-index: 3; display: flex; gap: 8px; }
+.gv-zbtn { width: 38px; height: 38px; padding: 0; border: 0; border-radius: 50%; background: rgba(255,255,255,0.82); color: #3a3b3b; font: 300 24px/1 'texto', sans-serif; box-shadow: 0 1px 6px rgba(0,0,0,0.25); cursor: pointer; display: flex; align-items: center; justify-content: center; -webkit-tap-highlight-color: transparent; transition: opacity 0.3s ease, scale 0.3s ease; }
+.gv-zbtn:hover:not(:disabled) { scale: 1.1; }
+.gv-zbtn:disabled { opacity: 0.35; cursor: default; }
+.gv-zbtn:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+.gv-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: opacity 0.7s ease; user-select: none; -webkit-user-drag: none; }
+.gv-img.on { opacity: 1; }
+.gv-btn { position: absolute; z-index: 2; width: 48px; height: 48px; padding: 0; border: 0; background: none; color: inherit; display: flex; align-items: center; justify-content: center; cursor: pointer; opacity: 0.85; -webkit-tap-highlight-color: transparent; transition: opacity 0.3s ease, scale 0.3s ease; }
+.gv-btn:hover { opacity: 1; scale: 1.15; }
+.gv-btn:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; border-radius: 4px; }
+.gv-prev { left: 0; top: 50%; margin-top: -24px; }
+.gv-next { right: 0; top: 50%; margin-top: -24px; }
+.gv-icon { display: block; width: 22px; height: 33px; background-color: currentColor; filter: drop-shadow(0 0 3px var(--gv-halo)); -webkit-mask: center / contain no-repeat; mask: center / contain no-repeat; }
+.gv-prev .gv-icon { -webkit-mask-image: url('../assets/atras.svg'); mask-image: url('../assets/atras.svg'); }
+.gv-next .gv-icon { -webkit-mask-image: url('../assets/adelante.svg'); mask-image: url('../assets/adelante.svg'); }
+@media (max-width: 768px) { .gallery-viewer { width: 94vw; } .gv-btn { width: 44px; height: 44px; } .gv-prev, .gv-next { margin-top: -22px; } }
+
+/* Logo (arriba a la derecha): lleva a la página principal; con una foto abierta lo reemplaza la flecha que la cierra */
+.pg-home { position: fixed; top: 0; right: calc(5vw - 7px); z-index: 1000; height: var(--hdr-h); display: flex; align-items: center; justify-content: flex-end; color: #3a3b3b; -webkit-tap-highlight-color: transparent; transition: transform 0.3s ease, opacity 0.4s ease, visibility 0s; }
+.pg-home:hover { transform: scale(1.08); }
+.pg-home:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; border-radius: 4px; }
+.pg-home-logo { display: block; height: 34px; aspect-ratio: 787 / 867; background-color: currentColor; -webkit-mask: url('../assets/logo_2.svg') center / contain no-repeat; mask: url('../assets/logo_2.svg') center / contain no-repeat; }
+html.gv-open .pg-home { opacity: 0; visibility: hidden; transition: opacity 0.4s ease, visibility 0s linear 0.4s; }
+/* Flecha de cerrar foto (misma posición que el logo) */
+.back-to-projects-btn { position: fixed; top: 0; right: calc(5vw - 7px); z-index: 1000; width: 42px; height: var(--hdr-h); display: flex; align-items: center; justify-content: center; background: none; -webkit-tap-highlight-color: transparent; transition: transform 0.3s ease, opacity 0.4s ease, visibility 0s linear 0.4s; opacity: 0; visibility: hidden; }
+html.gv-open .back-to-projects-btn { opacity: 1; visibility: visible; transition: transform 0.3s ease, opacity 0.4s ease, visibility 0s; }
+.back-to-projects-btn:hover { transform: scale(1.12); }
+.back-to-projects-btn:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; border-radius: 4px; }
+.back-to-projects-btn img { width: 28px; height: auto; display: block; }
+
+/* ---------- Recorrido 360 ---------- */
+.pg-tour { position: relative; width: 100%; height: 100%; background: #000; overflow: hidden; }
+.pg-swiping .pg-tour iframe { pointer-events: none; }
+.pg-tour iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; background: #000; }
+
+/* ---------- Antes y después ---------- */
+.pg-compare-wrap { position: relative; width: 100%; height: 100%; container-type: size; display: flex; align-items: center; justify-content: center; }
+.pg-compare { --pos: 50%; position: relative; width: min(100cqw, 100cqh * 1.5462); aspect-ratio: 1455 / 941; overflow: hidden; cursor: ew-resize; touch-action: pan-y; user-select: none; -webkit-user-select: none; background: #888; }
+.pg-compare img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; -webkit-user-drag: none; }
+.pg-compare .cmp-after { clip-path: inset(0 0 0 var(--pos)); }
+.cmp-tag { position: absolute; bottom: 14px; padding: 5px 12px; font-family: 'texto', sans-serif; font-size: 0.95rem; letter-spacing: 0.04em; color: #fff; background: rgba(0,0,0,0.5); border-radius: 3px; pointer-events: none; }
+.cmp-tag-before { left: 14px; } .cmp-tag-after { right: 14px; }
+.cmp-handle { position: absolute; top: 0; bottom: 0; left: var(--pos); width: 44px; margin-left: -22px; display: flex; align-items: center; justify-content: center; outline: none; }
+.cmp-handle::before { content: ''; position: absolute; top: 0; bottom: 0; left: 50%; width: 2px; margin-left: -1px; background: #fff; box-shadow: 0 0 6px rgba(0,0,0,0.45); }
+.cmp-knob { position: relative; width: 44px; height: 44px; border-radius: 50%; background: rgba(255,255,255,0.92); box-shadow: 0 1px 8px rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; gap: 6px; transition: transform 0.25s ease; }
+.cmp-knob::before, .cmp-knob::after { content: ''; width: 0; height: 0; border-style: solid; }
+.cmp-knob::before { border-width: 6px 8px 6px 0; border-color: transparent #3a3b3b transparent transparent; }
+.cmp-knob::after { border-width: 6px 0 6px 8px; border-color: transparent transparent transparent #3a3b3b; }
+.pg-compare.is-drag .cmp-knob, .cmp-handle:focus-visible .cmp-knob { transform: scale(1.12); }
+.cmp-handle:focus-visible .cmp-knob { outline: 2px solid #fff; outline-offset: 2px; }
+@media (max-width: 768px) { .cmp-tag { font-size: 0.8rem; padding: 4px 9px; bottom: 10px; } .cmp-tag-before { left: 10px; } .cmp-tag-after { right: 10px; } }
+
+/* ---------- Botón de contacto (mismo despliegue que la portada) ---------- */
+.contact-dropdown { position: fixed; bottom: calc(2 * var(--vh)); right: 2vw; z-index: 1000; }
+.contact-icon { height: 32px; width: auto; cursor: pointer; transition: transform 0.3s ease; display: block; }
+.contact-icon:hover { transform: scale(1.1); }
+.contact-dropdown-content { display: none; position: absolute; bottom: calc(100% + 10px); right: -25px; min-width: 120px; border-radius: 8px; padding: 12px 0; animation: dropdownSlide 0.4s ease-out forwards; transform-origin: bottom right; overflow: hidden; text-align: right; }
+.contact-dropdown-content a { color: black; text-decoration: none; display: block; padding: 8px 20px; font-family: 'texto', sans-serif; font-size: 1.2rem; transition: background-color 0.3s ease; border-radius: 4px; opacity: 0; transform: translateY(100%); animation: itemSlide 0.3s ease-out forwards; animation-delay: calc(var(--i) * 0.1s); margin-left: auto; width: fit-content; }
+.contact-dropdown-content a:hover { background-color: var(--dd-hover-bg, #f0f0f0); }
+.contact-dropdown-content a img { width: auto; height: 40px; display: block; margin-left: auto; }
+.contact-dropdown-content::before { content: ''; position: absolute; bottom: -10px; right: 10px; border-width: 10px 10px 0; border-style: solid; border-color: rgb(255,255,255) transparent transparent; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1)); }
+.contact-dropdown-content.closing a { animation: itemSlideOut 0.3s ease-in forwards; animation-delay: calc((var(--max-i, 0) - var(--i, 0)) * 0.1s); }
+@keyframes dropdownSlide { 0% { opacity: 0; transform: translateY(20px) scale(0.95); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes itemSlide { 0% { opacity: 0; transform: translateY(100%); } 100% { opacity: 1; transform: translateY(0); } }
+@keyframes itemSlideOut { 0% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(100%); } }
+@media (orientation: portrait) { .contact-dropdown { bottom: calc(var(--ftr-h, 58px) / 2 + 4px - 11.5px); } .contact-icon { height: 23px; } }
+@media (orientation: landscape) and (max-height: 560px) { .contact-dropdown { bottom: calc(var(--ftr-h, 58px) / 2 + 4px - 10px); } .contact-icon { height: 20px; } }
+@media (max-width: 768px) { .contact-dropdown-content { min-width: 180px; right: -5px; } .contact-dropdown-content a { padding: 8px 10px 8px 25px; font-size: 1rem; } }
+
+@media (prefers-reduced-motion: reduce) { .gallery-viewer, .pg-gallery, .gv-img, .gv-btn, .pg-gallery img { transition: none !important; } }
+[data-theme="dark"] .pg-home { color: #e2e1df; }
