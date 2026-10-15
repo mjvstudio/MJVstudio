@@ -3,6 +3,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const T = (d) => (window.mjvLang ? window.mjvLang.pick(d) : d.es);
     const html = document.documentElement;
 
+    /*-------- VERSIONES: 1 = carpetas sin prefijo (images/, 360/...), 2 = 2_images/, 2_360/... --------*/
+    const versions = (document.body.dataset.versions || '1').split(',').map((n) => parseInt(n, 10)).filter((n) => n > 0);
+    const prefixOf = (id) => (id === 1 ? '' : id + '_');
+    const fromHash = () => { const m = /^#v(\d+)$/.exec(location.hash); const id = m ? parseInt(m[1], 10) : 0; return versions.indexOf(id) >= 0 ? id : versions[versions.length - 1]; };
+    const state = window.PG = { id: fromHash(), prefix: '' };
+    state.prefix = prefixOf(state.id);
+
     /*-------- CARRUSEL: 1) galería  2) recorrido 360  3) antes y después --------*/
     const swiper = new Swiper('.swiper-container', {
         direction: 'horizontal', loop: false, slidesPerView: 1, speed: 800, simulateTouch: true, effect: 'slide',
@@ -24,9 +31,22 @@ document.addEventListener('DOMContentLoaded', () => {
         wheelTimer = setTimeout(() => { if (Math.abs(e.deltaY) > 15 || Math.abs(e.deltaX) > 15) ((e.deltaY || e.deltaX) > 0 ? swiper.slideNext() : swiper.slidePrev()); }, 50);
     }, { passive: true });
 
-    /*-------- RECORRIDO 360: se carga cuando la página terminó (la galería va primero) --------*/
+    /*-------- RECORRIDO 360: se carga cuando la página terminó (la galería va primero); cada versión tiene su carpeta --------*/
     const frame = document.getElementById('pg-tour-frame');
-    const loadTour = () => { if (frame && !frame.getAttribute('src')) frame.setAttribute('src', frame.dataset.src); };
+    const tourEmpty = document.getElementById('pg-tour-empty');
+    let tourWanted = false, tourFor = null, tourToken = 0;
+    const loadTour = () => {
+        tourWanted = true;
+        if (!frame || tourFor === state.prefix) return;
+        tourFor = state.prefix;
+        const my = ++tourToken, url = state.prefix + '360/index.html';
+        fetch(url, { method: 'HEAD' }).then((r) => r.ok, () => false).then((ok) => {
+            if (my !== tourToken) return;
+            frame.parentNode.hidden = !ok;
+            tourEmpty.hidden = ok;
+            if (ok) frame.setAttribute('src', url); else frame.removeAttribute('src');
+        });
+    };
     if (document.readyState === 'complete') setTimeout(loadTour, 400); else window.addEventListener('load', () => setTimeout(loadTour, 400));
     swiper.on('slideChange', loadTour);
 
@@ -75,16 +95,22 @@ document.addEventListener('DOMContentLoaded', () => {
     if (window.ResizeObserver) new ResizeObserver(queueLayout).observe(grid);
     window.addEventListener('resize', queueLayout);
 
-    const addImage = (i) => new Promise((resolve) => {
+    let galleryToken = 0;
+    const addImage = (i, my) => new Promise((resolve) => {
         const im = new Image();
         im.alt = (document.title.split(' — ')[0] || '') + ' ' + i;
         im.decoding = 'async'; im.draggable = false;
         im.tabIndex = 0; im.setAttribute('role', 'button');
-        im.onload = () => { im.classList.add('is-loaded'); grid.appendChild(im); imgs.push(im); empty.hidden = true; buildDots(); queueLayout(); resolve(true); };
+        im.onload = () => { if (my !== galleryToken) return resolve(false); im.classList.add('is-loaded'); grid.appendChild(im); imgs.push(im); empty.hidden = true; buildDots(); queueLayout(); resolve(true); };
         im.onerror = () => resolve(false);
-        im.src = 'images/' + pad(i) + '.webp';
+        im.src = state.prefix + 'images/' + pad(i) + '.webp';
     });
-    (async () => { for (let i = 1; i <= 80; i++) { if (!(await addImage(i))) break; } if (!imgs.length) empty.hidden = false; })();
+    const loadGallery = async () => {
+        const my = ++galleryToken;
+        imgs.length = 0; current = -1; grid.textContent = ''; empty.hidden = true; buildDots(); queueLayout();
+        for (let i = 1; i <= 80; i++) { if (!(await addImage(i, my))) break; }
+        if (my === galleryToken && !imgs.length) empty.hidden = false;
+    };
 
     /*-------- VISOR DE FOTO (se abre en el mismo espacio; flechas, teclas, ruedita y puntos de abajo) --------*/
     const viewer = document.getElementById('pg-viewer');
@@ -187,14 +213,12 @@ document.addEventListener('DOMContentLoaded', () => {
     btnPrev.addEventListener('click', () => go(-1));
     btnNext.addEventListener('click', () => go(1));
     closeBtn.addEventListener('click', (e) => { e.preventDefault(); closeViewer(); });
-    /*-------- ZOOM DE LA FOTO: pellizco, doble toque/clic, Ctrl+ruedita, botones + / − y teclas + − 0 --------*/
+    /*-------- ZOOM DE LA FOTO: pellizco, doble toque/clic, Ctrl+ruedita, teclas + − 0 (sin botones en pantalla) --------*/
     const MAXZ = 5;
     let zs = 1, zx = 0, zy = 0;
     const applyZoom = () => {
         stage.style.transform = zs === 1 ? '' : 'translate(' + zx + 'px,' + zy + 'px) scale(' + zs + ')';
         viewer.classList.toggle('is-zoomed', zs > 1);
-        if (zoomOutBtn) zoomOutBtn.disabled = zs <= 1;
-        if (zoomInBtn) zoomInBtn.disabled = zs >= MAXZ;
     };
     const clampPan = () => {
         const r = viewer.getBoundingClientRect(), mx = (zs - 1) * r.width / 2, my = (zs - 1) * r.height / 2;
@@ -210,22 +234,6 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     const zoomCenter = (ns) => { const r = viewer.getBoundingClientRect(); zoomAt(ns, r.left + r.width / 2, r.top + r.height / 2); };
     const resetZoom = () => { zs = 1; zx = zy = 0; applyZoom(); };
-    const mkZoomBtn = (cls, txt, fn) => {
-        const b = document.createElement('button'); b.type = 'button'; b.className = 'gv-zbtn ' + cls; b.textContent = txt;
-        b.addEventListener('pointerdown', (e) => e.stopPropagation());
-        b.addEventListener('click', (e) => { e.stopPropagation(); fn(); });
-        return b;
-    };
-    const zoomBox = document.createElement('div'); zoomBox.className = 'gv-zoom';
-    const zoomInBtn = mkZoomBtn('gv-zin', '+', () => zoomCenter(zs * 1.6));
-    const zoomOutBtn = mkZoomBtn('gv-zout', '−', () => zoomCenter(zs / 1.6));
-    zoomBox.append(zoomInBtn, zoomOutBtn); viewer.appendChild(zoomBox);
-    const setZoomLabels = () => {
-        zoomInBtn.setAttribute('aria-label', T({ es: 'Acercar', en: 'Zoom in', fr: 'Agrandir', pt: 'Aproximar' }));
-        zoomOutBtn.setAttribute('aria-label', T({ es: 'Alejar', en: 'Zoom out', fr: 'Réduire', pt: 'Afastar' }));
-    };
-    setZoomLabels(); document.addEventListener('mjvlangchange', setZoomLabels); applyZoom();
-
     // Punteros: 1 dedo/mouse = pasar de foto (sin zoom) o mover la foto (con zoom); 2 dedos = pellizco
     const ptrs = new Map();
     let swipeX = null, swipeY = null, pinch = null, moved = false, lastTap = { t: 0, x: 0, y: 0 }, downAt = 0;
@@ -285,6 +293,43 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     swiper.on('slideChange', closeViewer);
 
+    /*-------- SELECTOR DE VERSIÓN (flechita del título) --------*/
+    const titleBtn = document.getElementById('pg-title-btn');
+    const menu = document.getElementById('pg-version-menu');
+    const wrap = document.getElementById('pg-version-wrap');
+    const vLabel = (id) => T({ es: 'Versión ', en: 'Version ', fr: 'Version ', pt: 'Versão ' }) + id;
+    const paintMenu = () => {
+        Array.prototype.forEach.call(menu.children, (a) => { const id = Number(a.dataset.v); a.textContent = vLabel(id); a.classList.toggle('is-active', id === state.id); a.setAttribute('aria-current', id === state.id ? 'true' : 'false'); });
+        titleBtn.setAttribute('aria-label', document.title.split(' — ')[0] + ' — ' + vLabel(state.id));
+    };
+    const applyVersion = (first) => {
+        state.prefix = prefixOf(state.id);
+        paintMenu();
+        if (!first) closeViewer();
+        loadGallery();
+        if (tourWanted) { tourFor = null; loadTour(); }
+        document.dispatchEvent(new CustomEvent('pgversion', { detail: { id: state.id, prefix: state.prefix } }));
+    };
+    if (versions.length > 1) {
+        versions.forEach((id, i) => {
+            const a = document.createElement('a'); a.href = '#v' + id; a.dataset.v = id; a.style.setProperty('--i', i);
+            a.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (id === state.id) return;
+                state.id = id;
+                try { history.replaceState(null, '', '#v' + id); } catch (_) { location.hash = 'v' + id; }
+                applyVersion(false);
+            });
+            menu.appendChild(a);
+        });
+        if (typeof setupAnimatedDropdown === 'function') setupAnimatedDropdown(titleBtn, menu);
+        window.addEventListener('hashchange', () => { const id = fromHash(); if (id !== state.id) { state.id = id; applyVersion(false); } });
+        document.addEventListener('mjvlangchange', paintMenu);
+    } else {
+        wrap.classList.add('pg-single');
+    }
+    applyVersion(true);
+
     /*-------- BOTÓN DE CONTACTO --------*/
     if (typeof setupAnimatedDropdown === 'function') {
         setupAnimatedDropdown(document.getElementById('contact-button'), document.getElementById('contact-dropdown'));
@@ -322,4 +367,21 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     labels(); document.addEventListener('mjvlangchange', labels);
     set(50);
+    // Cada versión tiene su carpeta (antes_despues/, 2_antes_despues/...); si falta, se avisa en vez de mostrar un hueco
+    const wrapEl = box.parentNode, note = document.getElementById('pg-compare-empty');
+    const bEl = box.querySelector('.cmp-before'), aEl = box.querySelector('.cmp-after');
+    let cmpToken = 0;
+    const loadCompare = (prefix) => {
+        const my = ++cmpToken, base = prefix + 'antes_despues/';
+        let pending = 2, ok = true;
+        const done = () => { if (--pending || my !== cmpToken) return; wrapEl.hidden = !ok; note.hidden = ok; set(50); };
+        [[bEl, 'antes.webp'], [aEl, 'despues.webp']].forEach(([el, f]) => {
+            const t = new Image();
+            t.onload = () => { if (my === cmpToken) el.src = t.src; done(); };
+            t.onerror = () => { ok = false; done(); };
+            t.src = base + f;
+        });
+    };
+    loadCompare((window.PG && window.PG.prefix) || '');
+    document.addEventListener('pgversion', (e) => loadCompare(e.detail.prefix));
 });

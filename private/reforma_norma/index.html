@@ -37,10 +37,14 @@
     <script src="../../pref-tips.js" defer></script>
     <script src="../../analytics.js" defer></script>
 </head>
-<body>
+<body data-versions="1,2">
+    <!-- VERSIONES DEL PROYECTO: data-versions lista los números que existen (1,2,3...). Carpetas por versión:
+         versión 1 → images/, antes_despues/, 360/   |   versión 2 → 2_images/, 2_antes_despues/, 2_360/   |   versión 3 → 3_images/ ... y así.
+         Al abrir el link sin nada más se ve la última versión; para compartir una en particular: .../reforma_norma/#v1, #v2... -->
     <div class="title-header-container">
-        <div class="project-title">
-            <h1>Reforma Norma</h1>
+        <div class="project-title lang-dropdown" id="pg-version-wrap">
+            <h1><button type="button" class="pg-title-btn" id="pg-title-btn" aria-haspopup="true" aria-expanded="false"><span class="pg-title-text">Reforma Norma</span><span class="pg-chevron" aria-hidden="true"></span></button></h1>
+            <div class="lang-dropdown-content pg-version-menu" id="pg-version-menu"></div>
         </div>
     </div>
 
@@ -93,12 +97,13 @@
                 </main>
             </div>
 
-            <!-- Sección 2: recorrido 360 (fuera del recuadro se puede deslizar para cambiar de sección; dentro, el arrastre es del recorrido) (exportado de Marzipano en la carpeta 360/; para actualizarlo, reemplazar esa carpeta) -->
+            <!-- Sección 2: recorrido 360 (versión 1: 360/, versión 2: 2_360/...; fuera del recuadro se puede deslizar para cambiar de sección; dentro, el arrastre es del recorrido) (exportado de Marzipano en la carpeta 360/; para actualizarlo, reemplazar esa carpeta) -->
             <div class="swiper-slide">
                 <main>
                     <div class="pg-tour">
-                        <iframe id="pg-tour-frame" data-src="360/index.html" title="Recorrido 360" allow="fullscreen; accelerometer; gyroscope" allowfullscreen></iframe>
+                        <iframe id="pg-tour-frame" title="Recorrido 360" allow="fullscreen; accelerometer; gyroscope" allowfullscreen></iframe>
                     </div>
+                    <p class="pg-empty" id="pg-tour-empty" hidden data-en="The 360° tour of this version will be available very soon." data-fr="La visite 360° de cette version sera disponible très bientôt." data-pt="O passeio 360° desta versão estará disponível em breve.">El recorrido 360° de esta versión estará disponible muy pronto.</p>
                 </main>
             </div>
 
@@ -107,13 +112,14 @@
                 <main>
                     <div class="pg-compare-wrap">
                         <div class="pg-compare swiper-no-swiping" id="pg-compare">
-                            <img class="cmp-before" src="antes_despues/antes.webp" alt="Antes" draggable="false">
-                            <img class="cmp-after" src="antes_despues/despues.webp" alt="Después" draggable="false">
+                            <img class="cmp-before" alt="Antes" draggable="false">
+                            <img class="cmp-after" alt="Después" draggable="false">
                             <span class="cmp-tag cmp-tag-before" data-en="Before" data-fr="Avant" data-pt="Antes">Antes</span>
                             <span class="cmp-tag cmp-tag-after" data-en="After" data-fr="Après" data-pt="Depois">Después</span>
                             <div class="cmp-handle" role="slider" tabindex="0" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"><span class="cmp-knob"></span></div>
                         </div>
                     </div>
+                    <p class="pg-empty" id="pg-compare-empty" hidden data-en="The before and after of this version will be available very soon." data-fr="L'avant et après de cette version sera disponible très bientôt." data-pt="O antes e depois desta versão estará disponível em breve.">El antes y después de esta versión estará disponible muy pronto.</p>
                 </main>
             </div>
         </div>
