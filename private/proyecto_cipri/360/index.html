@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Proyecto Cipri</title>
+<meta charset="utf-8">
+<meta name="viewport" content="target-densitydpi=device-dpi, width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, minimal-ui" />
+<style> @-ms-viewport { width: device-width; } </style>
+<link rel="stylesheet" href="vendor/reset.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="multiple-scenes ">
+
+<div id="pano"></div>
+
+<div id="sceneList">
+  <ul class="scenes">
+    
+      <a href="javascript:void(0)" class="scene" data-id="0-acceso---exterior">
+        <li class="text">Acceso - Exterior</li>
+      </a>
+    
+      <a href="javascript:void(0)" class="scene" data-id="1-garaje">
+        <li class="text">Garaje</li>
+      </a>
+    
+      <a href="javascript:void(0)" class="scene" data-id="2-corredor">
+        <li class="text">Corredor</li>
+      </a>
+    
+      <a href="javascript:void(0)" class="scene" data-id="3-estar-social">
+        <li class="text">Estar Social</li>
+      </a>
+    
+      <a href="javascript:void(0)" class="scene" data-id="4-cocina---comedor">
+        <li class="text">Cocina - Comedor</li>
+      </a>
+    
+      <a href="javascript:void(0)" class="scene" data-id="5-distribuidor---dormitorios">
+        <li class="text">Distribuidor - Dormitorios</li>
+      </a>
+    
+      <a href="javascript:void(0)" class="scene" data-id="6-dormitorio-individual">
+        <li class="text">Dormitorio Individual</li>
+      </a>
+    
+      <a href="javascript:void(0)" class="scene" data-id="7-dormitorio-visitas">
+        <li class="text">Dormitorio Visitas</li>
+      </a>
+    
+      <a href="javascript:void(0)" class="scene" data-id="8-dormitorio-principal---vestidor">
+        <li class="text">Dormitorio Principal - Vestidor</li>
+      </a>
+    
+      <a href="javascript:void(0)" class="scene" data-id="9-dormitorio-principal---cama">
+        <li class="text">Dormitorio Principal - Cama</li>
+      </a>
+    
+      <a href="javascript:void(0)" class="scene" data-id="10-patio">
+        <li class="text">Patio</li>
+      </a>
+    
+      <a href="javascript:void(0)" class="scene" data-id="11-quincho">
+        <li class="text">Quincho</li>
+      </a>
+    
+      <a href="javascript:void(0)" class="scene" data-id="12-estar-exterior">
+        <li class="text">Estar Exterior</li>
+      </a>
+    
+      <a href="javascript:void(0)" class="scene" data-id="13-quincho---estar-exterior">
+        <li class="text">Quincho - Estar Exterior</li>
+      </a>
+    
+      <a href="javascript:void(0)" class="scene" data-id="14-patio-2">
+        <li class="text">Patio 2</li>
+      </a>
+    
+      <a href="javascript:void(0)" class="scene" data-id="15-quincho---parrilla">
+        <li class="text">Quincho - Parrilla</li>
+      </a>
+    
+      <a href="javascript:void(0)" class="scene" data-id="16-farmacia-entrada">
+        <li class="text">Farmacia Entrada</li>
+      </a>
+    
+      <a href="javascript:void(0)" class="scene" data-id="17-farmacia---caja">
+        <li class="text">Farmacia - Caja</li>
+      </a>
+    
+      <a href="javascript:void(0)" class="scene" data-id="18-farmacia---distribuidor">
+        <li class="text">Farmacia - Distribuidor</li>
+      </a>
+    
+      <a href="javascript:void(0)" class="scene" data-id="19-pasillo-farmacia">
+        <li class="text">Pasillo Farmacia</li>
+      </a>
+    
+      <a href="javascript:void(0)" class="scene" data-id="20-rea-de-inyectables">
+        <li class="text">Área de Inyectables</li>
+      </a>
+    
+      <a href="javascript:void(0)" class="scene" data-id="21-oficina-farmacia">
+        <li class="text">Oficina Farmacia</li>
+      </a>
+    
+      <a href="javascript:void(0)" class="scene" data-id="22-caja">
+        <li class="text">Caja</li>
+      </a>
+    
+      <a href="javascript:void(0)" class="scene" data-id="23-depsito-medicamentos">
+        <li class="text">Depósito Medicamentos</li>
+      </a>
+    
+      <a href="javascript:void(0)" class="scene" data-id="24-auto-farma">
+        <li class="text">Auto Farma</li>
+      </a>
+    
+  </ul>
+</div>
+
+<div id="titleBar">
+  <h1 class="sceneName"></h1>
+</div>
+
+<a href="javascript:void(0)" id="autorotateToggle">
+  <img class="icon off" src="img/play.png">
+  <img class="icon on" src="img/pause.png">
+</a>
+
+<a href="javascript:void(0)" id="fullscreenToggle">
+  <img class="icon off" src="img/fullscreen.png">
+  <img class="icon on" src="img/windowed.png">
+</a>
+
+<a href="javascript:void(0)" id="sceneListToggle">
+  <img class="icon off" src="img/expand.png">
+  <img class="icon on" src="img/collapse.png">
+</a>
+
+<a href="javascript:void(0)" id="viewUp" class="viewControlButton viewControlButton-1">
+  <img class="icon" src="img/up.png">
+</a>
+<a href="javascript:void(0)" id="viewDown" class="viewControlButton viewControlButton-2">
+  <img class="icon" src="img/down.png">
+</a>
+<a href="javascript:void(0)" id="viewLeft" class="viewControlButton viewControlButton-3">
+  <img class="icon" src="img/left.png">
+</a>
+<a href="javascript:void(0)" id="viewRight" class="viewControlButton viewControlButton-4">
+  <img class="icon" src="img/right.png">
+</a>
+<a href="javascript:void(0)" id="viewIn" class="viewControlButton viewControlButton-5">
+  <img class="icon" src="img/plus.png">
+</a>
+<a href="javascript:void(0)" id="viewOut" class="viewControlButton viewControlButton-6">
+  <img class="icon" src="img/minus.png">
+</a>
+
+<script src="vendor/screenfull.min.js" ></script>
+<script src="vendor/bowser.min.js" ></script>
+<script src="vendor/marzipano.js" ></script>
+
+<script src="data.js"></script>
+<script src="index.js"></script>
+
+</body>
+</html>
