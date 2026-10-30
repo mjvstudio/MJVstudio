@@ -1,0 +1,53 @@
+/* Pantalla de ingreso del 360 Studio */
+html.gate-locked body > *:not(#studioGate):not(script) { visibility: hidden; }
+#studioGate {
+    position: fixed; inset: 0; z-index: 2000000;
+    display: flex; align-items: center; justify-content: center;
+    padding: 16px;
+    background: radial-gradient(ellipse at 50% 30%, #2a0d0d 0%, #0b0b0b 70%);
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+}
+#gateForm {
+    width: 100%; max-width: 340px;
+    display: flex; flex-direction: column; gap: 8px;
+    padding: 28px 26px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    color: #fff;
+}
+.gate-logo { width: 54px; height: auto; align-self: center; margin-bottom: 6px; }
+#gateForm h1 { margin: 0; text-align: center; font-size: 22px; font-weight: 600; letter-spacing: .02em; }
+.gate-sub { margin: 0 0 12px; text-align: center; font-size: 13px; color: rgba(255,255,255,0.55); }
+#gateForm label { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: rgba(255,255,255,0.6); margin-top: 4px; }
+#gateForm input[type=text], #gateForm input[type=password] {
+    padding: 11px 12px; border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.14);
+    background: rgba(0,0,0,0.35); color: #fff; font-size: 15px; outline: none;
+}
+#gateForm input:focus { border-color: rgba(220,0,0,0.8); }
+#gateForm .gate-check { display: flex; align-items: center; gap: 8px; text-transform: none; letter-spacing: 0; font-size: 13px; margin-top: 8px; }
+#gateSubmit {
+    margin-top: 12px; padding: 12px; border: 0; border-radius: 12px; cursor: pointer;
+    background: linear-gradient(135deg, #d00000, #8c0000); color: #fff; font-size: 15px; font-weight: 600;
+}
+#gateSubmit:disabled { opacity: .6; cursor: progress; }
+#gateSubmit:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+#gateError { min-height: 18px; margin: 6px 0 0; font-size: 13px; color: #ff9c9c; text-align: center; }
+
+/* Usuario conectado (arriba a la izquierda, debajo del nombre del proyecto) */
+#gateUser {
+    position: absolute; top: 64px; left: 20px; z-index: 20;
+    display: flex; align-items: center; gap: 8px;
+    padding: 4px 6px 4px 12px; border-radius: 14px;
+    background: rgba(0,0,0,0.45); backdrop-filter: blur(4px);
+    color: rgba(255,255,255,0.85); font: 12px 'Segoe UI', sans-serif;
+}
+#gateUser button {
+    border: 0; border-radius: 10px; padding: 3px 9px; cursor: pointer;
+    background: rgba(255,255,255,0.12); color: #fff; font-size: 11px;
+}
+#gateUser button:hover { background: rgba(200,0,0,0.8); }
+body.presentation #gateUser { display: none; }
+@media (max-width: 600px) { #gateUser { top: 52px; left: 10px; } }

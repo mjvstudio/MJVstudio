@@ -1,0 +1,2909 @@
+/* =========================================================
+   BLOQUE 1: RESET Y BASE GLOBAL
+========================================================= */
+
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    user-select: none;
+}
+
+body {
+    overflow: hidden;
+    background: #000;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+
+/* =========================================================
+   BLOQUE 2: HEADER UI
+   LOGO + NOMBRE PROYECTO + NOMBRE ESCENA
+========================================================= */
+
+/* ---------- LOGO ---------- */
+
+#logo {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 50px;
+    z-index: 20;
+    cursor: pointer;
+}
+
+#logo img {
+    width: 100%;
+    display: block;
+}
+
+
+/* ---------- NOMBRE DEL PROYECTO ---------- */
+
+#projectName {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+
+    z-index: 20;
+
+    color: white;
+
+    background: rgba(0, 0, 0, 0.5);
+
+    backdrop-filter: blur(4px);
+
+    padding: 8px 16px;
+
+    border-radius: 30px;
+
+    font-size: 1.2rem;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+
+/* ---------- NOMBRE ESCENA ---------- */
+
+#sceneNameDisplay {
+    position: absolute;
+
+    bottom: 20px;
+
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    z-index: 20;
+
+    color: white;
+
+    font-size: 1.2rem;
+
+    font-weight: bold;
+
+    text-transform: uppercase;
+
+    letter-spacing: 1px;
+
+    font-family: 'Segoe UI', monospace;
+
+    text-shadow: 0 0 6px rgba(0, 0, 0, 0.7);
+
+    white-space: nowrap;
+
+    pointer-events: auto;
+
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   BLOQUE 3: BUTTON BAR
+========================================================= */
+
+#button-bar {
+
+    position: fixed;
+
+    bottom: 20px;
+
+    right: 20px;
+
+    display: flex;
+
+    gap: 12px;
+
+    /* =====================================
+       SIEMPRE ENCIMA DE TODO
+    ===================================== */
+
+    z-index: 99999;
+}
+
+.bar-btn {
+    width: 48px;
+
+    height: 48px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    cursor: pointer;
+
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(0,0,0,0.7),
+            rgba(0,0,0,0.4)
+        );
+
+    backdrop-filter: blur(8px);
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease;
+}
+
+.bar-btn:hover {
+    transform: scale(1.08);
+
+    background: rgba(0,0,0,0.85);
+}
+
+.bar-btn:active {
+    transform: scale(0.96);
+}
+
+.bar-btn img {
+    width: 28px;
+    height: 28px;
+
+    pointer-events: none;
+}
+
+.bar-btn .icon.on {
+    display: none;
+}
+
+.bar-btn.enabled .icon.on {
+    display: block;
+}
+
+.bar-btn.enabled .icon.off {
+    display: none;
+}
+
+
+/* ---------- SEPARADOR ---------- */
+
+.btn-separator {
+    width: 1px;
+
+    height: 32px;
+
+    margin: 0 4px;
+
+    align-self: center;
+
+    background-color: rgba(255,255,255,0.3);
+}
+
+
+/* =========================================================
+   BLOQUE 4: INPUTS EDITABLES
+========================================================= */
+
+.project-name-input {
+    position: absolute;
+
+    top: 20px;
+    left: 20px;
+
+    z-index: 40;
+
+    min-width: 220px;
+
+    color: white;
+
+    background: rgba(0,0,0,0.6);
+
+    backdrop-filter: blur(4px);
+
+    border: 1px solid #ffaa00;
+
+    border-radius: 30px;
+
+    padding: 8px 16px;
+
+    font-size: 1.2rem;
+
+    font-weight: bold;
+
+    font-family: 'Segoe UI', sans-serif;
+
+    outline: none;
+}
+
+.scene-name-input {
+    position: absolute;
+
+    bottom: 20px;
+
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    z-index: 40;
+
+    min-width: 180px;
+
+    color: white;
+
+    background: rgba(0,0,0,0.6);
+
+    backdrop-filter: blur(4px);
+
+    border: 1px solid #ffaa00;
+
+    border-radius: 20px;
+
+    padding: 4px 12px;
+
+    text-align: center;
+
+    font-size: 1.2rem;
+
+    font-weight: bold;
+
+    outline: none;
+}
+
+.scene-list-input {
+    width: calc(100% - 28px);
+
+    color: white;
+
+    background: rgba(255,255,255,0.08);
+
+    border: 1px solid rgba(255,170,0,0.7);
+
+    border-radius: 6px;
+
+    padding: 4px 8px;
+
+    font-size: 14px;
+
+    outline: none;
+}
+
+.scene-edit-icon {
+    width: 14px;
+
+    height: 14px;
+
+    margin-left: 8px;
+
+    cursor: pointer;
+
+    opacity: 0.7;
+
+    transition: opacity 0.2s ease;
+}
+
+.scene-edit-icon:hover {
+    opacity: 1;
+}
+
+
+/* =========================================================
+   BLOQUE 5: PANEL LISTA DE ESCENAS
+========================================================= */
+
+#sceneList {
+    position: absolute;
+
+    bottom: 148px;
+
+    right: -260px;
+
+    width: 240px;
+
+    max-height: 60vh;
+
+    z-index: 20;
+
+    overflow-y: auto;
+
+    padding: 8px 0;
+
+    border-radius: 16px;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(0,0,0,0.85),
+            rgba(0,0,0,0.6)
+        );
+
+    backdrop-filter: blur(12px);
+
+    transition: right 0.3s ease;
+
+    scrollbar-width: none;
+
+    -ms-overflow-style: none;
+}
+
+#sceneList::-webkit-scrollbar {
+    display: none;
+}
+
+#sceneList.enabled {
+    right: 20px;
+}
+
+#sceneList ul {
+    list-style: none;
+}
+
+#sceneList .scene {
+    position: relative;
+
+    padding: 12px 20px;
+
+    font-size: 14px;
+
+    color: rgba(255,255,255,0.85);
+
+    cursor: pointer;
+
+    transition: background 0.15s ease;
+
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+#sceneList .scene:last-child {
+    border-bottom: none;
+}
+
+#sceneList .scene:hover {
+    background: rgba(255,255,255,0.12);
+}
+
+#sceneList .scene.current {
+    color: white;
+
+    font-weight: bold;
+
+    border-left: 3px solid #ffaa00;
+
+    background: rgba(255,255,255,0.22);
+}
+
+
+/* ---------- MINIATURA HOVER ---------- */
+
+.scene-thumbnail-hover {
+    position: fixed;
+
+    top: 50%;
+    left: 20px;
+
+    transform: translateY(-50%);
+
+    width: 160px;
+
+    z-index: 100;
+
+    overflow: hidden;
+
+    border-radius: 12px;
+
+    border: 2px solid rgba(255,255,255,0.3);
+
+    background: rgba(0,0,0,0.6);
+
+    backdrop-filter: blur(4px);
+
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+
+    pointer-events: none;
+
+    transition: opacity 0.2s;
+}
+
+.scene-thumbnail-hover img {
+    width: 100%;
+
+    height: auto;
+
+    display: block;
+}
+
+
+/* =========================================================
+   BLOQUE 6: BLUEPRINT / PLANO
+========================================================= */
+
+#blueprintContainer {
+
+    position: fixed;
+
+    top: 50%;
+
+    right: -420px;
+
+    transform: translateY(-50%);
+
+    width: 420px;
+
+    max-width: 92vw;
+
+    z-index: 30;
+
+    transition:
+        right 0.3s ease;
+}
+
+
+#blueprintContainer.enabled {
+
+    right: 20px;
+}
+
+
+/* ==========================================
+   WRAPPER
+========================================== */
+
+.blueprint-wrapper {
+
+    position: relative;
+
+    width: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    overflow: visible;
+
+    pointer-events: auto;
+}
+
+
+/* ==========================================
+   IMAGEN PLANO
+========================================== */
+
+#blueprintImage {
+
+    display: block;
+
+    width: 100%;
+
+    height: auto;
+
+    transform-origin:
+        center center;
+
+    user-select: none;
+
+    pointer-events: none;
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 12px 40px rgba(0,0,0,0.45);
+}
+
+
+/* ==========================================
+   EYE BLUEPRINT
+========================================== */
+
+.blueprint-dot {
+
+    position: absolute;
+
+    width: 30px;
+
+    height: 30px;
+
+    z-index: 15;
+
+    cursor: grab;
+
+    transform:
+        translate(-50%, -50%);
+
+    transition:
+        transform 0.08s linear;
+}
+
+
+.blueprint-dot:active {
+
+    cursor: grabbing;
+}
+
+
+/* =========================================================
+   BLOQUE 6B: BLUEPRINT CONTROLS
+========================================================= */
+
+/* ==========================================
+   BOTÓN CONFIG
+========================================== */
+
+#blueprintConfigToggle {
+
+    position: fixed;
+
+    right: 20px;
+
+    bottom: 84px;
+
+    width: 48px;
+
+    height: 48px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 12px;
+
+    cursor: pointer;
+
+    z-index: 999999;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(180,0,0,0.95),
+            rgba(120,0,0,0.85)
+        );
+
+    backdrop-filter: blur(8px);
+
+    box-shadow:
+        0 6px 20px rgba(0,0,0,0.35);
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    transform:
+        translateY(10px);
+
+    transition:
+        opacity 0.2s ease,
+        transform 0.2s ease,
+        visibility 0.2s ease,
+        background 0.2s ease;
+}
+
+
+#blueprintConfigToggle:hover {
+
+    transform:
+        translateY(0)
+        scale(1.08);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(220,0,0,1),
+            rgba(150,0,0,0.95)
+        );
+}
+
+
+#blueprintConfigToggle:active {
+
+    transform:
+        scale(0.96);
+}
+
+
+#blueprintConfigToggle img {
+
+    width: 28px;
+
+    height: 28px;
+
+    pointer-events: none;
+}
+
+
+/* ==========================================
+   MOSTRAR BOTÓN
+========================================== */
+
+#blueprintConfigToggle.enabled {
+
+    opacity: 1;
+
+    visibility: visible;
+
+    transform:
+        translateY(0);
+}
+
+
+/* ==========================================
+   PANEL CONTROLES
+========================================== */
+
+#blueprintControls {
+
+    position: fixed;
+
+    right: 20px;
+
+    bottom: 150px;
+
+    width: 300px;
+
+    max-width: calc(100vw - 40px);
+
+    z-index: 999;
+
+    padding: 14px 16px;
+
+    border-radius: 18px;
+
+    background:
+        rgba(0,0,0,0.38);
+
+    backdrop-filter:
+        blur(14px);
+
+    box-shadow:
+        0 8px 24px rgba(0,0,0,0.28);
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 14px;
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    transform:
+        translateY(10px);
+
+    transition:
+        opacity 0.2s ease,
+        transform 0.2s ease,
+        visibility 0.2s ease;
+
+    pointer-events: none;
+}
+
+
+/* ==========================================
+   PANEL ABIERTO
+========================================== */
+
+#blueprintControls.enabled {
+
+    opacity: 1;
+
+    visibility: visible;
+
+    transform:
+        translateY(0);
+
+    pointer-events: auto;
+}
+
+
+/* ==========================================
+   GROUP
+========================================== */
+
+.bp-control-group {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 6px;
+
+    pointer-events: auto;
+}
+
+
+/* ==========================================
+   LABEL
+========================================== */
+
+.bp-label {
+
+    color:
+        rgba(255,255,255,0.92);
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.05em;
+
+    text-transform: uppercase;
+}
+
+
+/* ==========================================
+   VALUE
+========================================== */
+
+.bp-value {
+
+    color: #44ccff;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    font-family:
+        'Segoe UI',
+        monospace;
+}
+
+
+/* ==========================================
+   RANGE
+========================================== */
+
+#blueprintControls input[type="range"] {
+
+    width: 100%;
+
+    accent-color: #44ccff;
+
+    cursor: pointer;
+}
+
+
+/* ==========================================
+   SELECT
+========================================== */
+
+#bpLevelSelect {
+
+    width: 100%;
+
+    padding: 10px 12px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    outline: none;
+
+    color: white;
+
+    background:
+        rgba(255,255,255,0.08);
+
+    font-size: 14px;
+
+    backdrop-filter: blur(6px);
+}
+
+
+/* ==========================================
+   HOVER
+========================================== */
+
+#blueprintControls input:hover,
+#bpLevelSelect:hover {
+
+    filter: brightness(1.08);
+}
+/* =========================================================
+   BLOQUE 7: PANEL INFORMACIÓN ESCENA
+========================================================= */
+
+#infoTextContainer {
+    position: absolute;
+
+    bottom: 80px;
+
+    right: -320px;
+
+    width: 300px;
+
+    max-width: 80%;
+
+    max-height: 75vh;
+
+    z-index: 20;
+
+    overflow-y: auto;
+
+    padding: 16px;
+
+    color: rgba(255,255,255,0.9);
+
+    font-size: 14px;
+
+    line-height: 1.6;
+
+    background: rgba(0,0,0,0.85);
+
+    backdrop-filter: blur(12px);
+
+    border-radius: 16px;
+
+    transition: right 0.3s ease;
+
+    scrollbar-width: thin;
+
+    scrollbar-color:
+        rgba(255,255,255,0.2)
+        transparent;
+}
+
+#infoTextContainer.enabled {
+    right: 20px;
+}
+
+#infoTextContainer::-webkit-scrollbar {
+    width: 4px;
+}
+
+#infoTextContainer::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#infoTextContainer::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.2);
+
+    border-radius: 2px;
+}
+
+.info-text-wrapper {
+    word-wrap: break-word;
+
+    white-space: pre-wrap;
+}
+
+#infoTextContent {
+    margin: 0;
+}
+
+
+/* =========================================================
+   BLOQUE 8: TOAST / MENSAJES
+========================================================= */
+
+#info {
+    position: absolute;
+
+    bottom: 30px;
+
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    z-index: 100;
+
+    display: none;
+
+    padding: 6px 14px;
+
+    color: white;
+
+    font-size: 14px;
+
+    font-family: monospace;
+
+    white-space: nowrap;
+
+    pointer-events: none;
+
+    background: rgba(0,0,0,0.55);
+
+    backdrop-filter: blur(4px);
+
+    border-radius: 20px;
+}
+
+
+/* =========================================================
+   BLOQUE 9A: HOTSPOTS BASE
+========================================================= */
+
+.hs-wrap {
+    position: absolute;
+    z-index: 15;
+    width: auto;
+    height: auto;
+    pointer-events: auto;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    margin: -20px;
+}
+
+.hs-portal {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    overflow: visible;
+}
+
+.hs-link-img,
+.hs-info-img {
+    width: 32px;
+
+    height: 32px;
+
+    display: block;
+
+    margin: 0 auto;
+
+    filter: drop-shadow(
+        0 2px 4px rgba(0,0,0,0.5)
+    );
+
+    transition: filter 0.2s ease;
+}
+
+.hs-label {
+    position: absolute;
+
+    top: 100%;
+
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    margin-top: 4px;
+
+    padding: 2px 6px;
+
+    color: white;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+    white-space: nowrap;
+
+    pointer-events: none;
+
+    font-family: 'Segoe UI', monospace;
+
+    background: rgba(0,0,0,0.6);
+
+    backdrop-filter: blur(4px);
+
+    border-radius: 12px;
+}
+
+
+/* ---------- BOTÓN EDIT ---------- */
+
+.hs-edit-btn {
+    position: absolute;
+    right: -8px;
+    top: -8px;
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: none;
+    background: rgba(0,0,0,0.55);
+    border-radius: 50%;
+    padding: 0;
+    z-index: 8;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    backdrop-filter: blur(4px);
+}
+
+
+/* ==========================================
+   ICONO IMAGE
+========================================== */
+
+.hs-edit-btn::before {
+
+    content: '';
+
+    width: 100%;
+
+    height: 100%;
+
+    background-image:
+        url('img/deploy.png');
+
+    background-size: contain;
+
+    background-repeat: no-repeat;
+
+    background-position: center;
+
+    display: block;
+}
+
+
+/* ==========================================
+   MOSTRAR EN HOVER
+========================================== */
+
+.hs-wrap:hover .hs-edit-btn,
+.hs-edit-btn:hover {
+
+    opacity: 1;
+
+    pointer-events: auto;
+}
+
+
+/* ==========================================
+   HOVER
+========================================== */
+
+.hs-edit-btn:hover {
+
+    transform: scale(1.12);
+}
+
+
+/* ==========================================
+   ACTIVE
+========================================== */
+
+.hs-edit-btn:active {
+
+    transform: scale(0.95);
+}
+
+/* ---------- BOTÓN DELETE ---------- */
+
+.hs-delete-btn {
+    position: absolute;
+    left: -8px;
+    top: -8px;
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: none;
+    background: rgba(0,0,0,0.55);
+    border-radius: 50%;
+    padding: 0;
+    z-index: 8;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    backdrop-filter: blur(4px);
+}
+
+
+/* ==========================================
+   ICONO IMAGE
+========================================== */
+
+.hs-delete-btn::before {
+
+    content: '';
+
+    width: 100%;
+
+    height: 100%;
+
+    background-image:
+        url('img/erase.png');
+
+    background-size: contain;
+
+    background-repeat: no-repeat;
+
+    background-position: center;
+
+    display: block;
+
+    filter:
+        drop-shadow(
+            0 2px 6px rgba(0,0,0,0.6)
+        );
+}
+
+
+/* ==========================================
+   MOSTRAR EN HOVER
+========================================== */
+
+.hs-wrap:hover .hs-delete-btn,
+.hs-delete-btn:hover {
+
+    opacity: 1;
+
+    pointer-events: auto;
+}
+
+
+/* ==========================================
+   HOVER
+========================================== */
+
+.hs-delete-btn:hover {
+
+    transform: scale(1.12);
+}
+
+
+/* ==========================================
+   ACTIVE
+========================================== */
+
+.hs-delete-btn:active {
+
+    transform: scale(0.95);
+}
+
+/* =========================================================
+   BLOQUE 9B: HOTSPOT PICKER
+========================================================= */
+
+.hs-picker {
+    position: absolute;
+    top: 54px;
+    left: 20px;
+    min-width: 160px;
+    z-index: 20;
+    display: none;
+    background: rgba(0,0,0,0.9);
+    backdrop-filter: blur(12px);
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.15);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+}
+
+.hs-picker.open {
+    display: block;
+
+    animation: fadeIn 0.15s ease;
+}
+
+.hs-picker.up {
+    top: auto;
+    bottom: 54px;
+}
+
+@keyframes fadeIn {
+
+    from {
+        opacity: 0;
+
+        transform: translateY(-8px);
+    }
+
+    to {
+        opacity: 1;
+
+        transform: translateY(0);
+    }
+}
+
+.hsp-list {
+    list-style: none;
+
+    padding: 4px 0;
+
+    margin: 0;
+
+    max-height: 224px;
+
+    overflow-y: auto;
+
+    scrollbar-width: thin;
+
+    scrollbar-color: rgba(255,255,255,0.2) transparent;
+}
+
+.hsp-list::-webkit-scrollbar { width: 4px; }
+.hsp-list::-webkit-scrollbar-track { background: transparent; }
+.hsp-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 2px; }
+
+.hsp-header {
+    padding: 8px 14px 4px;
+
+    margin-bottom: 4px;
+
+    color: rgba(255,255,255,0.4);
+
+    font-size: 10px;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.08em;
+
+    border-bottom:
+        1px solid rgba(255,255,255,0.08);
+
+    position: sticky;
+
+    top: 0;
+
+    background: rgba(0,0,0,0.9);
+
+    z-index: 1;
+}
+
+.hsp-item {
+    padding: 8px 14px;
+
+    color: rgba(255,255,255,0.85);
+
+    font-size: 12px;
+
+    white-space: nowrap;
+
+    cursor: pointer;
+
+    transition: background 0.1s ease;
+}
+
+.hsp-item:hover {
+    background: rgba(255,255,255,0.12);
+
+    color: white;
+}
+
+.hsp-item.hsp-current {
+    color: #ffcc3c;
+
+    font-weight: 600;
+
+    background:
+        rgba(255,200,60,0.1);
+}
+
+.hsp-delete {
+    margin-top: 4px;
+
+    color: #ff8888 !important;
+
+    border-top:
+        1px solid rgba(255,255,255,0.08);
+}
+
+.hsp-delete:hover {
+    background:
+        rgba(255,80,80,0.15) !important;
+
+    color: #ff6666 !important;
+}
+
+
+/* =========================================================
+   BLOQUE 9C: HOTSPOT TEMPORAL
+========================================================= */
+
+.temp-hotspot {
+    border-radius: 50%;
+
+    filter:
+        drop-shadow(
+            0 0 6px rgba(255,0,0,0.8)
+        );
+}
+
+.temp-hotspot .hs-link-img {
+    border: 2px solid rgba(255,0,0,0.9);
+
+    border-radius: 50%;
+
+    box-shadow: 0 0 8px red;
+}
+
+.temp-hotspot .hs-label {
+    color: white;
+
+    font-weight: bold;
+
+    background: rgba(180,0,0,0.8);
+}
+
+
+/* =========================================================
+   BLOQUE 10: MODAL DESTINATION PANEL
+========================================================= */
+
+#destinationPanel {
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+
+    transform:
+        translate(-50%, -50%)
+        scale(0.92);
+
+    width: 280px;
+
+    max-height: 70vh;
+
+    z-index: 200;
+
+    overflow: hidden;
+
+    display: flex;
+
+    flex-direction: column;
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    background: rgba(10,10,10,0.95);
+
+    backdrop-filter: blur(16px);
+
+    border-radius: 18px;
+
+    border: 1px solid rgba(255,255,255,0.2);
+
+    box-shadow:
+        0 16px 48px rgba(0,0,0,0.7);
+
+    transition:
+        opacity 0.2s ease,
+        transform 0.2s ease;
+}
+
+#destinationPanel.open {
+    opacity: 1;
+
+    pointer-events: auto;
+
+    transform:
+        translate(-50%, -50%)
+        scale(1);
+}
+/* =========================================================
+   CONTINUACIÓN BLOQUE 10
+   MODAL DESTINATION PANEL
+========================================================= */
+
+.dp-header {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 16px 18px 12px;
+
+    flex-shrink: 0;
+
+    border-bottom:
+        1px solid rgba(255,255,255,0.1);
+}
+
+.dp-title {
+    color: white;
+
+    font-size: 14px;
+
+    font-weight: 600;
+}
+
+.dp-cancel {
+    width: 26px;
+    height: 26px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 0;
+
+    cursor: pointer;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background: rgba(255,255,255,0.1);
+
+    color: rgba(255,255,255,0.7);
+
+    font-size: 13px;
+
+    transition: background 0.15s;
+}
+
+.dp-cancel:hover {
+    background: rgba(255,60,60,0.3);
+
+    color: white;
+}
+
+.dp-list {
+    flex: 1;
+
+    overflow-y: auto;
+
+    list-style: none;
+
+    padding: 6px 0;
+
+    scrollbar-width: thin;
+
+    scrollbar-color:
+        rgba(255,255,255,0.2)
+        transparent;
+}
+
+.dp-list::-webkit-scrollbar {
+    width: 4px;
+}
+
+.dp-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.dp-list::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.2);
+
+    border-radius: 2px;
+}
+
+.dp-item {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 12px 18px;
+
+    cursor: pointer;
+
+    transition: background 0.12s;
+
+    border-bottom:
+        1px solid rgba(255,255,255,0.05);
+}
+
+.dp-item:last-child {
+    border-bottom: none;
+}
+
+.dp-item:hover {
+    background: rgba(255,255,255,0.1);
+}
+
+.dp-name {
+    color: rgba(255,255,255,0.88);
+
+    font-size: 14px;
+}
+
+.dp-item:hover .dp-name {
+    color: white;
+}
+
+
+/* =========================================================
+   BLOQUE 11: MODAL INFO HOTSPOTS
+========================================================= */
+
+.info-modal {
+    position: fixed;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    z-index: 300;
+
+    display: none;
+
+    background-color: rgba(0,0,0,0.7);
+
+    backdrop-filter: blur(5px);
+}
+
+.info-modal-content {
+    position: relative;
+
+    width: 80%;
+
+    max-width: 500px;
+
+    margin: 10% auto;
+
+    padding: 20px;
+
+    color: white;
+
+    background: #1e1e1e;
+
+    border-radius: 16px;
+
+    border:
+        1px solid rgba(255,255,255,0.2);
+
+    box-shadow:
+        0 4px 30px rgba(0,0,0,0.5);
+}
+
+.info-modal-close {
+    position: absolute;
+
+    top: 10px;
+    right: 15px;
+
+    color: #aaa;
+
+    font-size: 28px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+.info-modal-close:hover {
+    color: white;
+}
+
+.info-modal-body {
+    margin-top: 10px;
+
+    max-height: 60vh;
+
+    overflow-y: auto;
+
+    word-wrap: break-word;
+}
+
+
+/* =========================================================
+   BLOQUE 12: WIREFRAME LABELS
+========================================================= */
+
+.wf-label {
+    position: absolute;
+
+    transform: translate(-50%, -50%);
+
+    pointer-events: none;
+
+    white-space: nowrap;
+
+    transition: opacity 0.15s ease;
+
+    font-family: 'Segoe UI', monospace;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+    letter-spacing: 0.04em;
+}
+
+.wf-label-yaw {
+    color: rgba(255,255,255,0.75);
+
+    background: rgba(0,0,0,0.35);
+
+    padding: 1px 5px;
+
+    border-radius: 4px;
+
+    text-shadow:
+        0 0 4px rgba(0,0,0,0.9),
+        0 1px 3px rgba(0,0,0,0.8);
+}
+
+.wf-label-pitch {
+    color: rgba(68,204,255,0.85);
+
+    background: rgba(0,10,30,0.45);
+
+    padding: 1px 5px;
+
+    border-radius: 4px;
+
+    text-shadow:
+        0 0 6px rgba(0,0,0,0.9),
+        0 1px 3px rgba(0,0,0,0.8);
+}
+
+
+/* ---------- TOOLTIP ---------- */
+
+#wf-tooltip {
+    position: absolute;
+
+    z-index: 50;
+
+    pointer-events: none;
+
+    white-space: nowrap;
+
+    color: rgba(255,255,255,0.95);
+
+    background: rgba(0,0,0,0.72);
+
+    backdrop-filter: blur(6px);
+
+    border:
+        1px solid rgba(68,204,255,0.3);
+
+    border-radius: 8px;
+
+    padding: 4px 10px;
+
+    box-shadow:
+        0 2px 8px rgba(0,0,0,0.5);
+
+    font-family: 'Segoe UI', monospace;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    letter-spacing: 0.03em;
+
+    text-shadow: none;
+}
+
+
+/* =========================================================
+   BLOQUE 13: RESPONSIVE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    #logo {
+        width: 40px;
+
+        top: 10px;
+        right: 10px;
+    }
+
+    #projectName {
+        top: 10px;
+        left: 10px;
+
+        padding: 6px 12px;
+
+        font-size: 0.9rem;
+    }
+
+    #sceneNameDisplay {
+        bottom: 15px;
+
+        font-size: 1rem;
+    }
+
+    #button-bar {
+        bottom: 15px;
+        right: 15px;
+
+        gap: 8px;
+    }
+
+    .bar-btn {
+        width: 42px;
+        height: 42px;
+    }
+
+    .bar-btn img {
+        width: 22px;
+        height: 22px;
+    }
+
+    #sceneList {
+        width: 85%;
+
+        max-height: 50vh;
+
+        bottom: 70px;
+
+        right: -90%;
+    }
+
+    #sceneList.enabled {
+        right: 5%;
+    }
+
+    #blueprintContainer {
+        bottom: 70px;
+
+        right: -95%;
+
+        max-width: 90%;
+    }
+
+    #blueprintContainer.enabled {
+        right: 5%;
+    }
+
+    .blueprint-dot {
+    position: absolute;
+
+    width: 24px;
+    height: 24px;
+
+    z-index: 25;
+
+    cursor: grab;
+
+    pointer-events: auto;
+
+    transition:
+        transform 0.1s ease;
+
+    overflow: visible;
+
+    transform-origin: center center;
+}
+
+.blueprint-dot:active {
+    cursor: grabbing;
+}
+
+
+/* ==========================================
+   HANDLE ROTACIÓN BLUEPRINT
+========================================== */
+
+#blueprintRotateHandle {
+    position: absolute;
+
+    width: 18px;
+    height: 18px;
+
+    top: -12px;
+    right: -12px;
+
+    z-index: 999;
+
+    border-radius: 50%;
+
+    background: #44ccff;
+
+    border: 2px solid white;
+
+    box-shadow:
+        0 0 12px rgba(68,204,255,0.9);
+
+    cursor: grab;
+
+    opacity: 0;
+
+    pointer-events: auto;
+
+    transition:
+        opacity 0.15s ease,
+        transform 0.15s ease;
+}
+
+
+/* HOVER */
+
+.blueprint-dot:hover #blueprintRotateHandle {
+    opacity: 1;
+
+    transform: scale(1.08);
+}
+
+
+/* DRAG */
+
+#blueprintRotateHandle:active {
+    cursor: grabbing;
+
+    transform: scale(1.15);
+}
+
+    #infoTextContainer {
+        width: 85%;
+
+        bottom: 70px;
+
+        right: -90%;
+    }
+
+    #infoTextContainer.enabled {
+        right: 5%;
+    }
+
+    .hs-link-img,
+    .hs-info-img {
+        width: 28px;
+        height: 28px;
+    }
+
+    .hs-label {
+        font-size: 10px;
+    }
+
+    #destinationPanel {
+        width: 88%;
+    }
+
+    .scene-thumbnail-hover {
+        width: 120px;
+
+        left: 10px;
+    }
+}
+/* Estilo para el selector de nivel en la lista de escenas */
+.scene-level-select {
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 170, 0, 0.6);
+    font-family: 'Segoe UI', monospace;
+    transition: all 0.2s ease;
+}
+
+.scene-level-select:hover {
+    background: rgba(0, 0, 0, 0.9);
+    border-color: #ffaa00;
+}
+
+.scene-level-select option {
+    background: #1e1e1e;
+    color: white;
+}
+/* ==========================================
+   PROJECT MANAGER — MODALES
+   ========================================== */
+.pm-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 100000;
+    background: rgba(0,0,0,0.65);
+    backdrop-filter: blur(4px);
+    align-items: center;
+    justify-content: center;
+}
+.pm-modal.open { display: flex; }
+
+.pm-modal-box {
+    background: rgba(18,18,18,0.97);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    width: 480px;
+    max-width: calc(100vw - 32px);
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.6);
+}
+.pm-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 20px 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.92);
+    font-size: 14px;
+    font-weight: 700;
+    font-family: 'Segoe UI', sans-serif;
+    letter-spacing: 0.03em;
+}
+.pm-modal-close {
+    color: rgba(255,255,255,0.5);
+    font-size: 22px;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0 4px;
+    transition: color 0.15s;
+}
+.pm-modal-close:hover { color: #fff; }
+.pm-modal-body { padding: 18px 20px 20px; }
+
+/* Dropzone */
+.pm-dropzone {
+    border: 2px dashed rgba(255,255,255,0.15);
+    border-radius: 14px;
+    padding: 28px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+}
+.pm-dropzone:hover, .pm-dropzone.drag-over {
+    border-color: rgba(200,0,0,0.7);
+    background: rgba(200,0,0,0.06);
+}
+.pm-dropzone-icon { font-size: 36px; margin-bottom: 10px; }
+.pm-dropzone-text {
+    color: rgba(255,255,255,0.65);
+    font-size: 13px;
+    font-family: 'Segoe UI', sans-serif;
+    line-height: 1.6;
+    margin: 0;
+}
+.pm-dropzone--multi { padding: 20px; }
+
+/* File list */
+.pm-file-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 10px;
+}
+.pm-file-chip {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 8px;
+    padding: 4px 10px;
+    font-size: 11px;
+    font-family: monospace;
+    color: rgba(255,255,255,0.75);
+}
+.pm-file-chip.ok { background: rgba(0,160,60,0.2); color: #88ffaa; }
+.pm-file-chip.warn { background: rgba(200,120,0,0.2); color: #ffcc66; }
+
+/* Mapping de caras */
+.pm-mapping { margin-top: 12px; }
+.pm-mapping-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+.pm-mapping-face {
+    width: 60px;
+    color: rgba(255,255,255,0.6);
+    font-size: 11px;
+    font-family: monospace;
+    text-transform: uppercase;
+}
+.pm-mapping-select {
+    flex: 1;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 8px;
+    color: rgba(255,255,255,0.85);
+    font-size: 11px;
+    font-family: monospace;
+    padding: 4px 8px;
+    cursor: pointer;
+}
+.pm-mapping-select option { background: #1a1a1a; }
+
+/* Campos */
+.pm-field { margin-bottom: 14px; }
+.pm-label {
+    display: block;
+    color: rgba(255,255,255,0.55);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-family: 'Segoe UI', monospace;
+    margin-bottom: 6px;
+}
+.pm-input {
+    width: 100%;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px;
+    color: rgba(255,255,255,0.9);
+    font-size: 13px;
+    font-family: 'Segoe UI', sans-serif;
+    padding: 9px 12px;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.15s;
+}
+.pm-input:focus { border-color: rgba(200,0,0,0.6); }
+
+/* Type selector */
+.pm-type-selector { display: flex; gap: 8px; }
+.pm-type-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.1);
+    cursor: pointer;
+    color: rgba(255,255,255,0.6);
+    font-size: 12px;
+    font-family: 'Segoe UI', sans-serif;
+    transition: all 0.15s;
+}
+.pm-type-btn:hover { border-color: rgba(255,255,255,0.25); color: rgba(255,255,255,0.85); }
+.pm-type-btn.active { border-color: rgba(200,0,0,0.7); background: rgba(200,0,0,0.12); color: #fff; }
+.pm-type-icon { font-size: 18px; }
+
+/* Progress */
+.pm-progress { margin-top: 14px; }
+.pm-progress-bar {
+    height: 4px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+.pm-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, rgba(200,0,0,0.8), rgba(255,80,80,1));
+    border-radius: 2px;
+    width: 0%;
+    transition: width 0.3s ease;
+}
+.pm-progress-text {
+    color: rgba(255,255,255,0.55);
+    font-size: 11px;
+    font-family: monospace;
+    margin: 0;
+    text-align: center;
+}
+
+/* Hint */
+.pm-hint {
+    color: rgba(255,255,255,0.45);
+    font-size: 11px;
+    font-family: monospace;
+    margin: 6px 0 0;
+}
+
+/* Actions */
+.pm-actions { display: flex; gap: 8px; margin-top: 18px; }
+.pm-btn {
+    flex: 1;
+    padding: 11px;
+    border-radius: 12px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: 'Segoe UI', sans-serif;
+    transition: transform 0.15s, background 0.15s;
+}
+.pm-btn:hover { transform: scale(1.02); }
+.pm-btn:active { transform: scale(0.98); }
+.pm-btn--primary { background: linear-gradient(135deg, rgba(200,0,0,0.95), rgba(140,0,0,0.9)); color: #fff; }
+.pm-btn--primary:hover { background: linear-gradient(135deg, rgba(230,0,0,1), rgba(170,0,0,1)); }
+.pm-btn--secondary { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.7); }
+.pm-btn--secondary:hover { background: rgba(255,255,255,0.14); }
+/* ==========================================
+   PROJECT MANAGER — MODALES
+   ========================================== */
+.pm-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 100000;
+    background: rgba(0,0,0,0.65);
+    backdrop-filter: blur(4px);
+    align-items: center;
+    justify-content: center;
+}
+.pm-modal.open { display: flex; }
+
+.pm-modal-box {
+    background: rgba(18,18,18,0.97);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    width: 480px;
+    max-width: calc(100vw - 32px);
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.6);
+}
+.pm-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 20px 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.92);
+    font-size: 14px;
+    font-weight: 700;
+    font-family: 'Segoe UI', sans-serif;
+    letter-spacing: 0.03em;
+}
+.pm-modal-close {
+    color: rgba(255,255,255,0.5);
+    font-size: 22px;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0 4px;
+    transition: color 0.15s;
+}
+.pm-modal-close:hover { color: #fff; }
+.pm-modal-body { padding: 18px 20px 20px; }
+
+/* Dropzone */
+.pm-dropzone {
+    border: 2px dashed rgba(255,255,255,0.15);
+    border-radius: 14px;
+    padding: 28px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+}
+.pm-dropzone:hover, .pm-dropzone.drag-over {
+    border-color: rgba(200,0,0,0.7);
+    background: rgba(200,0,0,0.06);
+}
+.pm-dropzone-icon { font-size: 36px; margin-bottom: 10px; }
+.pm-dropzone-text {
+    color: rgba(255,255,255,0.65);
+    font-size: 13px;
+    font-family: 'Segoe UI', sans-serif;
+    line-height: 1.6;
+    margin: 0;
+}
+.pm-dropzone--multi { padding: 20px; }
+
+/* File list */
+.pm-file-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 10px;
+}
+.pm-file-chip {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 8px;
+    padding: 4px 10px;
+    font-size: 11px;
+    font-family: monospace;
+    color: rgba(255,255,255,0.75);
+}
+.pm-file-chip.ok { background: rgba(0,160,60,0.2); color: #88ffaa; }
+.pm-file-chip.warn { background: rgba(200,120,0,0.2); color: #ffcc66; }
+
+/* Mapping de caras */
+.pm-mapping { margin-top: 12px; }
+.pm-mapping-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+.pm-mapping-face {
+    width: 60px;
+    color: rgba(255,255,255,0.6);
+    font-size: 11px;
+    font-family: monospace;
+    text-transform: uppercase;
+}
+.pm-mapping-select {
+    flex: 1;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 8px;
+    color: rgba(255,255,255,0.85);
+    font-size: 11px;
+    font-family: monospace;
+    padding: 4px 8px;
+    cursor: pointer;
+}
+.pm-mapping-select option { background: #1a1a1a; }
+
+/* Campos */
+.pm-field { margin-bottom: 14px; }
+.pm-label {
+    display: block;
+    color: rgba(255,255,255,0.55);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-family: 'Segoe UI', monospace;
+    margin-bottom: 6px;
+}
+.pm-input {
+    width: 100%;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px;
+    color: rgba(255,255,255,0.9);
+    font-size: 13px;
+    font-family: 'Segoe UI', sans-serif;
+    padding: 9px 12px;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.15s;
+}
+.pm-input:focus { border-color: rgba(200,0,0,0.6); }
+
+/* Type selector */
+.pm-type-selector { display: flex; gap: 8px; }
+.pm-type-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.1);
+    cursor: pointer;
+    color: rgba(255,255,255,0.6);
+    font-size: 12px;
+    font-family: 'Segoe UI', sans-serif;
+    transition: all 0.15s;
+}
+.pm-type-btn:hover { border-color: rgba(255,255,255,0.25); color: rgba(255,255,255,0.85); }
+.pm-type-btn.active { border-color: rgba(200,0,0,0.7); background: rgba(200,0,0,0.12); color: #fff; }
+.pm-type-icon { font-size: 18px; }
+
+/* Progress */
+.pm-progress { margin-top: 14px; }
+.pm-progress-bar {
+    height: 4px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+.pm-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, rgba(200,0,0,0.8), rgba(255,80,80,1));
+    border-radius: 2px;
+    width: 0%;
+    transition: width 0.3s ease;
+}
+.pm-progress-text {
+    color: rgba(255,255,255,0.55);
+    font-size: 11px;
+    font-family: monospace;
+    margin: 0;
+    text-align: center;
+}
+
+/* Hint */
+.pm-hint {
+    color: rgba(255,255,255,0.45);
+    font-size: 11px;
+    font-family: monospace;
+    margin: 6px 0 0;
+}
+
+/* Actions */
+.pm-actions { display: flex; gap: 8px; margin-top: 18px; }
+.pm-btn {
+    flex: 1;
+    padding: 11px;
+    border-radius: 12px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: 'Segoe UI', sans-serif;
+    transition: transform 0.15s, background 0.15s;
+}
+.pm-btn:hover { transform: scale(1.02); }
+.pm-btn:active { transform: scale(0.98); }
+.pm-btn--primary { background: linear-gradient(135deg, rgba(200,0,0,0.95), rgba(140,0,0,0.9)); color: #fff; }
+.pm-btn--primary:hover { background: linear-gradient(135deg, rgba(230,0,0,1), rgba(170,0,0,1)); }
+.pm-btn--secondary { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.7); }
+.pm-btn--secondary:hover { background: rgba(255,255,255,0.14); }
+
+/* ==========================================
+   AÑADIR ESCENAS — BOTÓN EN LISTA
+   ========================================== */
+
+
+
+/* ==========================================
+   BOTÓN AÑADIR ESCENAS — SECUNDARIO (derecha)
+   ========================================== */
+#addScenesBtn {
+    position: fixed;
+    right: 20px;
+    bottom: 84px;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    cursor: pointer;
+    background: linear-gradient(135deg, rgba(180,0,0,0.95), rgba(120,0,0,0.85));
+    backdrop-filter: blur(8px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+    z-index: 999999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease, background 0.2s ease;
+}
+#addScenesBtn:hover {
+    transform: scale(1.08);
+    background: linear-gradient(135deg, rgba(220,0,0,1), rgba(150,0,0,0.95));
+}
+#addScenesBtn:active { transform: scale(0.96); }
+#addScenesBtn img { width: 28px; height: 28px; pointer-events: none; }
+#addScenesBtn.enabled { opacity: 1; visibility: visible; }
+
+/* Preview cards de escenas detectadas */
+.as-scene-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 12px;
+    max-height: 260px;
+    overflow-y: auto;
+}
+.as-scene-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
+}
+.as-scene-card.error {
+    background: rgba(180,0,0,0.12);
+    border-color: rgba(200,0,0,0.3);
+}
+.as-scene-thumb {
+    width: 56px;
+    height: 36px;
+    border-radius: 6px;
+    object-fit: cover;
+    background: rgba(255,255,255,0.05);
+    flex-shrink: 0;
+}
+.as-scene-thumb-placeholder {
+    width: 56px;
+    height: 36px;
+    border-radius: 6px;
+    background: rgba(255,255,255,0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+.as-scene-info { flex: 1; min-width: 0; }
+.as-scene-name-input {
+    width: 100%;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 7px;
+    color: rgba(255,255,255,0.9);
+    font-size: 12px;
+    font-family: 'Segoe UI', sans-serif;
+    padding: 4px 8px;
+    box-sizing: border-box;
+    outline: none;
+    margin-bottom: 3px;
+}
+.as-scene-name-input:focus { border-color: rgba(200,0,0,0.5); }
+.as-scene-meta {
+    color: rgba(255,255,255,0.4);
+    font-size: 10px;
+    font-family: monospace;
+}
+.as-scene-meta.ok { color: #88ffaa; }
+.as-scene-meta.warn { color: #ffcc66; }
+.as-scene-remove {
+    color: rgba(255,100,100,0.6);
+    font-size: 18px;
+    cursor: pointer;
+    padding: 0 4px;
+    flex-shrink: 0;
+    transition: color 0.15s;
+}
+.as-scene-remove:hover { color: #ff4444; }
+/* ==========================================
+   PROJECT MANAGER — MODALES
+   ========================================== */
+.pm-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 100000;
+    background: rgba(0,0,0,0.65);
+    backdrop-filter: blur(4px);
+    align-items: center;
+    justify-content: center;
+}
+.pm-modal.open { display: flex; }
+
+.pm-modal-box {
+    background: rgba(18,18,18,0.97);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    width: 480px;
+    max-width: calc(100vw - 32px);
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.6);
+}
+.pm-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 20px 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.92);
+    font-size: 14px;
+    font-weight: 700;
+    font-family: 'Segoe UI', sans-serif;
+    letter-spacing: 0.03em;
+}
+.pm-modal-close {
+    color: rgba(255,255,255,0.5);
+    font-size: 22px;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0 4px;
+    transition: color 0.15s;
+}
+.pm-modal-close:hover { color: #fff; }
+.pm-modal-body { padding: 18px 20px 20px; }
+
+/* Dropzone */
+.pm-dropzone {
+    border: 2px dashed rgba(255,255,255,0.15);
+    border-radius: 14px;
+    padding: 28px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+}
+.pm-dropzone:hover, .pm-dropzone.drag-over {
+    border-color: rgba(200,0,0,0.7);
+    background: rgba(200,0,0,0.06);
+}
+.pm-dropzone-icon { font-size: 36px; margin-bottom: 10px; }
+.pm-dropzone-text {
+    color: rgba(255,255,255,0.65);
+    font-size: 13px;
+    font-family: 'Segoe UI', sans-serif;
+    line-height: 1.6;
+    margin: 0;
+}
+.pm-dropzone--multi { padding: 20px; }
+
+/* File list */
+.pm-file-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 10px;
+}
+.pm-file-chip {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 8px;
+    padding: 4px 10px;
+    font-size: 11px;
+    font-family: monospace;
+    color: rgba(255,255,255,0.75);
+}
+.pm-file-chip.ok { background: rgba(0,160,60,0.2); color: #88ffaa; }
+.pm-file-chip.warn { background: rgba(200,120,0,0.2); color: #ffcc66; }
+
+/* Mapping de caras */
+.pm-mapping { margin-top: 12px; }
+.pm-mapping-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+.pm-mapping-face {
+    width: 60px;
+    color: rgba(255,255,255,0.6);
+    font-size: 11px;
+    font-family: monospace;
+    text-transform: uppercase;
+}
+.pm-mapping-select {
+    flex: 1;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 8px;
+    color: rgba(255,255,255,0.85);
+    font-size: 11px;
+    font-family: monospace;
+    padding: 4px 8px;
+    cursor: pointer;
+}
+.pm-mapping-select option { background: #1a1a1a; }
+
+/* Campos */
+.pm-field { margin-bottom: 14px; }
+.pm-label {
+    display: block;
+    color: rgba(255,255,255,0.55);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-family: 'Segoe UI', monospace;
+    margin-bottom: 6px;
+}
+.pm-input {
+    width: 100%;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px;
+    color: rgba(255,255,255,0.9);
+    font-size: 13px;
+    font-family: 'Segoe UI', sans-serif;
+    padding: 9px 12px;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.15s;
+}
+.pm-input:focus { border-color: rgba(200,0,0,0.6); }
+
+/* Type selector */
+.pm-type-selector { display: flex; gap: 8px; }
+.pm-type-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.1);
+    cursor: pointer;
+    color: rgba(255,255,255,0.6);
+    font-size: 12px;
+    font-family: 'Segoe UI', sans-serif;
+    transition: all 0.15s;
+}
+.pm-type-btn:hover { border-color: rgba(255,255,255,0.25); color: rgba(255,255,255,0.85); }
+.pm-type-btn.active { border-color: rgba(200,0,0,0.7); background: rgba(200,0,0,0.12); color: #fff; }
+.pm-type-icon { font-size: 18px; }
+
+/* Progress */
+.pm-progress { margin-top: 14px; }
+.pm-progress-bar {
+    height: 4px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+.pm-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, rgba(200,0,0,0.8), rgba(255,80,80,1));
+    border-radius: 2px;
+    width: 0%;
+    transition: width 0.3s ease;
+}
+.pm-progress-text {
+    color: rgba(255,255,255,0.55);
+    font-size: 11px;
+    font-family: monospace;
+    margin: 0;
+    text-align: center;
+}
+
+/* Hint */
+.pm-hint {
+    color: rgba(255,255,255,0.45);
+    font-size: 11px;
+    font-family: monospace;
+    margin: 6px 0 0;
+}
+
+/* Actions */
+.pm-actions { display: flex; gap: 8px; margin-top: 18px; }
+.pm-btn {
+    flex: 1;
+    padding: 11px;
+    border-radius: 12px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: 'Segoe UI', sans-serif;
+    transition: transform 0.15s, background 0.15s;
+}
+.pm-btn:hover { transform: scale(1.02); }
+.pm-btn:active { transform: scale(0.98); }
+.pm-btn--primary { background: linear-gradient(135deg, rgba(200,0,0,0.95), rgba(140,0,0,0.9)); color: #fff; }
+.pm-btn--primary:hover { background: linear-gradient(135deg, rgba(230,0,0,1), rgba(170,0,0,1)); }
+.pm-btn--secondary { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.7); }
+.pm-btn--secondary:hover { background: rgba(255,255,255,0.14); }
+
+/* ==========================================
+   AÑADIR ESCENAS — BOTÓN EN LISTA
+   ========================================== */
+/* Botón flotante añadir escenas — aparece junto a la lista de escenas */
+
+
+/* Preview cards de escenas detectadas */
+.as-scene-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 12px;
+    max-height: 260px;
+    overflow-y: auto;
+}
+.as-scene-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
+}
+.as-scene-card.error {
+    background: rgba(180,0,0,0.12);
+    border-color: rgba(200,0,0,0.3);
+}
+.as-scene-thumb {
+    width: 56px;
+    height: 36px;
+    border-radius: 6px;
+    object-fit: cover;
+    background: rgba(255,255,255,0.05);
+    flex-shrink: 0;
+}
+.as-scene-thumb-placeholder {
+    width: 56px;
+    height: 36px;
+    border-radius: 6px;
+    background: rgba(255,255,255,0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+.as-scene-info { flex: 1; min-width: 0; }
+.as-scene-name-input {
+    width: 100%;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 7px;
+    color: rgba(255,255,255,0.9);
+    font-size: 12px;
+    font-family: 'Segoe UI', sans-serif;
+    padding: 4px 8px;
+    box-sizing: border-box;
+    outline: none;
+    margin-bottom: 3px;
+}
+.as-scene-name-input:focus { border-color: rgba(200,0,0,0.5); }
+.as-scene-meta {
+    color: rgba(255,255,255,0.4);
+    font-size: 10px;
+    font-family: monospace;
+}
+.as-scene-meta.ok { color: #88ffaa; }
+.as-scene-meta.warn { color: #ffcc66; }
+.as-scene-remove {
+    color: rgba(255,100,100,0.6);
+    font-size: 18px;
+    cursor: pointer;
+    padding: 0 4px;
+    flex-shrink: 0;
+    transition: color 0.15s;
+}
+.as-scene-remove:hover { color: #ff4444; }
+/* ==========================================
+   TRANSICIONES ENTRE ESCENAS
+   ========================================== */
+#transitionCanvas {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    display: none;
+    pointer-events: none;
+    z-index: 5;
+    transform-origin: 50% 50%;
+    will-change: opacity, transform, filter;
+}
+body.transitioning .hs-wrap,
+body.transitioning .dx-dot-handle,
+body.transitioning .dx-label,
+body.transitioning #directrix-svg,
+body.transitioning #wf-labels { visibility: hidden !important; }
+body.transitioning canvas { cursor: progress; }
+
+/* ==========================================
+   ESTADO ONLINE (usuario / guardado)
+   ========================================== */
+#cloudBar {
+    position: absolute;
+    top: 64px;
+    left: 20px;
+    z-index: 20;
+    display: none;
+    gap: 6px;
+    font-size: 11px;
+    font-family: 'Segoe UI', sans-serif;
+    pointer-events: none;
+}
+body.cloud #cloudBar { display: flex; }
+#cloudBar span {
+    padding: 4px 10px;
+    border-radius: 12px;
+    background: rgba(0,0,0,0.45);
+    backdrop-filter: blur(4px);
+    color: rgba(255,255,255,0.8);
+}
+#saveStatus:empty { display: none; }
+#saveStatus[data-state="error"] { color: #ffb3b3; background: rgba(120,0,0,0.6); }
+#saveStatus[data-state="saved"] { color: #a6f0b8; }
+
+#cloudProjectsSection { display: none; }
+body.cloud #cloudProjectsSection { display: block; }
+#cloudProjectList { max-height: 260px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; }
+.cloud-project-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px; border-radius: 12px;
+    background: rgba(255,255,255,0.06); cursor: pointer;
+    border: 1px solid transparent;
+}
+.cloud-project-row:hover { background: rgba(255,255,255,0.12); }
+.cloud-project-row.current { border-color: rgba(200,0,0,0.8); }
+.cloud-project-info { flex: 1; min-width: 0; }
+.cloud-project-name { color: #fff; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cloud-project-meta { color: rgba(255,255,255,0.5); font-size: 11px; margin-top: 2px; }
+.cloud-project-del { color: rgba(255,255,255,0.5); font-size: 18px; padding: 0 6px; }
+.cloud-project-del:hover { color: #ff6666; }
+
+.access-table { width: 100%; border-collapse: collapse; font-size: 12px; color: #fff; }
+.access-table th { text-align: left; font-weight: 600; color: rgba(255,255,255,0.55); padding: 6px 8px; border-bottom: 1px solid rgba(255,255,255,0.15); }
+.access-table td { padding: 8px; border-bottom: 1px solid rgba(255,255,255,0.07); vertical-align: top; }
+.access-table td:last-child, .access-table th:last-child { text-align: right; }
+.access-email { color: rgba(255,255,255,0.45); font-size: 11px; }
+
+/* ==========================================
+   PANEL AJUSTES DEL RECORRIDO
+   ========================================== */
+#settingsPanel {
+    position: fixed;
+    right: 20px;
+    bottom: 90px;
+    width: 300px;
+    max-width: calc(100vw - 40px);
+    z-index: 999;
+    border-radius: 18px;
+    background: rgba(0,0,0,0.55);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.28);
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+    pointer-events: none;
+}
+#settingsPanel.enabled { opacity: 1; visibility: visible; transform: translateY(0); pointer-events: auto; }
+#settingsPanel input[type="range"] { width: 100%; accent-color: rgba(200,0,0,0.9); cursor: pointer; }
+#settingsPanelClose { cursor: pointer; font-size: 20px; color: rgba(255,255,255,0.6); }
+
+/* ==========================================
+   PROYECTO VACÍO
+   ========================================== */
+#emptyState {
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 420px;
+    width: calc(100vw - 40px);
+    text-align: center;
+    color: #fff;
+    z-index: 6;
+    padding: 28px;
+    border-radius: 20px;
+    background: rgba(0,0,0,0.45);
+    backdrop-filter: blur(8px);
+    font-family: 'Segoe UI', sans-serif;
+}
+#emptyState h2 { margin: 0 0 10px; font-size: 20px; }
+#emptyState p { margin: 0; line-height: 1.5; color: rgba(255,255,255,0.75); font-size: 14px; }
+#emptyState code { background: rgba(255,255,255,0.12); padding: 1px 6px; border-radius: 6px; }
+
+/* ==========================================
+   SOLO LECTURA Y MODO PRESENTACIÓN
+   Oculta todas las herramientas de edición
+   ========================================== */
+body.readonly #newProjectBtn,
+body.readonly #addLinkBtn,
+body.readonly #addInfoBtn,
+body.readonly #infoStyleBtn,
+body.readonly #addCommentBtn,
+body.readonly #addScenesBtn,
+body.readonly .scene-edit-icon,
+body.readonly .hs-edit-btn,
+body.readonly .hs-delete-btn,
+body.readonly .dx-dot-delete-btn,
+body.readonly #blueprintAddMarkerBtn,
+body.readonly #blueprintAreaBtn,
+body.readonly #blueprintEyeBtn,
+body.readonly #blueprintConfigToggle,
+body.readonly #bpAddLevelBtn,
+body.readonly #commentDisplayClose,
+body.readonly #presentationBtn,
+body.readonly #setTransition,
+body.presentation #button-bar > :not(#fullscreenToggle):not(#sceneListToggle):not(#blueprintToggle):not(#infoGeneralBtn),
+body.presentation .btn-separator,
+body.presentation #addInfoBtn,
+body.presentation #infoStyleBtn,
+body.presentation #addCommentBtn,
+body.presentation #addScenesBtn,
+body.presentation .scene-edit-icon,
+body.presentation .scene-level-select,
+body.presentation .hs-edit-btn,
+body.presentation .hs-delete-btn,
+body.presentation .dx-dot-delete-btn,
+body.presentation #blueprintAddMarkerBtn,
+body.presentation #blueprintAreaBtn,
+body.presentation #blueprintEyeBtn,
+body.presentation #blueprintConfigToggle,
+body.presentation #blueprintControls,
+body.presentation #cloudBar,
+body.presentation #settingsPanel { display: none !important; }
+body.readonly .hs-wrap, body.presentation .hs-wrap { cursor: pointer !important; }
+body.readonly .dx-label, body.presentation .dx-label { cursor: default; }
+body.readonly .dx-label-text, body.presentation .dx-label-text { cursor: default !important; }
+body.readonly .dx-dot-handle, body.presentation .dx-dot-handle { pointer-events: none; }
+body.presentation #projectName, body.presentation #sceneNameDisplay { pointer-events: none; }
+
+#exitPresentationBtn {
+    display: none;
+    position: fixed;
+    top: 20px; right: 20px;
+    z-index: 30;
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.5);
+    color: #fff;
+    align-items: center; justify-content: center;
+    cursor: pointer;
+    font-size: 16px;
+    opacity: 0.5;
+}
+#exitPresentationBtn:hover { opacity: 1; }
+body.presentation:not(.readonly) #exitPresentationBtn { display: flex; }
+
+@media (max-width: 600px) {
+    #cloudBar { top: 52px; left: 10px; }
+}

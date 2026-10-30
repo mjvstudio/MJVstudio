@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>MJV 360 Studio</title>
+    <!-- PÁGINA PRIVADA: herramienta interna del estudio. No aparece en Google (noindex) ni en el mapa del sitio. -->
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/png" href="../../assets/logo_2.png">
+    <link rel="stylesheet" href="gate.css">
+    <script>window.STUDIO_WEB = true;</script>
+
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="hotspot-editor.css">
+    <link rel="stylesheet" href="blueprint.css">
+    <script src="https://cdn.jsdelivr.net/npm/screenfull@5.2.0/dist/screenfull.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+</head>
+
+<body>
+
+    <!-- INGRESO: el Studio se carga recién después de iniciar sesión -->
+    <div id="studioGate">
+        <form id="gateForm" autocomplete="on">
+            <img src="img/logo.png" alt="MJV Studio" class="gate-logo">
+            <h1>360 Studio</h1>
+            <p class="gate-sub">Acceso del equipo</p>
+            <label for="gateUserInput">Usuario</label>
+            <input id="gateUserInput" name="username" type="text" autocomplete="username" autocapitalize="none" spellcheck="false" required>
+            <label for="gatePassInput">Contraseña</label>
+            <input id="gatePassInput" name="password" type="password" autocomplete="current-password" required>
+            <label class="gate-check"><input id="gateRemember" type="checkbox"> Recordarme 7 días en este equipo</label>
+            <button id="gateSubmit" type="submit">Ingresar</button>
+            <p id="gateError" role="alert"></p>
+        </form>
+    </div>
+
+    <div id="logo">
+        <img src="img/logo.png" alt="Logo MJV Studio">
+    </div>
+
+    <div id="projectName">Cargando...</div>
+    <div id="sceneNameDisplay">Cargando...</div>
+
+    <!-- Estado online: usuario y guardado -->
+    <div id="cloudBar">
+        <span id="userBadge" style="display:none"></span>
+        <span id="saveStatus"></span>
+    </div>
+    <div id="exitPresentationBtn" title="Volver a editar">✎</div>
+
+    <div id="button-bar">
+        <div id="newProjectBtn" class="bar-btn" title="Nuevo proyecto">
+            <img src="img/new.png" alt="Nuevo">
+        </div>
+        <div id="loadProjectBtn" class="bar-btn" title="Cargar proyecto ZIP">
+            <img src="img/zip.png" alt="Cargar">
+        </div>
+        <div id="saveChangesBtn" class="bar-btn" title="Exportar proyecto (descargar ZIP)">
+            <img src="img/save.png" alt="Exportar">
+        </div>
+        <div id="accessBtn" class="bar-btn" title="Accesos del equipo" style="display:none">
+            <img src="img/eye.png" alt="Accesos">
+        </div>
+        <div class="btn-separator"></div>
+
+        <div id="addLinkBtn" class="bar-btn" title="Añadir link hotspot">
+            <img src="img/+link.png" alt="+Link">
+        </div>
+
+        <div class="btn-separator"></div>
+
+        <div id="infoGeneralBtn" class="bar-btn" title="Información de la escena">
+            <img src="img/info.png" alt="Info">
+        </div>
+        <div id="sceneListToggle" class="bar-btn" title="Lista de escenas">
+            <img src="img/expand.png" alt="Escenas">
+        </div>
+        <div id="blueprintToggle" class="bar-btn" title="Mostrar plano">
+            <img src="img/blueprint.png" alt="Plano">
+        </div>
+        <div id="wireframeToggle" class="bar-btn" title="Mostrar cuadrícula esférica">
+            <img src="img/wireframe.png" alt="Wireframe">
+        </div>
+        <div id="settingsBtn" class="bar-btn" title="Ajustes del recorrido (transiciones)">
+            <img src="img/config.png" alt="Ajustes">
+        </div>
+        <div id="fullscreenToggle" class="bar-btn" title="Pantalla completa">
+            <img class="icon off" src="img/fullscreen.png" alt="Fullscreen">
+            <img class="icon on" src="img/windowed.png" alt="Windowed">
+        </div>
+    </div>
+
+    <!-- Botones secundarios de mostrar información — 3 botones -->
+    <div id="addInfoBtn" title="Añadir directriz">
+        <img src="img/+info.png" alt="+Info">
+    </div>
+    <div id="infoStyleBtn" title="Estilo de directrices">
+        <img src="img/config.png" alt="Estilo directriz">
+    </div>
+    <div id="addCommentBtn" title="Comentario de escena">
+        <img src="img/comment.png" alt="Comentario">
+    </div>
+
+    <!-- Panel estilo de directrices -->
+    <div id="infoStylePanel">
+        <div class="bp-eye-header">
+            <span>Estilo de directrices</span>
+            <div id="infoStylePanelClose" title="Cerrar">&times;</div>
+        </div>
+        <div class="bp-eye-body">
+            <div class="bp-eye-row">
+                <span class="bp-eye-label">Color de línea</span>
+                <input type="color" id="dxLineColor" value="#ffffff" class="bp-color-input">
+            </div>
+            <div class="bp-eye-row bp-eye-row--col" style="margin-top:10px">
+                <div class="bp-eye-row-header">
+                    <span class="bp-eye-label">Grosor de línea</span>
+                    <span class="bp-value" id="dxLineWidthVal">1.5px</span>
+                </div>
+                <input type="range" id="dxLineWidth" min="0.5" max="6" step="0.5" value="1.5">
+            </div>
+            <div class="bp-eye-row" style="margin-top:10px">
+                <span class="bp-eye-label">Tipo de línea</span>
+                <select id="dxLineDash" class="bp-select">
+                    <option value="none">Sólida</option>
+                    <option value="6,3">Guiones</option>
+                    <option value="2,3">Puntos</option>
+                    <option value="8,3,2,3">Guión-punto</option>
+                </select>
+            </div>
+            <div class="bp-eye-row" style="margin-top:10px">
+                <span class="bp-eye-label">Inicio de línea</span>
+                <select id="dxStartCap" class="bp-select">
+                    <option value="none">Sin nada</option>
+                    <option value="dot">Punto</option>
+                    <option value="arrow">Flecha</option>
+                </select>
+            </div>
+            <div class="bp-eye-row" style="margin-top:10px">
+                <span class="bp-eye-label">Final de línea</span>
+                <select id="dxEndCap" class="bp-select">
+                    <option value="none">Sin nada</option>
+                    <option value="dot">Punto</option>
+                    <option value="arrow">Flecha</option>
+                </select>
+            </div>
+            <div class="bp-eye-row" style="margin-top:10px">
+                <span class="bp-eye-label">Color de texto</span>
+                <input type="color" id="dxTextColor" value="#ffffff" class="bp-color-input">
+            </div>
+        </div>
+    </div>
+
+    <!-- Panel ajustes del recorrido -->
+    <div id="settingsPanel">
+        <div class="bp-eye-header">
+            <span>Ajustes del recorrido</span>
+            <div id="settingsPanelClose" title="Cerrar">&times;</div>
+        </div>
+        <div class="bp-eye-body">
+            <div class="bp-eye-row">
+                <span class="bp-eye-label">Transición entre escenas</span>
+                <select id="setTransition" class="bp-select">
+                    <option value="zoom">Acercarse + fundido</option>
+                    <option value="fade">Fundido</option>
+                    <option value="none">Sin transición</option>
+                </select>
+            </div>
+            <div class="bp-eye-row bp-eye-row--col" style="margin-top:10px">
+                <div class="bp-eye-row-header">
+                    <span class="bp-eye-label">Duración</span>
+                    <span class="bp-value" id="setTransitionMsVal">0.9 s</span>
+                </div>
+                <input type="range" id="setTransitionMs" min="300" max="2500" step="100" value="900">
+            </div>
+            <div class="comment-actions" style="margin-top:12px">
+                <div id="setTransitionPreview" class="pm-btn pm-btn--secondary">Probar</div>
+                <div id="presentationBtn" class="pm-btn pm-btn--primary">Modo presentación</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Panel edición de comentario -->
+    <div id="commentEditPanel">
+        <div class="bp-eye-header">
+            <span id="commentEditTitle">Comentario de escena</span>
+            <div id="commentEditClose" title="Cerrar">&times;</div>
+        </div>
+        <div class="bp-eye-body">
+            <textarea id="commentTextarea" placeholder="Escribí el comentario para esta escena..." rows="5"></textarea>
+            <div class="comment-actions">
+                <div id="commentSaveBtn" class="pm-btn pm-btn--primary">Guardar</div>
+                <div id="commentClearBtn" class="pm-btn pm-btn--secondary">Borrar</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Panel visualización del comentario (esquina superior derecha) -->
+    <div id="commentDisplayPanel">
+        <div class="comment-display-header">
+            <span id="commentDisplayScene"></span>
+            <div id="commentDisplayClose" title="Ocultar">&times;</div>
+        </div>
+        <div id="commentDisplayText"></div>
+    </div>
+
+    <!-- MODAL: CARGAR PROYECTO -->
+    <div id="loadProjectModal" class="pm-modal">
+        <div class="pm-modal-box">
+            <div class="pm-modal-header">
+                <span>Cargar proyecto</span>
+                <div class="pm-modal-close" id="loadProjectModalClose">&times;</div>
+            </div>
+            <div class="pm-modal-body">
+                <div id="cloudProjectsSection">
+                    <div class="pm-label" style="margin-bottom:8px">Proyectos del estudio</div>
+                    <div id="cloudProjectList"></div>
+                    <div class="pm-label" style="margin:16px 0 8px">Importar desde ZIP</div>
+                </div>
+                <div id="loadDropZone" class="pm-dropzone">
+                    <div class="pm-dropzone-icon">📂</div>
+                    <p class="pm-dropzone-text">Arrastrá tu archivo <strong>.zip</strong> aquí<br>o hacé click para seleccionarlo</p>
+                    <input type="file" id="loadProjectFile" accept=".zip" style="display:none">
+                </div>
+                <div id="loadProjectProgress" class="pm-progress" style="display:none">
+                    <div class="pm-progress-bar"><div id="loadProjectProgressFill" class="pm-progress-fill"></div></div>
+                    <p id="loadProjectStatus" class="pm-progress-text">Procesando...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: ACCESOS DEL EQUIPO -->
+    <div id="accessModal" class="pm-modal">
+        <div class="pm-modal-box">
+            <div class="pm-modal-header">
+                <span>Quién entró al Studio</span>
+                <div class="pm-modal-close" id="accessModalClose">&times;</div>
+            </div>
+            <div class="pm-modal-body">
+                <div id="accessList"></div>
+                <p class="pm-hint" style="margin-top:10px">Para sumar o quitar integrantes usá el botón <b>Compartir</b> del link (cada persona entra con su propia cuenta).</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="sceneListBackdrop"></div>
+    <div id="sceneList" role="navigation">
+        <ul class="scenes"></ul>
+    </div>
+
+    <!-- Botón flotante añadir escenas — aparece cuando la lista está abierta -->
+    <div id="addScenesBtn" title="Añadir escenas">
+        <img src="img/+scenes.png" alt="Añadir escenas">
+    </div>
+
+    <!-- MODAL: REEMPLAZAR ESCENA -->
+    <div id="replaceSceneModal" class="pm-modal">
+        <div class="pm-modal-box">
+            <div class="pm-modal-header">
+                <span>Reemplazar escena: <span id="replaceSceneTitle" style="color:rgba(255,200,200,0.9)"></span></span>
+                <div class="pm-modal-close" id="replaceSceneModalClose">&times;</div>
+            </div>
+            <div class="pm-modal-body">
+                <div class="pm-type-selector" style="margin-bottom:16px">
+                    <div class="pm-type-btn active" data-rmode="cubemap">
+                        <span class="pm-type-icon">⬡</span>
+                        <span>Cubemap (carpeta)</span>
+                    </div>
+                    <div class="pm-type-btn" data-rmode="equirect">
+                        <span class="pm-type-icon">🌐</span>
+                        <span>Equirectangular</span>
+                    </div>
+                </div>
+
+                <!-- Cubemap -->
+                <div id="rMode-cubemap">
+                    <div id="rCubemapDZ" class="pm-dropzone">
+                        <div class="pm-dropzone-icon">🗂</div>
+                        <p class="pm-dropzone-text">Arrastrá la carpeta con las <strong>6 imágenes</strong><br>o hacé click para seleccionarla</p>
+                        <input type="file" id="rCubemapInput" webkitdirectory multiple style="display:none">
+                    </div>
+                    <div id="rCubemapPreview" style="display:none;margin-top:10px"></div>
+                </div>
+
+                <!-- Equirect -->
+                <div id="rMode-equirect" style="display:none">
+                    <div id="rEquirectDZ" class="pm-dropzone">
+                        <div class="pm-dropzone-icon">🌐</div>
+                        <p class="pm-dropzone-text">Arrastrá la imagen <strong>equirectangular</strong><br>o hacé click para seleccionarla</p>
+                        <input type="file" id="rEquirectInput" accept="image/*" style="display:none">
+                    </div>
+                    <div id="rEquirectPreview" style="display:none;margin-top:10px;text-align:center">
+                        <img id="rEquirectImg" style="max-width:100%;border-radius:8px;max-height:120px;object-fit:cover">
+                        <p id="rEquirectInfo" class="pm-hint"></p>
+                    </div>
+                </div>
+
+                <div id="rSceneProgress" class="pm-progress" style="display:none">
+                    <div class="pm-progress-bar"><div id="rSceneProgressFill" class="pm-progress-fill"></div></div>
+                    <p id="rSceneStatus" class="pm-progress-text">Procesando...</p>
+                </div>
+
+                <div class="pm-actions">
+                    <div id="rSceneConfirmBtn" class="pm-btn pm-btn--primary">Reemplazar</div>
+                    <div class="pm-btn pm-btn--secondary" id="replaceSceneModalClose2">Cancelar</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="addScenesModal" class="pm-modal">
+        <div class="pm-modal-box">
+            <div class="pm-modal-header">
+                <span>Añadir escenas</span>
+                <div class="pm-modal-close" id="addScenesModalClose">&times;</div>
+            </div>
+            <div class="pm-modal-body">
+
+                <!-- Selector de modo -->
+                <div class="pm-type-selector" style="margin-bottom:16px">
+                    <div class="pm-type-btn active" data-mode="project">
+                        <span class="pm-type-icon">📁</span>
+                        <span>Carpeta de proyecto</span>
+                    </div>
+                    <div class="pm-type-btn" data-mode="single">
+                        <span class="pm-type-icon">🗂</span>
+                        <span>Una escena</span>
+                    </div>
+                    <div class="pm-type-btn" data-mode="equirect">
+                        <span class="pm-type-icon">🌐</span>
+                        <span>Equirectangular</span>
+                    </div>
+                </div>
+
+                <!-- MODO: Carpeta de proyecto completa -->
+                <div id="asMode-project">
+                    <div id="asProjectDZ" class="pm-dropzone">
+                        <div class="pm-dropzone-icon">📁</div>
+                        <p class="pm-dropzone-text">Arrastrá tu carpeta <strong>project/</strong> aquí<br>o hacé click para seleccionarla<br><small style="opacity:.6">Detecta todas las escenas automáticamente</small></p>
+                        <input type="file" id="asProjectInput" webkitdirectory multiple style="display:none">
+                    </div>
+                    <div id="asProjectPreview" style="display:none"></div>
+                </div>
+
+                <!-- MODO: Una carpeta de escena -->
+                <div id="asMode-single" style="display:none">
+                    <div class="pm-field">
+                        <label class="pm-label">Nombre de la escena</label>
+                        <input type="text" id="asSingleName" class="pm-input" placeholder="Se detecta del nombre de la carpeta">
+                    </div>
+                    <div id="asSingleDZ" class="pm-dropzone">
+                        <div class="pm-dropzone-icon">🗂</div>
+                        <p class="pm-dropzone-text">Arrastrá la <strong>carpeta de la escena</strong><br>o hacé click para seleccionarla<br><small style="opacity:.6">Debe contener las 6 imágenes del cubemap</small></p>
+                        <input type="file" id="asSingleInput" webkitdirectory multiple style="display:none">
+                    </div>
+                    <div id="asSinglePreview" style="display:none"></div>
+                </div>
+
+                <!-- MODO: Equirectangular -->
+                <div id="asMode-equirect" style="display:none">
+                    <div class="pm-field">
+                        <label class="pm-label">Nombre de la escena</label>
+                        <input type="text" id="asEquirectName" class="pm-input" placeholder="Se detecta del nombre del archivo">
+                    </div>
+                    <div id="asEquirectDZ" class="pm-dropzone">
+                        <div class="pm-dropzone-icon">🌐</div>
+                        <p class="pm-dropzone-text">Arrastrá la imagen <strong>equirectangular</strong><br>o hacé click para seleccionarla<br><small style="opacity:.6">Proporción 2:1 recomendada · JPG/PNG/WEBP</small></p>
+                        <input type="file" id="asEquirectInput" accept="image/*" style="display:none">
+                    </div>
+                    <div id="asEquirectPreview" style="display:none;margin-top:12px;text-align:center">
+                        <img id="asEquirectImg" style="max-width:100%;border-radius:8px;max-height:130px;object-fit:cover">
+                        <p id="asEquirectInfo" class="pm-hint"></p>
+                    </div>
+                </div>
+
+                <!-- Progress -->
+                <div id="asScenesProgress" class="pm-progress" style="display:none">
+                    <div class="pm-progress-bar"><div id="asScenesProgressFill" class="pm-progress-fill"></div></div>
+                    <p id="asScenesStatus" class="pm-progress-text">Procesando...</p>
+                </div>
+
+                <div class="pm-actions">
+                    <div id="asScenesConfirmBtn" class="pm-btn pm-btn--primary">Añadir</div>
+                    <div class="pm-btn pm-btn--secondary" id="addScenesModalClose2">Cancelar</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PLANO Y SUS CONTROLES -->
+    <div id="blueprintContainer">
+        <div class="blueprint-wrapper">
+            <img id="blueprintImage" src="" draggable="false">
+            <img id="blueprintDot" class="blueprint-dot" src="img/eye-blueprint.png" draggable="false">
+            <div id="blueprintMarkers"></div>
+            <svg id="blueprintAreas" xmlns="http://www.w3.org/2000/svg"
+                 style="position:absolute;top:0;left:0;width:100%;height:100%;overflow:visible;pointer-events:none;z-index:18;">
+            </svg>
+        </div>
+        <div id="blueprintControls">
+            <div class="bp-control-group">
+                <div class="bp-label">Escala plano</div>
+                <input type="range" id="bpScaleSlider" min="50" max="200" step="1" value="50">
+                <div class="bp-value" id="bpScaleValue">100%</div>
+            </div>
+            <div class="bp-control-group">
+                <div class="bp-label">Desplazamiento X</div>
+                <input type="range" id="bpOffsetXSlider" min="-100" max="100" step="1" value="0">
+                <div class="bp-value" id="bpOffsetXValue">0%</div>
+            </div>
+            <div class="bp-control-group">
+                <div class="bp-label">Desplazamiento Y</div>
+                <input type="range" id="bpOffsetYSlider" min="-100" max="100" step="1" value="0">
+                <div class="bp-value" id="bpOffsetYValue">0%</div>
+            </div>
+            <div class="bp-control-group">
+                <div id="bpAddLevelBtn" class="pm-btn pm-btn--secondary" style="width:100%;text-align:center">+ Cargar plano (imagen)</div>
+                <input type="file" id="bpAddLevelInput" accept="image/*" multiple style="display:none">
+            </div>
+        </div>
+    </div>
+
+    <!-- BOTONES FLOTANTES DEL PLANO (posicionados individualmente) -->
+    <div id="blueprintAddMarkerBtn" class="bar-btn blueprint-float-btn" title="Añadir ubicación en el plano">
+        <img src="img/eye.png" alt="Añadir ubicación">
+    </div>
+    <div id="blueprintAreaBtn" class="bar-btn blueprint-float-btn" title="Área">
+        <img src="img/area.png" alt="Area">
+    </div>
+    <div id="blueprintEyeBtn" class="bar-btn blueprint-float-btn" title="Vista de cámara">
+        <img src="img/eye.png" alt="Eye">
+    </div>
+    <div id="blueprintConfigToggle" class="bar-btn blueprint-float-btn" title="Configuración plano">
+        <img src="img/config.png" alt="Config">
+    </div>
+
+    <!-- PANEL FLOTANTE DEL BOTÓN AREA -->
+    <div id="blueprintAreaPanel">
+        <div class="bp-eye-header">
+            <span>Áreas</span>
+            <div id="blueprintAreaPanelClose" title="Cerrar">&times;</div>
+        </div>
+        <div class="bp-eye-body">
+
+            <!-- Acciones -->
+            <div class="bp-area-actions">
+                <div id="bpAddAreaBtn" class="bp-area-action-btn">
+                    <img src="img/area.png" alt="Añadir área">
+                    <span>Añadir área</span>
+                </div>
+                <div id="bpEditAreaBtn" class="bp-area-action-btn bp-area-action-btn--edit" style="display:none">
+                    <span>Editar polígono</span>
+                </div>
+                <div id="bpDeleteAreaBtn" class="bp-area-action-btn bp-area-action-btn--danger" style="display:none">
+                    <span>Eliminar</span>
+                </div>
+            </div>
+
+            <!-- RELLENO -->
+            <div class="bp-style-section">
+                <div class="bp-style-row">
+                    <span class="bp-section-title">RELLENO</span>
+                    <div id="bpFillToggle" class="bp-toggle active" title="Activar/desactivar relleno">
+                        <div class="bp-toggle-knob"></div>
+                    </div>
+                </div>
+                <div id="bpFillOptions">
+                    <div class="bp-style-row" style="margin-top:6px">
+                        <span class="bp-eye-label">Tipo</span>
+                        <select id="bpAreaFillType" class="bp-select">
+                            <option value="solid">Color sólido</option>
+                            <option value="hatch45">Trama diagonal ///</option>
+                            <option value="hatch135">Trama diagonal \\\</option>
+                            <option value="cross">Trama cruzada</option>
+                            <option value="dots">Trama puntos</option>
+                        </select>
+                    </div>
+                    <div class="bp-style-row" style="margin-top:6px">
+                        <span class="bp-eye-label">Color</span>
+                        <input type="color" id="bpAreaFillColor" value="#cc0000" class="bp-color-input">
+                    </div>
+                    <div class="bp-style-row bp-style-row--col" style="margin-top:6px">
+                        <div class="bp-style-row-header">
+                            <span class="bp-eye-label">Opacidad</span>
+                            <span class="bp-value" id="bpAreaOpacityVal">30%</span>
+                        </div>
+                        <input type="range" id="bpAreaOpacity" min="0" max="100" step="1" value="30">
+                    </div>
+                </div>
+            </div>
+
+            <!-- BORDE -->
+            <div class="bp-style-section">
+                <div class="bp-style-row">
+                    <span class="bp-section-title">BORDE</span>
+                    <div id="bpStrokeToggle" class="bp-toggle active" title="Activar/desactivar borde">
+                        <div class="bp-toggle-knob"></div>
+                    </div>
+                </div>
+                <div id="bpStrokeOptions">
+                    <div class="bp-style-row" style="margin-top:6px">
+                        <span class="bp-eye-label">Color</span>
+                        <input type="color" id="bpAreaStrokeColor" value="#cc0000" class="bp-color-input">
+                    </div>
+                    <div class="bp-style-row" style="margin-top:6px">
+                        <span class="bp-eye-label">Tipo de línea</span>
+                        <select id="bpAreaStrokeDash" class="bp-select">
+                            <option value="none">Sólido</option>
+                            <option value="6,3">Guiones</option>
+                            <option value="2,3">Puntos</option>
+                            <option value="8,3,2,3">Guión-punto</option>
+                        </select>
+                    </div>
+                    <div class="bp-style-row bp-style-row--col" style="margin-top:6px">
+                        <div class="bp-style-row-header">
+                            <span class="bp-eye-label">Grosor</span>
+                            <span class="bp-value" id="bpAreaStrokeWidthVal">1.5px</span>
+                        </div>
+                        <input type="range" id="bpAreaStrokeWidth" min="0.5" max="8" step="0.5" value="1.5">
+                    </div>
+                </div>
+            </div>
+
+            <div id="bpAreaList" class="bp-area-list"></div>
+        </div>
+    </div>
+
+    <!-- PANEL FLOTANTE DEL BOTÓN EYE -->
+    <div id="blueprintEyePanel">
+        <div class="bp-eye-header">
+            <span>Opciones de cámara</span>
+            <div id="blueprintEyePanelClose" title="Cerrar">&times;</div>
+        </div>
+        <div class="bp-eye-body">
+            <div class="bp-eye-row">
+                <span class="bp-eye-label">Mostrar indicador de cámara</span>
+                <div id="blueprintDotToggle" class="bp-toggle active" title="Mostrar/ocultar ojo en el plano">
+                    <div class="bp-toggle-knob"></div>
+                </div>
+            </div>
+            <div class="bp-eye-row bp-eye-row--col">
+                <div class="bp-eye-row-header">
+                    <span class="bp-eye-label">Rotación del indicador</span>
+                    <span class="bp-value" id="bpOrientationValue">0°</span>
+                </div>
+                <input type="range" id="bpOrientationSlider" min="-180" max="180" step="1" value="0">
+            </div>
+        </div>
+    </div>
+
+    <div id="infoTextContainer">
+        <div class="info-text-wrapper">
+            <div id="infoTextContent">Cargando información...</div>
+        </div>
+    </div>
+
+    <div id="info" role="status">Cargando panorama 360°...</div>
+
+    <div id="infoModal" class="info-modal">
+        <div class="info-modal-content">
+            <span class="info-modal-close">&times;</span>
+            <div class="info-modal-body"></div>
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.128.0/build/three.module.js"
+            }
+        }
+    </script>
+    <script src="../../analytics.js"></script>
+    <script src="users.js"></script>
+    <script src="gate.js"></script>
+</body>
+
+</html>

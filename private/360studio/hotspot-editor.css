@@ -1,0 +1,377 @@
+/* ==========================================
+   HOTSPOT EDITOR: PANEL DE COORDENADAS Y MARCADOR TEMPORAL
+   ========================================== */
+#coord-editor-panel {
+    user-select: none;
+    font-family: 'Segoe UI', monospace;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+
+#coord-editor-panel input {
+    font-family: monospace;
+}
+
+#coord-editor-panel input:focus {
+    outline: none;
+    border-color: #ffaa00;
+}
+
+/* Marcador temporal (ahora usa la imagen link.png) */
+.temp-marker {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    cursor: grab;
+    z-index: 20;
+    pointer-events: auto;
+    transform: translate(-50%, -50%);
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+    -webkit-user-drag: none;
+    user-select: none;
+    -webkit-user-select: none;
+}
+.temp-marker:active {
+    cursor: grabbing;
+}
+/* ==========================================
+   DIRECTRICES — LABELS
+   ========================================== */
+.dx-label {
+    position: fixed;
+    z-index: 51;
+    pointer-events: auto;
+    cursor: grab;
+    user-select: none;
+    max-width: 220px;
+    min-width: 60px;
+}
+.dx-label:active { cursor: grabbing; }
+
+.dx-label-text {
+    display: inline-block;
+    background: rgba(0,0,0,0.55);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 12px;
+    font-family: 'Segoe UI', sans-serif;
+    font-weight: 500;
+    color: inherit;
+    line-height: 1.4;
+    white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    transition: background 0.15s;
+}
+.dx-label.selected .dx-label-text {
+    background: rgba(0,0,0,0.72);
+    border-color: rgba(255,255,255,0.3);
+}
+
+.dx-label-actions {
+    display: flex;
+    gap: 4px;
+    margin-top: 4px;
+    justify-content: flex-start;
+}
+.dx-action-btn {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    background: rgba(0,0,0,0.55);
+    border: 1px solid rgba(255,255,255,0.12);
+    cursor: pointer;
+    font-size: 13px;
+    color: rgba(255,255,255,0.8);
+    transition: background 0.15s, color 0.15s;
+    backdrop-filter: blur(4px);
+}
+.dx-action-btn:hover { background: rgba(255,255,255,0.15); color: #fff; }
+.dx-delete-btn:hover { background: rgba(180,0,0,0.7); color: #fff; }
+
+.dx-color-wrap { padding: 0; overflow: hidden; }
+.dx-color-input {
+    width: 24px; height: 24px;
+    border: none; padding: 0; cursor: pointer;
+    background: none; opacity: 0.85;
+}
+.dx-color-input::-webkit-color-swatch-wrapper { padding: 3px; }
+.dx-color-input::-webkit-color-swatch { border-radius: 3px; border: none; }
+
+.dx-text-input {
+    background: rgba(0,0,0,0.7);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 6px;
+    color: #fff;
+    font-size: 12px;
+    font-family: 'Segoe UI', sans-serif;
+    padding: 3px 8px;
+    outline: none;
+    min-width: 80px;
+    max-width: 280px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    box-sizing: border-box;
+}
+.dx-text-input:focus { border-color: rgba(255,200,0,0.6); }
+
+/* Cursor al crear directriz */
+body.creating-directrix * { cursor: crosshair !important; }
+/* ==========================================
+   BOTONES SECUNDARIOS DE MOSTRAR INFORMACIÓN
+   Solo visibles cuando infoGeneralBtn está activo
+   ========================================== */
+
+/* addInfoBtn — más a la izquierda */
+#addInfoBtn {
+    position: fixed;
+    right: 140px;
+    bottom: 84px;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    cursor: pointer;
+    background: linear-gradient(135deg, rgba(180,0,0,0.95), rgba(120,0,0,0.85));
+    backdrop-filter: blur(8px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+    z-index: 999999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease, background 0.2s ease;
+}
+#addInfoBtn:hover {
+    transform: scale(1.08);
+    background: linear-gradient(135deg, rgba(220,0,0,1), rgba(150,0,0,0.95));
+}
+#addInfoBtn:active { transform: scale(0.96); }
+#addInfoBtn img { width: 28px; height: 28px; pointer-events: none; }
+#addInfoBtn.enabled { opacity: 1; visibility: visible; }
+
+/* infoStyleBtn — centro */
+#infoStyleBtn {
+    position: fixed;
+    right: 80px;
+    bottom: 84px;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    cursor: pointer;
+    background: linear-gradient(135deg, rgba(180,0,0,0.95), rgba(120,0,0,0.85));
+    backdrop-filter: blur(8px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+    z-index: 999999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease, background 0.2s ease;
+}
+#infoStyleBtn:hover {
+    transform: scale(1.08);
+    background: linear-gradient(135deg, rgba(220,0,0,1), rgba(150,0,0,0.95));
+}
+#infoStyleBtn:active { transform: scale(0.96); }
+#infoStyleBtn img { width: 28px; height: 28px; pointer-events: none; }
+#infoStyleBtn.enabled { opacity: 1; visibility: visible; }
+
+/* addCommentBtn — más a la derecha */
+#addCommentBtn {
+    position: fixed;
+    right: 20px;
+    bottom: 84px;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    cursor: pointer;
+    background: linear-gradient(135deg, rgba(180,0,0,0.95), rgba(120,0,0,0.85));
+    backdrop-filter: blur(8px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+    z-index: 999999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease, background 0.2s ease;
+}
+#addCommentBtn:hover {
+    transform: scale(1.08);
+    background: linear-gradient(135deg, rgba(220,0,0,1), rgba(150,0,0,0.95));
+}
+#addCommentBtn:active { transform: scale(0.96); }
+#addCommentBtn img { width: 28px; height: 28px; pointer-events: none; }
+#addCommentBtn.enabled { opacity: 1; visibility: visible; }
+
+/* Panel flotante estilo directriz */
+#infoStylePanel {
+    position: fixed;
+    right: 20px;
+    bottom: 150px;
+    width: 300px;
+    max-width: calc(100vw - 40px);
+    z-index: 999;
+    border-radius: 18px;
+    background: rgba(0,0,0,0.38);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.28);
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+    pointer-events: none;
+}
+#infoStylePanel.enabled {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+#infoStylePanel input[type="range"] {
+    width: 100%;
+    accent-color: rgba(200,0,0,0.9);
+    cursor: pointer;
+}
+/* ==========================================
+   PANEL COMENTARIO DE ESCENA
+   ========================================== */
+#commentEditPanel {
+    position: fixed;
+    right: 20px;
+    bottom: 148px;
+    width: 300px;
+    max-width: calc(100vw - 40px);
+    z-index: 999;
+    border-radius: 18px;
+    background: rgba(0,0,0,0.38);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.28);
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+    pointer-events: none;
+}
+#commentEditPanel.enabled {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+#commentTextarea {
+    width: 100%;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px;
+    color: rgba(255,255,255,0.9);
+    font-size: 12px;
+    font-family: 'Segoe UI', sans-serif;
+    padding: 8px 10px;
+    resize: none;
+    outline: none;
+    box-sizing: border-box;
+    line-height: 1.5;
+    transition: border-color 0.15s;
+}
+#commentTextarea:focus { border-color: rgba(200,0,0,0.5); }
+.comment-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+/* Panel display comentario — esquina superior derecha */
+#commentDisplayPanel {
+    position: fixed;
+    top: 20px;
+    right: 80px;
+    max-width: 280px;
+    min-width: 160px;
+    z-index: 40;
+    border-radius: 12px;
+    background: rgba(0,0,0,0.55);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+    padding: 10px 14px;
+    display: none;
+}
+#commentDisplayPanel.visible { display: block; }
+.comment-display-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+}
+#commentDisplayScene {
+    color: rgba(255,255,255,0.45);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-family: 'Segoe UI', monospace;
+}
+#commentDisplayClose {
+    color: rgba(255,255,255,0.4);
+    font-size: 16px;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0 2px;
+    transition: color 0.15s;
+}
+#commentDisplayClose:hover { color: #fff; }
+#commentDisplayText {
+    color: rgba(255,255,255,0.85);
+    font-size: 12px;
+    font-family: 'Segoe UI', sans-serif;
+    line-height: 1.55;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+/* ── Punto de origen DOM handle ──────────────────────────────────────────── */
+.dx-dot-handle {
+    position: fixed;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    cursor: grab;
+    z-index: 52;
+    transform: translate(-50%, -50%);
+    pointer-events: all;
+    background: transparent;
+    box-shadow: none;
+}
+.dx-dot-handle:hover { transform: translate(-50%, -50%) scale(1.25); }
+.dx-dot-handle:active { cursor: grabbing; }
+
+.dx-dot-delete-btn {
+    position: absolute;
+    top: -9px;
+    right: -9px;
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    background: rgba(180,0,0,0.9);
+    color: #fff;
+    font-size: 12px;
+    line-height: 17px;
+    text-align: center;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s;
+    font-family: sans-serif;
+    z-index: 53;
+}
+.dx-dot-handle:hover .dx-dot-delete-btn {
+    opacity: 1;
+    pointer-events: all;
+}
+.dx-dot-delete-btn:hover { background: rgba(220,0,0,1); }

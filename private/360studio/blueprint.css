@@ -1,0 +1,647 @@
+/* =========================================================
+   BLUEPRINT / PLANO - SIN MARCOS, CON BOTONES ALINEADOS
+========================================================= */
+
+/* Contenedor principal del plano (se desliza desde la derecha) */
+#blueprintContainer {
+    position: fixed;
+    top: 50%;
+    right: -420px;
+    transform: translateY(-50%);
+    width: 420px;
+    max-width: 92vw;
+    z-index: 30;
+    transition: right 0.3s ease;
+    background: none;
+    box-shadow: none;
+    border: none;
+}
+#blueprintContainer.enabled {
+    right: 20px;
+}
+
+/* Wrapper para la imagen y los marcadores */
+.blueprint-wrapper {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
+    pointer-events: auto;
+    background: none;
+    box-shadow: none;
+}
+
+/* Imagen del plano: sin bordes ni sombras */
+#blueprintImage {
+    display: block;
+    width: 100%;
+    height: auto;
+    transform-origin: center center;
+    user-select: none;
+    pointer-events: none;
+    border-radius: 0;
+    box-shadow: none;
+    border: none;
+    background: transparent;
+}
+
+/* Ojo indicador de la posición de la cámara — siempre encima de las áreas */
+.blueprint-dot {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    z-index: 35;
+    cursor: grab;
+    transform: translate(-50%, -50%);
+    transition: transform 0.08s linear;
+}
+.blueprint-dot:active {
+    cursor: grabbing;
+}
+
+/* Contenedor para los marcadores de ubicación */
+#blueprintMarkers {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 30;
+}
+.blueprint-marker {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    cursor: grab;
+    transform: translate(-50%, -50%);
+    pointer-events: auto;
+    z-index: 25;
+}
+.blueprint-marker:active {
+    cursor: grabbing;
+}
+.blueprint-marker img {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+/* =========================================================
+   BOTONES FLOTANTES DEL PLANO (solo visibles cuando el plano está abierto)
+   Se muestran en la misma posición que antes pero ahora son dos elementos en fila.
+   El orden en HTML es: primero Añadir ubicación, luego Configuración.
+========================================================= */
+#blueprintButtons {
+    position: fixed;
+    right: 20px;
+    bottom: 84px;
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    z-index: 999999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+/* Botón Area */
+#blueprintAreaBtn {
+    position: fixed;
+    right: 140px;
+    bottom: 84px;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    cursor: pointer;
+    background: linear-gradient(135deg, rgba(200,0,0,0.97), rgba(130,0,0,0.90));
+    backdrop-filter: blur(8px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+    z-index: 999999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease, background 0.2s ease;
+}
+#blueprintAreaBtn:hover {
+    transform: scale(1.08);
+    background: linear-gradient(135deg, rgba(240,0,0,1), rgba(160,0,0,0.98));
+}
+#blueprintAreaBtn:active { transform: scale(0.96); }
+#blueprintAreaBtn img { width: 28px; height: 28px; pointer-events: none; }
+#blueprintAreaBtn.enabled { opacity: 1; visibility: visible; }
+
+/* Panel flotante Area — idéntico al eye panel */
+#blueprintAreaPanel {
+    position: fixed;
+    right: 20px;
+    bottom: 160px;
+    width: 300px;
+    max-width: calc(100vw - 40px);
+    z-index: 999;
+    border-radius: 18px;
+    background: rgba(0,0,0,0.38);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.28);
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+    pointer-events: none;
+}
+#blueprintAreaPanel.enabled {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+.bp-area-placeholder {
+    color: rgba(255,255,255,0.55);
+    font-size: 12px;
+    font-family: 'Segoe UI', monospace;
+    margin: 0;
+    text-align: center;
+    padding: 16px 0;
+}
+
+/* Botones de acción del panel área */
+.bp-area-actions {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+.bp-area-action-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 12px;
+    border-radius: 10px;
+    background: rgba(200,0,0,0.75);
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.15s ease;
+    flex: 1;
+    justify-content: center;
+}
+.bp-area-action-btn:hover {
+    background: rgba(230,0,0,0.95);
+    transform: scale(1.03);
+}
+.bp-area-action-btn:active { transform: scale(0.97); }
+.bp-area-action-btn img { width: 16px; height: 16px; pointer-events: none; }
+.bp-area-action-btn span {
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    font-family: 'Segoe UI', monospace;
+    letter-spacing: 0.04em;
+}
+.bp-area-action-btn--danger {
+    background: rgba(80,0,0,0.75);
+}
+.bp-area-action-btn--danger:hover { background: rgba(180,0,0,0.95); }
+.bp-area-action-btn--edit {
+    background: rgba(0,80,160,0.75);
+}
+.bp-area-action-btn--edit:hover { background: rgba(0,120,220,0.95); }
+.bp-area-action-btn--edit.active {
+    background: rgba(0,140,60,0.85);
+    box-shadow: 0 0 0 2px rgba(0,200,80,0.5);
+}
+
+/* Título de sección */
+.bp-section-title {
+    color: rgba(255,255,255,0.5);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    font-family: 'Segoe UI', monospace;
+    text-transform: uppercase;
+}
+
+/* Lista de áreas */
+.bp-area-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-height: 160px;
+    overflow-y: auto;
+}
+.bp-area-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 10px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.07);
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+.bp-area-item:hover { background: rgba(255,255,255,0.13); }
+.bp-area-item.selected { background: rgba(200,0,0,0.35); }
+.bp-area-item-name {
+    color: rgba(255,255,255,0.88);
+    font-size: 11px;
+    font-family: 'Segoe UI', monospace;
+}
+.bp-area-item-del {
+    color: rgba(255,100,100,0.7);
+    font-size: 15px;
+    line-height: 1;
+    padding: 0 4px;
+    cursor: pointer;
+    transition: color 0.15s;
+}
+.bp-area-item-del:hover { color: #ff4444; }
+
+/* SVG áreas — polígono y handles */
+.bp-area-poly {
+    fill: rgba(200, 0, 0, 0.18);
+    stroke: rgba(220, 0, 0, 0.85);
+    stroke-width: 1.5;
+    cursor: move;
+    transition: fill 0.15s;
+}
+.bp-area-poly:hover { fill: rgba(200, 0, 0, 0.30); }
+.bp-area-poly.selected { stroke: #ff4444; stroke-width: 2; fill: rgba(200,0,0,0.28); }
+.bp-area-poly.drawing {
+    fill: rgba(200, 0, 0, 0.12);
+    stroke: rgba(220, 0, 0, 0.6);
+    stroke-dasharray: 5,3;
+    pointer-events: none;
+}
+
+/* Handles de vértices */
+.bp-vertex-handle {
+    fill: #fff;
+    stroke: rgba(220,0,0,0.9);
+    stroke-width: 1.5;
+    cursor: grab;
+    r: 5;
+    pointer-events: all;
+}
+.bp-vertex-handle:active { cursor: grabbing; }
+.bp-vertex-handle:hover { fill: #ffaaaa; }
+
+/* Handle de arista (punto medio para añadir vértice) */
+.bp-edge-handle {
+    fill: rgba(255,255,255,0.5);
+    stroke: rgba(220,0,0,0.6);
+    stroke-width: 1;
+    cursor: crosshair;
+    r: 3.5;
+    pointer-events: all;
+}
+.bp-edge-handle:hover { fill: rgba(255,180,180,0.9); r: 4.5; }
+
+/* Cursor mientras se dibuja */
+.blueprint-wrapper.drawing-area { cursor: crosshair !important; }
+
+/* Indicador snap ortogonal (Shift) */
+.blueprint-wrapper.snap-active::after {
+    content: '⇧ SNAP';
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(200,0,0,0.85);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    font-family: monospace;
+    padding: 3px 8px;
+    border-radius: 6px;
+    pointer-events: none;
+    z-index: 50;
+}
+
+/* Sección de estilos globales del área */
+.bp-style-section {
+    border-top: 1px solid rgba(255,255,255,0.08);
+    margin-top: 10px;
+    padding-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+.bp-style-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+.bp-style-row--col {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+}
+.bp-style-row-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.bp-color-input {
+    width: 36px;
+    height: 24px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    background: none;
+    padding: 0;
+    flex-shrink: 0;
+}
+.bp-select {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 7px;
+    color: rgba(255,255,255,0.88);
+    font-size: 11px;
+    font-family: 'Segoe UI', monospace;
+    padding: 3px 6px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+.bp-select option { background: #1a1a1a; color: #fff; }
+#blueprintAreaPanel input[type="range"] {
+    width: 100%;
+    accent-color: rgba(200,0,0,0.9);
+    cursor: pointer;
+}
+#blueprintEyeBtn {
+    position: fixed;
+    right: 80px;
+    bottom: 84px;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    cursor: pointer;
+    background: linear-gradient(135deg, rgba(200,0,0,0.97), rgba(130,0,0,0.90));
+    backdrop-filter: blur(8px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+    z-index: 999999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease, background 0.2s ease;
+}
+#blueprintEyeBtn:hover {
+    transform: scale(1.08);
+    background: linear-gradient(135deg, rgba(240,0,0,1), rgba(160,0,0,0.98));
+}
+#blueprintEyeBtn:active {
+    transform: scale(0.96);
+}
+#blueprintEyeBtn img {
+    width: 28px;
+    height: 28px;
+    pointer-events: none;
+}
+/* Clase .enabled aplicada por JS cuando el plano está activo */
+#blueprintEyeBtn.enabled {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* =========================================================
+   PANEL FLOTANTE DEL BOTÓN EYE
+========================================================= */
+#blueprintEyePanel {
+    position: fixed;
+    right: 20px;
+    bottom: 160px;
+    width: 300px;
+    max-width: calc(100vw - 40px);
+    z-index: 999;
+    border-radius: 18px;
+    background: rgba(0,0,0,0.38);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.28);
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+    pointer-events: none;
+}
+#blueprintEyePanel.enabled {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+.bp-eye-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.bp-eye-header span {
+    color: rgba(255,255,255,0.92);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-family: 'Segoe UI', monospace;
+}
+#blueprintEyePanelClose {
+    color: rgba(255,255,255,0.6);
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0 4px;
+    transition: color 0.15s ease;
+}
+#blueprintEyePanelClose:hover {
+    color: #fff;
+}
+.bp-eye-body {
+    padding: 14px 16px;
+}
+
+/* Fila de opción dentro del panel eye */
+.bp-eye-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+.bp-eye-row--col {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+    margin-top: 10px;
+}
+.bp-eye-row-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+#blueprintEyePanel input[type="range"] {
+    width: 100%;
+    accent-color: rgba(200,0,0,0.9);
+    cursor: pointer;
+}
+.bp-eye-label {
+    color: rgba(255,255,255,0.88);
+    font-size: 11px;
+    font-weight: 600;
+    font-family: 'Segoe UI', monospace;
+    letter-spacing: 0.03em;
+    flex: 1;
+}
+
+/* Toggle switch */
+.bp-toggle {
+    position: relative;
+    width: 40px;
+    height: 22px;
+    border-radius: 11px;
+    background: rgba(255,255,255,0.15);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background 0.2s ease;
+}
+.bp-toggle.active {
+    background: rgba(200,0,0,0.85);
+}
+.bp-toggle-knob {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+    transition: transform 0.2s ease;
+}
+.bp-toggle.active .bp-toggle-knob {
+    transform: translateX(18px);
+}
+
+/* Estilo común para ambos botones */
+#blueprintConfigToggle,
+#blueprintAddMarkerBtn {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    cursor: pointer;
+    background: linear-gradient(135deg, rgba(180,0,0,0.95), rgba(120,0,0,0.85));
+    backdrop-filter: blur(8px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+#blueprintConfigToggle:hover,
+#blueprintAddMarkerBtn:hover {
+    transform: scale(1.08);
+    background: linear-gradient(135deg, rgba(220,0,0,1), rgba(150,0,0,0.95));
+}
+#blueprintConfigToggle:active,
+#blueprintAddMarkerBtn:active {
+    transform: scale(0.96);
+}
+#blueprintConfigToggle img,
+#blueprintAddMarkerBtn img {
+    width: 28px;
+    height: 28px;
+    pointer-events: none;
+}
+
+/* =========================================================
+   PANEL DE CONTROLES (Escala, Desplazamiento X, Desplazamiento Y)
+========================================================= */
+#blueprintControls {
+    position: fixed;
+    right: 20px;
+    bottom: 160px;
+    width: 300px;
+    max-width: calc(100vw - 40px);
+    z-index: 999;
+    padding: 14px 16px;
+    border-radius: 18px;
+    background: rgba(0,0,0,0.38);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.28);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+    pointer-events: none;
+}
+#blueprintControls.enabled {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.bp-control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    pointer-events: auto;
+}
+.bp-label {
+    color: rgba(255,255,255,0.92);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+.bp-value {
+    color: #44ccff;
+    font-size: 11px;
+    font-weight: 700;
+    font-family: 'Segoe UI', monospace;
+}
+#blueprintControls input[type="range"] {
+    width: 100%;
+    accent-color: #44ccff;
+    cursor: pointer;
+}
+/* Contenedor de los botones flotantes del plano */
+#blueprintButtons {
+    position: fixed;
+    right: 20px;
+    bottom: 84px;
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    z-index: 999999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+#blueprintContainer.enabled ~ #blueprintButtons {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Estilo común para ambos botones */
+#blueprintConfigToggle,
+#blueprintAddMarkerBtn {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    cursor: pointer;
+    background: linear-gradient(135deg, rgba(180,0,0,0.95), rgba(120,0,0,0.85));
+    backdrop-filter: blur(8px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+    transition: transform 0.2s ease, background 0.2s ease;
+}

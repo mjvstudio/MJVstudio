@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear usuario — 360 Studio</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/png" href="../../assets/logo_2.png">
+    <link rel="stylesheet" href="gate.css">
+    <style>
+        #gateForm { max-width: 460px; }
+        #out { display: none; margin-top: 14px; }
+        #outLine {
+            width: 100%; box-sizing: border-box; min-height: 92px; resize: vertical;
+            padding: 10px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.14);
+            background: rgba(0,0,0,0.45); color: #a6f0b8; font: 12px/1.45 Consolas, monospace;
+        }
+        .steps { font-size: 13px; line-height: 1.55; color: rgba(255,255,255,0.7); margin: 10px 0 0; padding-left: 18px; }
+        .steps code { background: rgba(255,255,255,0.1); padding: 1px 5px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <div id="studioGate">
+        <form id="gateForm">
+            <h1>Crear usuario</h1>
+            <p class="gate-sub">Genera la línea para <code>users.js</code>. La contraseña no se guarda en ningún lado.</p>
+            <label for="nUser">Usuario (para ingresar)</label>
+            <input id="nUser" type="text" autocapitalize="none" spellcheck="false" placeholder="ej. sofia" required>
+            <label for="nName">Nombre visible</label>
+            <input id="nName" type="text" placeholder="ej. Sofía">
+            <label for="nPass">Contraseña</label>
+            <input id="nPass" type="text" autocomplete="off" required>
+            <button id="gateSubmit" type="submit">Generar línea</button>
+            <p id="gateError" role="alert"></p>
+            <div id="out">
+                <label for="outLine">Copiá esta línea</label>
+                <textarea id="outLine" readonly></textarea>
+                <button id="copyBtn" type="button" style="margin-top:8px;padding:9px;border:0;border-radius:10px;background:rgba(255,255,255,0.12);color:#fff;cursor:pointer">Copiar</button>
+                <ol class="steps">
+                    <li>Abrí <code>private/360studio/users.js</code>.</li>
+                    <li>Pegá la línea dentro de <code>window.STUDIO_USERS = [ … ]</code>.</li>
+                    <li>Guardá, hacé commit y push. Pasale el usuario y la contraseña a la persona.</li>
+                </ol>
+            </div>
+        </form>
+    </div>
+    <script>window.STUDIO_GATE_OFF = true;</script>
+    <script src="gate.js"></script>
+    <script>
+    (function () {
+        // gate.js expone la misma función de hash que usa el ingreso
+        var f = document.getElementById('gateForm');
+        var err = document.getElementById('gateError');
+        function rnd() {
+            var a = new Uint8Array(16); crypto.getRandomValues(a);
+            return Array.prototype.map.call(a, function (b) { return ('0' + b.toString(16)).slice(-2); }).join('');
+        }
+        function q(s) { return "'" + String(s).replace(/\\/g, '\\\\').replace(/'/g, "\\'") + "'"; }
+        f.addEventListener('submit', function (e) {
+            e.preventDefault();
+            err.textContent = '';
+            var u = document.getElementById('nUser').value.trim().toLowerCase();
+            var n = document.getElementById('nName').value.trim() || u;
+            var p = document.getElementById('nPass').value;
+            if (!/^[a-z0-9._-]{2,32}$/.test(u)) { err.textContent = 'Usuario: solo letras, números, punto o guion (sin espacios).'; return; }
+            if (p.length < 8) { err.textContent = 'Usá una contraseña de al menos 8 caracteres.'; return; }
+            if (!window.crypto || !crypto.subtle) { err.textContent = 'Abrí esta página desde https://mjvstudio.com o desde localhost.'; return; }
+            var salt = rnd();
+            window.studioHashPassword(p, salt).then(function (h) {
+                document.getElementById('outLine').value = '    { user: ' + q(u) + ', name: ' + q(n) + ", salt: '" + salt + "', hash: '" + h + "' },";
+                document.getElementById('out').style.display = 'block';
+            });
+        });
+        document.getElementById('copyBtn').addEventListener('click', function () {
+            var t = document.getElementById('outLine');
+            t.select();
+            if (navigator.clipboard) navigator.clipboard.writeText(t.value).catch(function () {});
+            else document.execCommand('copy');
+            this.textContent = 'Copiado ✓';
+        });
+    })();
+    </script>
+</body>
+</html>
