@@ -332,13 +332,31 @@
                         <span class="pm-type-icon">🌐</span>
                         <span>Equirectangular</span>
                     </div>
+                    <div class="pm-type-btn" data-mode="drive" id="asDriveTab">
+                        <span class="pm-type-icon">☁️</span>
+                        <span>Google Drive</span>
+                    </div>
+                </div>
+
+                <!-- MODO: Google Drive (link de Claude) -->
+                <div id="asMode-drive" style="display:none">
+                    <div id="asDriveLast" class="drive-last" style="display:none"></div>
+                    <div class="pm-field">
+                        <label class="pm-label" for="asDriveSearch">Buscar la carpeta del proyecto en tu Drive</label>
+                        <div class="drive-search">
+                            <input type="text" id="asDriveSearch" class="pm-input" placeholder="MJV 360 Studio">
+                            <div id="asDriveSearchBtn" class="pm-btn pm-btn--secondary">Buscar</div>
+                        </div>
+                    </div>
+                    <div id="asDriveList" class="drive-list"></div>
+                    <p id="asDriveNote" class="pm-hint"></p>
                 </div>
 
                 <!-- MODO: Carpeta de proyecto completa -->
                 <div id="asMode-project">
                     <div id="asProjectDZ" class="pm-dropzone">
                         <div class="pm-dropzone-icon">📁</div>
-                        <p class="pm-dropzone-text">Arrastrá tu carpeta <strong>project/</strong> aquí<br>o hacé click para seleccionarla<br><small style="opacity:.6">Detecta todas las escenas automáticamente</small></p>
+                        <p class="pm-dropzone-text">Hacé click y elegí la carpeta <strong>MJV 360 Studio - …</strong><br>(o arrastrala acá)<br><small style="opacity:.6">Las escenas se detectan y se añaden solas</small></p>
                         <input type="file" id="asProjectInput" webkitdirectory multiple style="display:none">
                     </div>
                     <div id="asProjectPreview" style="display:none"></div>

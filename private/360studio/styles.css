@@ -2907,3 +2907,31 @@ body.presentation:not(.readonly) #exitPresentationBtn { display: flex; }
 @media (max-width: 600px) {
     #cloudBar { top: 52px; left: 10px; }
 }
+
+/* ==========================================
+   AÑADIR ESCENAS DESDE GOOGLE DRIVE
+   ========================================== */
+.drive-search { display: flex; gap: 8px; }
+.drive-search .pm-input { flex: 1; min-width: 0; }
+.drive-search .pm-btn { flex: 0 0 auto; padding: 10px 14px; }
+.drive-list { display: flex; flex-direction: column; gap: 6px; max-height: 280px; overflow-y: auto; margin-top: 8px; }
+.drive-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 11px 12px; border-radius: 12px; cursor: pointer;
+    background: rgba(255,255,255,0.06); border: 1px solid transparent;
+}
+.drive-row:hover { background: rgba(255,255,255,0.12); border-color: rgba(200,0,0,0.6); }
+.drive-row .dr-name { flex: 1; min-width: 0; color: #fff; font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.drive-row .dr-date { color: rgba(255,255,255,0.5); font-size: 11px; white-space: nowrap; }
+.drive-last {
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    padding: 10px 12px; margin-bottom: 12px; border-radius: 12px;
+    background: rgba(200,0,0,0.12); border: 1px solid rgba(200,0,0,0.4);
+    color: #fff; font-size: 13px;
+}
+.drive-last span { flex: 1; min-width: 0; }
+.drive-last .pm-btn { flex: 0 0 auto; padding: 8px 12px; }
+#addScenesModal .pm-type-selector { flex-wrap: wrap; }
+@media (max-width: 600px) {
+    #addScenesModal .pm-type-btn { flex: 1 1 40%; }
+}

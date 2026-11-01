@@ -20,6 +20,7 @@ import {
 } from './blueprint.js';
 
 import * as Cloud from './cloud.js';
+import * as Drive from './drive.js';
 
 // ==========================================
 // BLOQUE 1: CONFIGURACIÓN DE LA ESFERA ALÁMBRICA
@@ -1049,9 +1050,13 @@ let detectedScenes = []; // [{ id, name, files: {right,left,...}, equirectFile, 
 function openAddScenesModal() {
     if (readOnly) return;
     document.getElementById('addScenesModal').classList.add('open');
-    setAddScenesMode('project');
     detectedScenes = [];
     detectedLevels = [];
+    const dl = document.getElementById('asDriveList');
+    if (dl) { dl.innerHTML = ''; delete dl.dataset.loaded; }
+    // En el celular no se pueden elegir carpetas: si hay Drive, se abre directo ahí
+    const phone = matchMedia('(pointer: coarse)').matches && !matchMedia('(pointer: fine)').matches;
+    setAddScenesMode(Drive.driveReady() && (phone || projectData.driveFolder) ? 'drive' : 'project');
     document.getElementById('asProjectPreview').style.display = 'none';
     document.getElementById('asProjectPreview').innerHTML = '';
     document.getElementById('asSinglePreview').style.display = 'none';
@@ -1071,9 +1076,14 @@ function setAddScenesMode(mode) {
     document.querySelectorAll('#addScenesModal .pm-type-btn').forEach(b => {
         b.classList.toggle('active', b.dataset.mode === mode);
     });
-    ['project','single','equirect'].forEach(m => {
-        document.getElementById(`asMode-${m}`).style.display = m === mode ? '' : 'none';
+    ['project','single','equirect','drive'].forEach(m => {
+        const el = document.getElementById(`asMode-${m}`);
+        if (el) el.style.display = m === mode ? '' : 'none';
     });
+    // Carpeta y Drive se añaden solos: el botón "Añadir" queda para escena suelta y 360° suelta
+    const btn = document.getElementById('asScenesConfirmBtn');
+    if (btn) btn.style.display = (mode === 'project' || mode === 'drive') ? 'none' : '';
+    if (mode === 'drive') openDriveMode();
 }
 
 // Detecta el nombre de cara desde el nombre de archivo
@@ -1115,7 +1125,79 @@ function makeFaceThumbURL(faces) {
 }
 
 // Procesar carpeta completa de proyecto
-function processProjectFolder(fileList) {
+// ---------- Carpetas que arma MJV AI Bridge (360° con ChatGPT) ----------
+//   MJV 360 Studio - <Proyecto>/<Espacio>/<Espacio> - 1 ARRASTRAR A CHATGPT.jpg  (referencia)
+//                                          <Espacio> - 5 RENDER IA.png           (render de ChatGPT)
+//                                          _espacio.json                          (nombre y vista inicial)
+const BRIDGE_REF = / - 1 ARRASTRAR A CHATGPT\.(jpe?g|png|webp)$/i;
+const BRIDGE_RENDER = / - 5 RENDER IA\.(jpe?g|png|webp)$/i;
+const BRIDGE_RENDER_X4 = / - 5 RENDER IA x4\.(jpe?g|png|webp)$/i;
+const SKIP_DIRS = /^(_anteriores|niveles|planos)$|datos tecnicos|^\./i;
+
+// Nombre del espacio a partir del nombre de archivo o carpeta ("Living - 1 ARRASTRAR A CHATGPT" → "Living")
+function cleanSceneName(name) {
+    return String(name || '')
+        .replace(/\.[^.\/]+$/, '')
+        .replace(/\s+-\s+\d+\s+(ARRASTRAR A CHATGPT|PEGAR EN CHATGPT|RENDER IA|SEGUNDO MENSAJE).*$/i, '')
+        .replace(/[_\s-]+360(_[a-z_]+)?$/i, '')
+        .replace(/_/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim() || 'Escena';
+}
+window.cleanSceneName = cleanSceneName;
+
+// Agrupa las imágenes por la carpeta que las contiene y detecta los espacios del bridge
+async function detectBridgePoints(files) {
+    const byDir = {};
+    for (const f of files) {
+        const parts = (f.webkitRelativePath || f.name).split('/');
+        if (parts.length < 2) continue;
+        if (parts.slice(0, -1).some(p => SKIP_DIRS.test(p))) continue;
+        const dir = parts.slice(0, -1).join('/');
+        (byDir[dir] = byDir[dir] || []).push(f);
+    }
+    const out = [];
+    for (const [dir, list] of Object.entries(byDir)) {
+        const imgs = list.filter(f => /\.(jpe?g|png|webp)$/i.test(f.name));
+        const ref = imgs.find(f => BRIDGE_REF.test(f.name));
+        const meta = list.find(f => f.name === '_espacio.json');
+        if (!ref && !meta) continue;
+        // Render IA: el que guardó el bridge, o cualquier otra imagen que pusiste en la carpeta
+        const render = imgs.find(f => BRIDGE_RENDER_X4.test(f.name)) || imgs.find(f => BRIDGE_RENDER.test(f.name)) ||
+            imgs.filter(f => f !== ref).sort((a, b) => b.lastModified - a.lastModified)[0] || null;
+        const folder = dir.split('/').pop();
+        let info = {};
+        if (meta) { try { info = JSON.parse(await meta.text()); } catch (e) {} }
+        out.push({
+            id: folder.replace(/[^\w\-. ]+/g, '_'),
+            name: info.nombre ? cleanSceneName(info.nombre) : cleanSceneName(folder),
+            equirectFile: render || ref,
+            hasRender: !!render,
+            isX4: !!(render && BRIDGE_RENDER_X4.test(render.name)),
+            description: (info.descripcion || '').trim(),
+            iaPrompt: (info.indicaciones_ia || '').trim(),
+            fromBridge: true,
+            yaw: typeof info.yaw_inicial === 'number' ? -info.yaw_inicial : 0,
+            fovDeg: info.fov || 0,
+            faceCount: 1,
+            type: 'equirect'
+        });
+    }
+    // Mismo orden que el chat del proyecto (_puntos.json), si está
+    const order = files.find(f => f.name === '_puntos.json' && (f.webkitRelativePath || '').split('/').length <= 2);
+    if (order) {
+        try {
+            const list = JSON.parse(await order.text()).map(p => p.folder);
+            out.sort((a, b) => (list.indexOf(a.id) + 1 || 999) - (list.indexOf(b.id) + 1 || 999));
+        } catch (e) {}
+    }
+    return out;
+}
+
+// opts.container: dónde mostrar las escenas detectadas · opts.auto: añadirlas sin esperar el clic
+async function processProjectFolder(fileList, opts = {}) {
+    const container = opts.container || 'asProjectPreview';
+    const auto = opts.auto !== false;
     const files = Array.from(fileList);
     // Planos: cualquier imagen dentro de una carpeta "niveles" / "planos"
     detectedLevels = files.filter(f => {
@@ -1157,15 +1239,139 @@ function processProjectFolder(fileList) {
 
     // Ordenar por id natural
     detectedScenes.sort((a, b) => a.id.localeCompare(b.id, undefined, { numeric: true }));
-    renderScenePreviewCards('asProjectPreview');
+    // Espacios 360° del bridge (render IA o referencia de SketchUp)
+    const bridge = await detectBridgePoints(files);
+    const taken = new Set(detectedScenes.map(s => s.id));
+    detectedScenes.push(...bridge.filter(b => !taken.has(b.id)));
+    renderScenePreviewCards(container);
     if (detectedLevels.length) {
         const p = document.createElement('p');
         p.className = 'pm-hint';
         p.style.textAlign = 'center';
         p.textContent = `+ ${detectedLevels.length} plano${detectedLevels.length !== 1 ? 's' : ''}: ${detectedLevels.map(f => f.name).join(', ')}`;
-        document.getElementById('asProjectPreview').appendChild(p);
+        document.getElementById(container).appendChild(p);
+    }
+    // Nombre del proyecto desde la carpeta ("MJV 360 Studio - Casa DA" → "Casa DA") si todavía no tiene uno
+    const rootName = ((files[0] && (files[0].webkitRelativePath || '')) || '').split('/')[0];
+    if (rootName && /^(proyecto nuevo|mjv studio|proyecto sin nombre)?$/i.test((projectData.name || '').trim())) {
+        const nm = rootName.replace(/^MJV 360 Studio\s*-\s*/i, '').trim();
+        if (nm && nm !== rootName || /^MJV 360 Studio\s*-/i.test(rootName)) {
+            projectData.name = nm || rootName;
+            projectNameEl.textContent = projectData.name;
+        }
+    }
+    // Elegir la carpeta alcanza: las escenas válidas se añaden solas
+    const valid = detectedScenes.some(s => s.type === 'equirect' || s.faceCount >= 6) || detectedLevels.length;
+    if (auto && valid && !readOnly) {
+        await new Promise(r => setTimeout(r, 400));
+        confirmAddScenes();
+    } else if (!valid) {
+        showMessage('No encontré escenas en esa carpeta. Elegí la carpeta "MJV 360 Studio - …" completa.', 4500);
     }
 }
+
+// Arrastrar una CARPETA: el navegador solo entrega la carpeta; se recorre por dentro
+async function filesFromDrop(dt) {
+    const items = Array.from(dt.items || []).map(i => i.webkitGetAsEntry && i.webkitGetAsEntry()).filter(Boolean);
+    if (!items.length) return Array.from(dt.files || []);
+    const out = [];
+    const readAll = (reader) => new Promise((res, rej) => {
+        const acc = [];
+        const next = () => reader.readEntries(batch => { if (!batch.length) res(acc); else { acc.push(...batch); next(); } }, rej);
+        next();
+    });
+    const walk = async (entry, path) => {
+        if (entry.isFile) {
+            const f = await new Promise((res, rej) => entry.file(res, rej));
+            const file = new File([f], f.name, { type: f.type, lastModified: f.lastModified });
+            Object.defineProperty(file, 'webkitRelativePath', { value: path + f.name });
+            out.push(file);
+        } else if (entry.isDirectory) {
+            if (/^_anteriores$|datos tecnicos/i.test(entry.name)) return;
+            const kids = await readAll(entry.createReader());
+            for (const k of kids) await walk(k, path + entry.name + '/');
+        }
+    };
+    for (const it of items) await walk(it, '');
+    return out;
+}
+
+// ---------- Google Drive (link de Claude) ----------
+function fmtDay(iso) {
+    try { return new Date(iso).toLocaleDateString('es', { day: '2-digit', month: 'short', year: 'numeric' }); } catch (e) { return ''; }
+}
+async function openDriveMode() {
+    const list = document.getElementById('asDriveList');
+    const note = document.getElementById('asDriveNote');
+    const last = document.getElementById('asDriveLast');
+    if (!Drive.driveReady()) {
+        list.innerHTML = '';
+        note.textContent = Cloud.isCloud()
+            ? 'Google Drive no está disponible en esta vista. Conectalo en Claude: Configuración → Conectores.'
+            : 'La carga desde Google Drive funciona en el link de Claude del Studio. Acá usá "Carpeta de proyecto".';
+        return;
+    }
+    note.textContent = 'Se usa tu Google Drive conectado en Claude. Solo se bajan los renders y datos de cada espacio.';
+    const df = projectData.driveFolder;
+    if (df && df.id) {
+        last.style.display = '';
+        last.innerHTML = '';
+        const sp = document.createElement('span'); sp.textContent = `☁️ ${df.title}`;
+        const b = document.createElement('div'); b.className = 'pm-btn pm-btn--primary'; b.textContent = 'Actualizar desde Drive';
+        b.addEventListener('click', () => importFromDrive(df));
+        last.append(sp, b);
+    } else last.style.display = 'none';
+    const input = document.getElementById('asDriveSearch');
+    if (!list.dataset.loaded) { list.dataset.loaded = '1'; searchDrive(input.value); }
+}
+async function searchDrive(text) {
+    const list = document.getElementById('asDriveList');
+    list.innerHTML = '<p class="pm-hint" style="text-align:center">Buscando en tu Drive…</p>';
+    try {
+        const folders = await Drive.findProjectFolders(text);
+        list.innerHTML = '';
+        if (!folders.length) { list.innerHTML = '<p class="pm-hint" style="text-align:center">No encontré carpetas con ese nombre.</p>'; return; }
+        folders.forEach(f => {
+            const row = document.createElement('div');
+            row.className = 'drive-row';
+            const n = document.createElement('span'); n.className = 'dr-name'; n.textContent = '📁 ' + f.title;
+            const d = document.createElement('span'); d.className = 'dr-date'; d.textContent = fmtDay(f.modifiedTime);
+            row.append(n, d);
+            row.addEventListener('click', () => importFromDrive({ id: f.id, title: f.title }));
+            list.appendChild(row);
+        });
+    } catch (e) {
+        console.error(e);
+        list.innerHTML = '';
+        document.getElementById('asDriveNote').textContent = Drive.driveErrorText(e);
+    }
+}
+async function importFromDrive(folder) {
+    if (readOnly) return;
+    const progressEl = document.getElementById('asScenesProgress');
+    const fillEl = document.getElementById('asScenesProgressFill');
+    const statusEl = document.getElementById('asScenesStatus');
+    progressEl.style.display = '';
+    try {
+        const files = await Drive.loadProjectFolder(folder, (p, msg) => {
+            fillEl.style.width = `${Math.round(p * 100)}%`;
+            statusEl.textContent = msg;
+        });
+        if (!files.length) {
+            progressEl.style.display = 'none';
+            showMessage(`"${folder.title}" no tiene espacios del bridge`, 4000);
+            return;
+        }
+        projectData.driveFolder = { id: folder.id, title: folder.title };
+        await processProjectFolder(files, { container: 'asDriveList', auto: true });
+    } catch (e) {
+        console.error(e);
+        progressEl.style.display = 'none';
+        showMessage(Drive.driveErrorText(e), 5000);
+        document.getElementById('asDriveNote').textContent = Drive.driveErrorText(e);
+    }
+}
+window.importFromDrive = importFromDrive;
 
 // Sube/añade imágenes de planos al proyecto (sin duplicar nombres)
 async function addLevelFiles(files, statusEl) {
@@ -1222,7 +1428,7 @@ function processSingleFolder(fileList) {
 
 // Procesar imagen equirectangular
 function processEquirectFile(file) {
-    const baseName = file.name.replace(/\.[^.]+$/, '');
+    const baseName = cleanSceneName(file.name);
     const customName = document.getElementById('asEquirectName').value.trim() || baseName;
     detectedScenes = [{
         id: baseName,
@@ -1305,7 +1511,11 @@ function renderScenePreviewCards(containerId) {
                 ? `✓ 6 caras detectadas`
                 : `⚠ Faltan: ${missing.join(', ')}`;
         } else {
-            meta.textContent = '✓ Equirectangular · se convertirá a cubemap';
+            const exists = sc.fromBridge && projectData.scenes.some(x => x.id === sc.id);
+            meta.textContent = sc.fromBridge
+                ? (sc.hasRender ? (sc.isX4 ? '✓ Render IA mejorado x4' : '✓ Render IA') : '⚠ Sin render IA todavía · se usa la referencia de SketchUp') + (exists ? ' · actualiza la escena existente' : '')
+                : '✓ Equirectangular · se convertirá a cubemap';
+            if (sc.fromBridge && !sc.hasRender) meta.className = 'as-scene-meta warn';
         }
 
         info.appendChild(nameInput);
@@ -1341,11 +1551,12 @@ function renderScenePreviewCards(containerId) {
 async function confirmAddScenes() {
     if (addingScenes) return;
     const toAdd = detectedScenes.filter(s => s.type === 'equirect' || s.faceCount >= 6);
-    const levelsToAdd = addScenesMode === 'project' ? detectedLevels : [];
+    const levelsToAdd = (addScenesMode === 'project' || addScenesMode === 'drive') ? detectedLevels : [];
     if (toAdd.length === 0 && levelsToAdd.length === 0) { showMessage('No hay escenas válidas para añadir', 2500); return; }
+    if (readOnly) return;
     addingScenes = true;
     const startCount = projectData.scenes.length;
-    let added = 0;
+    let added = 0, updated = 0;
 
     const progressEl = document.getElementById('asScenesProgress');
     const fillEl = document.getElementById('asScenesProgressFill');
@@ -1368,7 +1579,10 @@ async function confirmAddScenes() {
         fillEl.style.width = `${pct}%`;
         statusEl.textContent = `Procesando "${sc.name}" (${i + 1}/${toAdd.length})...`;
 
-        const sceneId = getUniqueId(sc.id);
+        // Un espacio del bridge que ya está en el proyecto: solo se actualiza su imagen
+        // (se conservan links, directrices, posición en el plano y comentarios)
+        const existing = sc.fromBridge ? projectData.scenes.find(x => x.id === sc.id) : null;
+        const sceneId = existing ? existing.id : getUniqueId(sc.id);
         const base = `project/${sceneId}/1/`;
 
         try {
@@ -1380,18 +1594,32 @@ async function confirmAddScenes() {
                     fillEl.style.width = `${pct + Math.round(p * (45 / toAdd.length))}%`;
                 });
             }
+            if (existing) forgetScenePaths(base);
             let fi = 0;
             for (const [face, file] of Object.entries(faceBlobs)) {
                 const ext = (file.name ? file.name.split('.').pop() : 'jpg').toLowerCase();
                 if (Cloud.isCloud()) statusEl.textContent = `Subiendo "${sc.name}" (${i + 1}/${toAdd.length}) · ${++fi}/6`;
                 await storeImage(`${base}${face}.${ext}`, file);
             }
+            if (existing) {
+                updated++;
+                existing.renderIA = !!sc.hasRender;
+                if (sc.iaPrompt) existing.iaPrompt = sc.iaPrompt;
+                // la descripción del bridge solo completa: lo que escribiste en el Studio se respeta
+                if (sc.description && !(existing.comment || '').trim()) existing.comment = sc.description;
+                continue;
+            }
             added++;
 
+            // vista inicial cómoda en el visor (la de la cámara de SketchUp suele ser muy cerrada)
+            const fov = sc.fovDeg ? Math.max(1.1, Math.min(1.9, sc.fovDeg / 50)) : 1.2;
             projectData.scenes.push({
                 id: sceneId,
                 name: sc.name || sceneId,
-                initialViewParameters: { yaw: 0, pitch: 0, fov: 1.2 },
+                renderIA: sc.fromBridge ? !!sc.hasRender : undefined,
+                iaPrompt: sc.iaPrompt || undefined,
+                comment: sc.description || undefined,
+                initialViewParameters: { yaw: sc.yaw || 0, pitch: 0, fov },
                 planPosition: { x: 0.5, y: 0.5 },
                 planOrientation: 0,
                 level: 0,
@@ -1412,7 +1640,9 @@ async function confirmAddScenes() {
     catch (err) { console.error(err); showMessage(`Planos: ${uploadErrorText(err)}`, 4000); }
 
     fillEl.style.width = '100%';
-    statusEl.textContent = `¡${added} escena${added !== 1 ? 's' : ''} añadida${added !== 1 ? 's' : ''}!`;
+    const doneTxt = [added ? `${added} escena${added !== 1 ? 's' : ''} añadida${added !== 1 ? 's' : ''}` : '',
+                     updated ? `${updated} actualizada${updated !== 1 ? 's' : ''} con el render nuevo` : ''].filter(Boolean).join(' · ') || 'Sin cambios';
+    statusEl.textContent = `¡${doneTxt}!`;
     window.projectData = projectData;
     saveToLocalStorage();
     populateSceneList();
@@ -1422,8 +1652,9 @@ async function confirmAddScenes() {
         closeAddScenesModal();
         // Navegar a la primera escena añadida (antes se calculaba mal si alguna fallaba)
         if (added > 0) loadScene(startCount);
-        const extra = levelsAdded ? ` y ${levelsAdded} plano${levelsAdded !== 1 ? 's' : ''}` : '';
-        showMessage(`${added} escena${added !== 1 ? 's' : ''} añadida${added !== 1 ? 's' : ''}${extra} ✓`, 3000);
+        else if (updated > 0) loadScene(currentSceneIndex);
+        const extra = levelsAdded ? ` · ${levelsAdded} plano${levelsAdded !== 1 ? 's' : ''}` : '';
+        showMessage(`${doneTxt}${extra} ✓`, 3500);
     }, 500);
 }
 let addingScenes = false;
@@ -1446,13 +1677,18 @@ function initAddScenesModal() {
     const projectDZ = document.getElementById('asProjectDZ');
     const projectInput = document.getElementById('asProjectInput');
     projectDZ?.addEventListener('click', () => projectInput.click());
-    projectInput?.addEventListener('change', (e) => { if (e.target.files.length) processProjectFolder(e.target.files); });
+    projectInput?.addEventListener('change', (e) => { if (e.target.files.length) processProjectFolder(e.target.files).catch(err => { console.error(err); showMessage('No se pudo leer la carpeta', 3000); }); });
     projectDZ?.addEventListener('dragover', (e) => { e.preventDefault(); projectDZ.classList.add('drag-over'); });
     projectDZ?.addEventListener('dragleave', () => projectDZ.classList.remove('drag-over'));
-    projectDZ?.addEventListener('drop', (e) => {
+    projectDZ?.addEventListener('drop', async (e) => {
         e.preventDefault(); projectDZ.classList.remove('drag-over');
-        if (e.dataTransfer.files.length) processProjectFolder(e.dataTransfer.files);
+        try {
+            const files = await filesFromDrop(e.dataTransfer);
+            if (files.length) await processProjectFolder(files);
+        } catch (err) { console.error(err); showMessage('No se pudo leer la carpeta arrastrada', 3000); }
     });
+    document.getElementById('asDriveSearchBtn')?.addEventListener('click', () => searchDrive(document.getElementById('asDriveSearch').value));
+    document.getElementById('asDriveSearch')?.addEventListener('keydown', (e) => { if (e.key === 'Enter') searchDrive(e.target.value); });
 
     // Modo escena individual
     const singleDZ = document.getElementById('asSingleDZ');
@@ -1869,6 +2105,21 @@ async function equirectToCubemap(file, onProgress) {
     sctx.drawImage(bmp, 0, 0, W, H);
     bmp.close && bmp.close();
     const sd = sctx.getImageData(0, 0, W, H).data;
+    // Unión de los bordes: los renders de IA suelen dejar un salto entre el borde izquierdo y
+    // el derecho (que son el mismo lugar). Se funden unas pocas columnas para que no se vea la costura.
+    const SEAM = Math.max(4, Math.round(W * 0.006));
+    for (let y = 0; y < H; y++) {
+        const row = y * W * 4;
+        for (let k = 0; k < SEAM; k++) {
+            const t = 0.5 * (1 - k / SEAM);
+            const a = row + k * 4, b = row + (W - 1 - k) * 4;
+            for (let c = 0; c < 3; c++) {
+                const va = sd[a + c], vb = sd[b + c];
+                sd[a + c] = va * (1 - t) + vb * t;
+                sd[b + c] = vb * (1 - t) + va * t;
+            }
+        }
+    }
     const size = Math.max(256, Math.min(2048, Math.round(W / 4)));
 
     // Dirección de muestreo del cubemap (convención OpenGL) para cada cara y píxel
@@ -2444,6 +2695,7 @@ function setReadOnly(on) {
 // ==========================================
 async function init() {
     const cloud = await Cloud.initCloud();
+    if (cloud) await Drive.initDrive();
     const params = new URLSearchParams(location.search);
 
     if (cloud) {
