@@ -87,7 +87,7 @@
         ['script.js', 'hotspot-editor.js', 'blueprint.js'].forEach(function (src) {
             var s = document.createElement('script');
             s.type = 'module';
-            s.src = src;
+            s.src = src + (window.STUDIO_VERSION ? '?v=' + window.STUDIO_VERSION : '');
             document.body.appendChild(s);
         });
     }
