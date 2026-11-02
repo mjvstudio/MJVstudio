@@ -6,20 +6,96 @@
 // necesita de cada espacio: el render (x4 si no es muy pesado, si no el normal, si no
 // la referencia de SketchUp), _espacio.json, _puntos.json y los planos.
 
+// En TU WEB (mjvstudio.com) se conecta directo con Google: cada integrante entra con su
+// cuenta de Google (ventana de Google) y el Studio lee la carpeta con la API de Drive.
+// Necesita el "ID de cliente" de Google en google-config.js (ver instrucciones ahí).
+
 const SERVER = 'Google Drive';
 const FOLDER = 'application/vnd.google-apps.folder';
-const MAX_X4_BYTES = 9 * 1024 * 1024;   // más que esto viaja lento por el conector
+let MAX_X4_BYTES = 9 * 1024 * 1024;   // por el conector de Claude; directo con Google no hay límite práctico
 let mcp = null;
+let mode = null;          // 'claude' | 'google'
+let gToken = null, gTokenExp = 0, gClient = null;
+const SCOPE = 'https://www.googleapis.com/auth/drive.readonly';
+
+const gcfg = () => window.MJV_GOOGLE || {};
+export const googleConfigured = () => !!(gcfg().clientId && /apps\.googleusercontent\.com$/.test(gcfg().clientId));
 
 export async function initDrive() {
-    if (!window.claude || typeof window.claude.use !== 'function') return null;
-    try { mcp = await window.claude.use('mcp'); } catch (e) { mcp = null; }
-    return mcp;
+    if (window.claude && typeof window.claude.use === 'function') {
+        try { mcp = await window.claude.use('mcp'); } catch (e) { mcp = null; }
+        if (mcp) { mode = 'claude'; return true; }
+    }
+    if (googleConfigured()) { mode = 'google'; MAX_X4_BYTES = 40 * 1024 * 1024; return true; }
+    return null;
 }
-export const driveReady = () => !!mcp;
+export const driveReady = () => !!mode;
+export const driveMode = () => mode;
+export const googleSignedIn = () => !!gToken && Date.now() < gTokenExp;
+
+function loadGsi() {
+    if (window.google && google.accounts && google.accounts.oauth2) return Promise.resolve();
+    return new Promise((res, rej) => {
+        const s = document.createElement('script');
+        s.src = 'https://accounts.google.com/gsi/client';
+        s.async = true;
+        s.onload = () => res();
+        s.onerror = () => rej({ code: 'gsi_failed' });
+        document.head.appendChild(s);
+    });
+}
+
+// Ventana de Google para entrar (tiene que llamarse desde un clic)
+export async function googleSignIn() {
+    await loadGsi();
+    return new Promise((resolve, reject) => {
+        gClient = google.accounts.oauth2.initTokenClient({
+            client_id: gcfg().clientId,
+            scope: SCOPE,
+            callback: (r) => {
+                if (r && r.access_token) {
+                    gToken = r.access_token;
+                    gTokenExp = Date.now() + ((+r.expires_in || 3600) - 60) * 1000;
+                    resolve(true);
+                } else reject({ code: 'google_denied', detail: r && r.error });
+            },
+            error_callback: (e) => reject({ code: e && e.type === 'popup_closed' ? 'google_closed' : 'google_denied' })
+        });
+        gClient.requestAccessToken({ prompt: googleSignedIn() ? '' : 'select_account' });
+    });
+}
+
+async function gfetch(url, asBlob) {
+    if (!googleSignedIn()) throw { code: 'google_signin' };
+    const r = await fetch(url, { headers: { Authorization: 'Bearer ' + gToken } });
+    if (r.status === 401) { gToken = null; throw { code: 'google_signin' }; }
+    if (r.status === 403 || r.status === 404) throw { code: 'google_forbidden' };
+    if (!r.ok) throw { code: 'server_unavailable' };
+    return asBlob ? r.blob() : r.json();
+}
+const GAPI = 'https://www.googleapis.com/drive/v3/files';
+const G_FIELDS = 'nextPageToken,files(id,name,mimeType,size,modifiedTime)';
+async function gList(query, max = 1000) {
+    const out = [];
+    let pageToken = '';
+    for (let i = 0; i < 20 && out.length < max; i++) {
+        const u = `${GAPI}?q=${encodeURIComponent(query)}&fields=${encodeURIComponent(G_FIELDS)}&pageSize=1000` +
+                  `&supportsAllDrives=true&includeItemsFromAllDrives=true&orderBy=modifiedTime desc${pageToken ? '&pageToken=' + pageToken : ''}`;
+        const p = await gfetch(u);
+        (p.files || []).forEach(f => out.push({ id: f.id, title: f.name, mimeType: f.mimeType, fileSize: f.size, modifiedTime: f.modifiedTime }));
+        pageToken = p.nextPageToken;
+        if (!pageToken) break;
+    }
+    return out;
+}
 
 export function driveErrorText(e) {
     const c = e && e.code;
+    if (c === 'google_signin') return 'Entrá con tu cuenta de Google para ver tu Drive.';
+    if (c === 'google_closed') return 'Se cerró la ventana de Google antes de terminar.';
+    if (c === 'google_denied') return 'Google no dio acceso. Revisá que tu cuenta esté en "Usuarios de prueba" del proyecto de Google.';
+    if (c === 'google_forbidden') return 'Tu cuenta de Google no tiene acceso a esa carpeta (pedí que te la compartan).';
+    if (c === 'gsi_failed') return 'No se pudo abrir el inicio de sesión de Google (revisá la conexión o un bloqueador).';
     if (c === 'server_not_connected') return 'Conectá Google Drive en Claude: Configuración → Conectores.';
     if (c === 'needs_reauth') return 'Volvé a conectar Google Drive en Claude: Configuración → Conectores.';
     if (c === 'not_in_manifest' || c === 'approval_required') return 'Hace falta permitir el acceso a Google Drive para esta página.';
@@ -65,11 +141,14 @@ async function searchAll(query, max = 400) {
 // Carpetas del proyecto (por defecto, las que arma el bridge: "MJV 360 Studio - …")
 export async function findProjectFolders(text) {
     const t = (text || '').trim() || 'MJV 360 Studio';
+    if (mode === 'google') return gList(`mimeType = '${FOLDER}' and name contains '${q(t)}' and trashed = false`, 60);
     const list = await searchAll(`mimeType = '${FOLDER}' and title contains '${q(t)}'`, 60);
     return list.sort((a, b) => String(b.modifiedTime).localeCompare(String(a.modifiedTime)));
 }
 
-const children = (id) => searchAll(`parentId = '${q(id)}'`);
+const children = (id) => mode === 'google'
+    ? gList(`'${q(id)}' in parents and trashed = false`)
+    : searchAll(`parentId = '${q(id)}'`);
 
 function b64ToBlob(b64, type) {
     const bin = atob(b64);
@@ -79,6 +158,10 @@ function b64ToBlob(b64, type) {
 }
 
 async function download(f) {
+    if (mode === 'google') {
+        const blob = await gfetch(`${GAPI}/${encodeURIComponent(f.id)}?alt=media&supportsAllDrives=true`, true);
+        return new File([blob], f.title, { type: f.mimeType || blob.type || '', lastModified: Date.parse(f.modifiedTime) || Date.now() });
+    }
     const p = await call('download_file_content', { fileId: f.id });
     if (!p || !p.content) throw { code: 'upstream_error' };
     const file = new File([b64ToBlob(p.content, f.mimeType || p.mimeType)], f.title, {

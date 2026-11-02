@@ -410,11 +410,29 @@ function showEmptyState(show) {
     if (el) return;
     el = document.createElement('div');
     el.id = 'emptyState';
-    el.innerHTML = readOnly
-        ? `<h2>Proyecto vacío</h2><p>Todavía no hay escenas en este proyecto.</p>`
-        : `<h2>Empezá un recorrido</h2><p>Abrí la lista de escenas y usá <b>Añadir escenas</b> para cargar la carpeta <code>project/</code> o una imagen 360°, o cargá un proyecto ZIP.</p>`;
+    if (readOnly) {
+        el.innerHTML = `<h2>Proyecto vacío</h2><p>Todavía no hay escenas en este proyecto.</p>`;
+    } else {
+        el.innerHTML = `<h2>Empezá un recorrido</h2>
+            <p>Elegí la carpeta <b>MJV 360 Studio - …</b> que arma el bridge: las escenas se cargan solas.</p>
+            <div class="empty-actions">
+                ${Drive.driveReady() ? '<button type="button" class="pm-btn pm-btn--primary" data-open="drive">☁️ Cargar desde Google Drive</button>' : ''}
+                <button type="button" class="pm-btn ${Drive.driveReady() ? 'pm-btn--secondary' : 'pm-btn--primary'}" data-open="project">📁 Elegir carpeta en esta compu</button>
+            </div>
+            ${Drive.driveReady() ? '' : (Cloud.isCloud() ? '<p class="empty-note">Google Drive no está conectado en Claude (Configuración → Conectores).</p>' : '<p class="empty-note">Google Drive todavía no está configurado en esta página.</p>')}`;
+        el.querySelectorAll('[data-open]').forEach(b => b.addEventListener('click', () => openAddScenesAt(b.dataset.open)));
+    }
     document.body.appendChild(el);
 }
+
+// Abre "Añadir escenas" directo en Drive o en Carpeta (desde el inicio o el botón ☁️ de la barra)
+function openAddScenesAt(mode) {
+    openAddScenesModal();
+    setAddScenesMode(mode);
+    // el selector de carpeta tiene que abrirse en el mismo clic (si no, el navegador lo bloquea)
+    if (mode === 'project') document.getElementById('asProjectInput')?.click();
+}
+window.openAddScenesAt = openAddScenesAt;
 
 // Carga la escena. Devuelve una promesa que se resuelve cuando la imagen está en pantalla.
 function loadScene(index, opts = {}) {
@@ -1062,8 +1080,6 @@ function openAddScenesModal() {
     document.getElementById('asSinglePreview').style.display = 'none';
     document.getElementById('asSinglePreview').innerHTML = '';
     document.getElementById('asEquirectPreview').style.display = 'none';
-    document.getElementById('asSingleName').value = '';
-    document.getElementById('asEquirectName').value = '';
     document.getElementById('asScenesProgress').style.display = 'none';
 }
 function closeAddScenesModal() {
@@ -1308,22 +1324,50 @@ async function openDriveMode() {
         list.innerHTML = '';
         note.textContent = Cloud.isCloud()
             ? 'Google Drive no está disponible en esta vista. Conectalo en Claude: Configuración → Conectores.'
-            : 'La carga desde Google Drive funciona en el link de Claude del Studio. Acá usá "Carpeta de proyecto".';
+            : 'Falta configurar Google Drive en esta página (archivo google-config.js con el ID de cliente de Google).';
         return;
     }
-    note.textContent = 'Se usa tu Google Drive conectado en Claude. Solo se bajan los renders y datos de cada espacio.';
+    note.textContent = Drive.driveMode() === 'google'
+        ? 'Entrás con tu cuenta de Google. Solo se leen los renders y datos de cada espacio; no se modifica nada en tu Drive.'
+        : 'Se usa tu Google Drive conectado en Claude. Solo se bajan los renders y datos de cada espacio.';
+    if (Drive.driveMode() === 'google' && !Drive.googleSignedIn()) { showGoogleSignIn(); return; }
     const df = projectData.driveFolder;
     if (df && df.id) {
         last.style.display = '';
         last.innerHTML = '';
         const sp = document.createElement('span'); sp.textContent = `☁️ ${df.title}`;
         const b = document.createElement('div'); b.className = 'pm-btn pm-btn--primary'; b.textContent = 'Actualizar desde Drive';
-        b.addEventListener('click', () => importFromDrive(df));
+        b.addEventListener('click', async () => {
+            if (Drive.driveMode() === 'google' && !Drive.googleSignedIn()) {
+                try { await Drive.googleSignIn(); } catch (e) { document.getElementById('asDriveNote').textContent = Drive.driveErrorText(e); return; }
+            }
+            importFromDrive(df);
+        });
         last.append(sp, b);
     } else last.style.display = 'none';
     const input = document.getElementById('asDriveSearch');
     if (!list.dataset.loaded) { list.dataset.loaded = '1'; searchDrive(input.value); }
 }
+function showGoogleSignIn(msg) {
+    const list = document.getElementById('asDriveList');
+    list.innerHTML = '';
+    const b = document.createElement('div');
+    b.className = 'pm-btn pm-btn--primary';
+    b.style.textAlign = 'center';
+    b.textContent = 'Entrar con Google';
+    b.addEventListener('click', async () => {
+        try {
+            await Drive.googleSignIn();
+            delete list.dataset.loaded;
+            openDriveMode();
+        } catch (e) {
+            document.getElementById('asDriveNote').textContent = Drive.driveErrorText(e);
+        }
+    });
+    list.appendChild(b);
+    if (msg) document.getElementById('asDriveNote').textContent = msg;
+}
+
 async function searchDrive(text) {
     const list = document.getElementById('asDriveList');
     list.innerHTML = '<p class="pm-hint" style="text-align:center">Buscando en tu Drive…</p>';
@@ -1343,6 +1387,7 @@ async function searchDrive(text) {
     } catch (e) {
         console.error(e);
         list.innerHTML = '';
+        if (e && e.code === 'google_signin') return showGoogleSignIn(Drive.driveErrorText(e));
         document.getElementById('asDriveNote').textContent = Drive.driveErrorText(e);
     }
 }
@@ -1405,53 +1450,80 @@ function uploadErrorText(err) {
     return 'Error al procesar las imágenes';
 }
 
-// Procesar carpeta de una sola escena
-function processSingleFolder(fileList) {
-    const files = Array.from(fileList).filter(f => f.type.startsWith('image/'));
-    const folderName = files.length
-        ? (files[0].webkitRelativePath || files[0].name).split('/')[0]
-        : 'escena';
-    const faces = parseCubemapFolder(files);
-    const faceCount = Object.keys(faces).length;
+// ---------- Escenas sueltas: una o varias imágenes (o la carpeta de un espacio) ----------
+const isImgFile = f => /^image\//.test(f.type || '') || /\.(jpe?g|png|webp)$/i.test(f.name || '');
+const sceneKey = n => cleanSceneName(n).toLowerCase();
 
-    detectedScenes = [{
-        id: folderName,
-        name: document.getElementById('asSingleName').value.trim() || folderName.replace(/_/g, ' '),
-        faces,
-        faceCount,
-        type: 'cubemap'
-    }];
-
-    document.getElementById('asSingleName').value = detectedScenes[0].name;
-    renderScenePreviewCards('asSinglePreview');
+async function processImageFiles(fileList, containerId) {
+    const all = Array.from(fileList || []);
+    const imgs = all.filter(isImgFile);
+    detectedScenes = [];
+    if (!imgs.length) {
+        renderScenePreviewCards(containerId);
+        showMessage('Elegí imágenes JPG, PNG o WEBP', 3000);
+        return;
+    }
+    // Carpeta(s) de espacio del bridge arrastradas: se leen igual que en "Carpeta de proyecto"
+    if (all.some(f => (f.webkitRelativePath || '').includes('/'))) {
+        const bridge = await detectBridgePoints(all);
+        if (bridge.length) {
+            detectedScenes = bridge;
+            renderScenePreviewCards(containerId);
+            return;
+        }
+    }
+    // Las 6 caras de un cubemap
+    const isBridgeName = f => BRIDGE_REF.test(f.name) || BRIDGE_RENDER.test(f.name) || BRIDGE_RENDER_X4.test(f.name);
+    const faces = parseCubemapFolder(imgs.filter(f => detectFace(f.name)));
+    if (Object.keys(faces).length >= 6 && !imgs.some(isBridgeName)) {
+        const folder = ((imgs[0].webkitRelativePath || '').split('/').slice(-2, -1)[0]) || 'Escena';
+        detectedScenes = [{ id: folder, name: cleanSceneName(folder), faces, faceCount: 6, type: 'cubemap' }];
+        renderScenePreviewCards(containerId);
+        return;
+    }
+    // Cada imagen es una escena; si hay varias del mismo espacio (referencia + render), gana el render
+    let info = {};
+    const meta = all.find(f => f.name === '_espacio.json');
+    if (meta) { try { info = JSON.parse(await meta.text()); } catch (e) {} }
+    const groups = new Map();
+    for (const f of imgs) {
+        const k = sceneKey(f.name);
+        if (!groups.has(k)) groups.set(k, []);
+        groups.get(k).push(f);
+    }
+    for (const list of groups.values()) {
+        const ref = list.find(f => BRIDGE_REF.test(f.name));
+        const render = list.find(f => BRIDGE_RENDER_X4.test(f.name)) || list.find(f => BRIDGE_RENDER.test(f.name)) ||
+            list.filter(f => f !== ref).sort((a, b) => b.lastModified - a.lastModified)[0] || null;
+        const file = render || ref;
+        const name = cleanSceneName(file.name);
+        const fromBridge = list.some(isBridgeName);
+        // Si ya hay una escena con ese nombre, se actualiza su imagen en lugar de duplicarla
+        const existing = projectData.scenes.find(x => x.id === name.replace(/[^\w\-. ]+/g, '_')) ||
+                         projectData.scenes.find(x => sceneKey(x.name || '') === sceneKey(name));
+        const useMeta = groups.size === 1 && meta;
+        detectedScenes.push({
+            id: existing ? existing.id : (fromBridge ? name.replace(/[^\w\-. ]+/g, '_') : name),
+            name: useMeta && info.nombre ? cleanSceneName(info.nombre) : (existing ? existing.name : name),
+            equirectFile: file,
+            hasRender: fromBridge ? !!(render && !BRIDGE_REF.test(render.name)) : true,
+            isX4: !!(render && BRIDGE_RENDER_X4.test(render.name)),
+            description: useMeta ? (info.descripcion || '').trim() : '',
+            iaPrompt: useMeta ? (info.indicaciones_ia || '').trim() : '',
+            yaw: useMeta && typeof info.yaw_inicial === 'number' ? -info.yaw_inicial : 0,
+            fovDeg: useMeta ? (info.fov || 0) : 0,
+            fromBridge,
+            updatesExisting: !!existing,
+            faceCount: 1,
+            type: 'equirect'
+        });
+    }
+    // mismo orden que la lista de escenas del proyecto
+    const pos = s => { const i = projectData.scenes.findIndex(x => x.id === s.id); return i < 0 ? 9999 : i; };
+    detectedScenes.sort((a, b) => pos(a) - pos(b) || a.name.localeCompare(b.name, undefined, { numeric: true }));
+    renderScenePreviewCards(containerId);
 }
-
-// Procesar imagen equirectangular
-function processEquirectFile(file) {
-    const baseName = cleanSceneName(file.name);
-    const customName = document.getElementById('asEquirectName').value.trim() || baseName;
-    detectedScenes = [{
-        id: baseName,
-        name: customName,
-        equirectFile: file,
-        faceCount: 1,
-        type: 'equirect'
-    }];
-    document.getElementById('asEquirectName').value = customName;
-
-    // Preview
-    const url = URL.createObjectURL(file);
-    const img = document.getElementById('asEquirectImg');
-    const info = document.getElementById('asEquirectInfo');
-    img.src = url;
-    img.onload = () => {
-        const ratio = img.naturalWidth / img.naturalHeight;
-        const ok = Math.abs(ratio - 2) < 0.15;
-        info.textContent = `${img.naturalWidth}×${img.naturalHeight}px · ratio ${ratio.toFixed(2)}:1 ${ok ? '✓' : '⚠ se esperaba 2:1'}`;
-        info.style.color = ok ? '#88ffaa' : '#ffcc66';
-    };
-    document.getElementById('asEquirectPreview').style.display = '';
-}
+window.processImageFiles = processImageFiles;
 
 // Renderiza las tarjetas de preview
 function renderScenePreviewCards(containerId) {
@@ -1511,10 +1583,10 @@ function renderScenePreviewCards(containerId) {
                 ? `✓ 6 caras detectadas`
                 : `⚠ Faltan: ${missing.join(', ')}`;
         } else {
-            const exists = sc.fromBridge && projectData.scenes.some(x => x.id === sc.id);
+            const exists = sc.updatesExisting || (sc.fromBridge && projectData.scenes.some(x => x.id === sc.id));
             meta.textContent = sc.fromBridge
                 ? (sc.hasRender ? (sc.isX4 ? '✓ Render IA mejorado x4' : '✓ Render IA') : '⚠ Sin render IA todavía · se usa la referencia de SketchUp') + (exists ? ' · actualiza la escena existente' : '')
-                : '✓ Equirectangular · se convertirá a cubemap';
+                : '✓ Imagen 360°' + (exists ? ' · reemplaza la imagen de la escena existente' : ' · escena nueva');
             if (sc.fromBridge && !sc.hasRender) meta.className = 'as-scene-meta warn';
         }
 
@@ -1581,7 +1653,7 @@ async function confirmAddScenes() {
 
         // Un espacio del bridge que ya está en el proyecto: solo se actualiza su imagen
         // (se conservan links, directrices, posición en el plano y comentarios)
-        const existing = sc.fromBridge ? projectData.scenes.find(x => x.id === sc.id) : null;
+        const existing = (sc.fromBridge || sc.updatesExisting) ? projectData.scenes.find(x => x.id === sc.id) : null;
         const sceneId = existing ? existing.id : getUniqueId(sc.id);
         const base = `project/${sceneId}/1/`;
 
@@ -1603,7 +1675,7 @@ async function confirmAddScenes() {
             }
             if (existing) {
                 updated++;
-                existing.renderIA = !!sc.hasRender;
+                if (sc.fromBridge) existing.renderIA = !!sc.hasRender;
                 if (sc.iaPrompt) existing.iaPrompt = sc.iaPrompt;
                 // la descripción del bridge solo completa: lo que escribiste en el Studio se respeta
                 if (sc.description && !(existing.comment || '').trim()) existing.comment = sc.description;
@@ -1690,35 +1762,25 @@ function initAddScenesModal() {
     document.getElementById('asDriveSearchBtn')?.addEventListener('click', () => searchDrive(document.getElementById('asDriveSearch').value));
     document.getElementById('asDriveSearch')?.addEventListener('keydown', (e) => { if (e.key === 'Enter') searchDrive(e.target.value); });
 
-    // Modo escena individual
-    const singleDZ = document.getElementById('asSingleDZ');
-    const singleInput = document.getElementById('asSingleInput');
-    singleDZ?.addEventListener('click', () => singleInput.click());
-    singleInput?.addEventListener('change', (e) => { if (e.target.files.length) processSingleFolder(e.target.files); });
-    singleDZ?.addEventListener('dragover', (e) => { e.preventDefault(); singleDZ.classList.add('drag-over'); });
-    singleDZ?.addEventListener('dragleave', () => singleDZ.classList.remove('drag-over'));
-    singleDZ?.addEventListener('drop', (e) => {
-        e.preventDefault(); singleDZ.classList.remove('drag-over');
-        if (e.dataTransfer.files.length) processSingleFolder(e.dataTransfer.files);
-    });
-    document.getElementById('asSingleName')?.addEventListener('input', (e) => {
-        if (detectedScenes[0]) detectedScenes[0].name = e.target.value;
-    });
-
-    // Modo equirectangular
-    const equirectDZ = document.getElementById('asEquirectDZ');
-    const equirectInput = document.getElementById('asEquirectInput');
-    equirectDZ?.addEventListener('click', () => equirectInput.click());
-    equirectInput?.addEventListener('change', (e) => { if (e.target.files[0]) processEquirectFile(e.target.files[0]); });
-    equirectDZ?.addEventListener('dragover', (e) => { e.preventDefault(); equirectDZ.classList.add('drag-over'); });
-    equirectDZ?.addEventListener('dragleave', () => equirectDZ.classList.remove('drag-over'));
-    equirectDZ?.addEventListener('drop', (e) => {
-        e.preventDefault(); equirectDZ.classList.remove('drag-over');
-        const f = e.dataTransfer.files[0];
-        if (f && f.type.startsWith('image/')) processEquirectFile(f);
-    });
-    document.getElementById('asEquirectName')?.addEventListener('input', (e) => {
-        if (detectedScenes[0]) { detectedScenes[0].name = e.target.value; detectedScenes[0].id = e.target.value; }
+    // Escena suelta / imágenes 360°: elegir imágenes (o arrastrar imágenes o la carpeta del espacio)
+    [['asSingleDZ', 'asSingleInput', 'asSinglePreview'], ['asEquirectDZ', 'asEquirectInput', 'asEquirectPreview']].forEach(([dzId, inId, prevId]) => {
+        const dz = document.getElementById(dzId);
+        const input = document.getElementById(inId);
+        if (!dz || !input) return;
+        const run = (files) => processImageFiles(files, prevId).catch(err => { console.error(err); showMessage('No se pudieron leer las imágenes', 3000); });
+        dz.addEventListener('click', () => input.click());
+        input.addEventListener('change', (e) => {
+            const files = Array.from(e.target.files || []);
+            e.target.value = '';   // para poder elegir de nuevo la misma imagen
+            if (files.length) run(files);
+        });
+        dz.addEventListener('dragover', (e) => { e.preventDefault(); dz.classList.add('drag-over'); });
+        dz.addEventListener('dragleave', () => dz.classList.remove('drag-over'));
+        dz.addEventListener('drop', async (e) => {
+            e.preventDefault(); dz.classList.remove('drag-over');
+            try { const files = await filesFromDrop(e.dataTransfer); if (files.length) run(files); }
+            catch (err) { console.error(err); showMessage('No se pudo leer lo que arrastraste', 3000); }
+        });
     });
 
     // Confirmar
@@ -2695,7 +2757,17 @@ function setReadOnly(on) {
 // ==========================================
 async function init() {
     const cloud = await Cloud.initCloud();
-    if (cloud) await Drive.initDrive();
+    await Drive.initDrive();
+    if (Drive.driveReady()) {
+        const bar = document.getElementById('button-bar');
+        const btn = document.createElement('div');
+        btn.id = 'driveBtn';
+        btn.className = 'bar-btn';
+        btn.title = 'Cargar o actualizar desde Google Drive';
+        btn.innerHTML = '<span style="font-size:22px;line-height:1">☁️</span>';
+        btn.addEventListener('click', () => { if (!readOnly) openAddScenesAt('drive'); });
+        bar?.insertBefore(btn, bar.firstChild);
+    }
     const params = new URLSearchParams(location.search);
 
     if (cloud) {

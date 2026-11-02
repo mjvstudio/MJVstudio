@@ -271,7 +271,7 @@
                     </div>
                     <div class="pm-type-btn" data-rmode="equirect">
                         <span class="pm-type-icon">🌐</span>
-                        <span>Equirectangular</span>
+                        <span>Imágenes 360°</span>
                     </div>
                 </div>
 
@@ -330,7 +330,7 @@
                     </div>
                     <div class="pm-type-btn" data-mode="equirect">
                         <span class="pm-type-icon">🌐</span>
-                        <span>Equirectangular</span>
+                        <span>Imágenes 360°</span>
                     </div>
                     <div class="pm-type-btn" data-mode="drive" id="asDriveTab">
                         <span class="pm-type-icon">☁️</span>
@@ -362,35 +362,24 @@
                     <div id="asProjectPreview" style="display:none"></div>
                 </div>
 
-                <!-- MODO: Una carpeta de escena -->
+                <!-- MODO: Una escena (imágenes sueltas) -->
                 <div id="asMode-single" style="display:none">
-                    <div class="pm-field">
-                        <label class="pm-label">Nombre de la escena</label>
-                        <input type="text" id="asSingleName" class="pm-input" placeholder="Se detecta del nombre de la carpeta">
-                    </div>
                     <div id="asSingleDZ" class="pm-dropzone">
-                        <div class="pm-dropzone-icon">🗂</div>
-                        <p class="pm-dropzone-text">Arrastrá la <strong>carpeta de la escena</strong><br>o hacé click para seleccionarla<br><small style="opacity:.6">Debe contener las 6 imágenes del cubemap</small></p>
-                        <input type="file" id="asSingleInput" webkitdirectory multiple style="display:none">
+                        <div class="pm-dropzone-icon">🖼</div>
+                        <p class="pm-dropzone-text">Hacé click y elegí la <strong>imagen 360°</strong> de la escena<br>(el render <em>"… - 5 RENDER IA"</em> o cualquier panorama 2:1)<br><small style="opacity:.6">Podés elegir varias a la vez · también sirven las 6 caras de un cubemap · o arrastrá la carpeta del espacio</small></p>
+                        <input type="file" id="asSingleInput" accept="image/*,.json" multiple style="display:none">
                     </div>
                     <div id="asSinglePreview" style="display:none"></div>
                 </div>
 
-                <!-- MODO: Equirectangular -->
+                <!-- MODO: Imágenes 360° (varias) -->
                 <div id="asMode-equirect" style="display:none">
-                    <div class="pm-field">
-                        <label class="pm-label">Nombre de la escena</label>
-                        <input type="text" id="asEquirectName" class="pm-input" placeholder="Se detecta del nombre del archivo">
-                    </div>
                     <div id="asEquirectDZ" class="pm-dropzone">
                         <div class="pm-dropzone-icon">🌐</div>
-                        <p class="pm-dropzone-text">Arrastrá la imagen <strong>equirectangular</strong><br>o hacé click para seleccionarla<br><small style="opacity:.6">Proporción 2:1 recomendada · JPG/PNG/WEBP</small></p>
-                        <input type="file" id="asEquirectInput" accept="image/*" style="display:none">
+                        <p class="pm-dropzone-text">Elegí <strong>una o varias imágenes 360°</strong><br>Cada imagen es una escena<br><small style="opacity:.6">Si se llama como un espacio del proyecto ("Cocina - 5 RENDER IA.png"), actualiza esa escena</small></p>
+                        <input type="file" id="asEquirectInput" accept="image/*" multiple style="display:none">
                     </div>
-                    <div id="asEquirectPreview" style="display:none;margin-top:12px;text-align:center">
-                        <img id="asEquirectImg" style="max-width:100%;border-radius:8px;max-height:130px;object-fit:cover">
-                        <p id="asEquirectInfo" class="pm-hint"></p>
-                    </div>
+                    <div id="asEquirectPreview" style="display:none;margin-top:12px"></div>
                 </div>
 
                 <!-- Progress -->
@@ -583,6 +572,7 @@
         </div>
     </div>
 
+    <script src="google-config.js"></script>
     <script src="data.js"></script>
     <script type="importmap">
         {
