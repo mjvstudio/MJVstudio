@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Casa DA — MJV Studio</title>
+    <!-- PÁGINA PRIVADA: se comparte solo con el link. No aparece en Google (noindex) ni en el mapa del sitio. -->
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="description" content="Casa DA — reforma y ampliación: modelo 3D, relevamiento, planos, esquemas y recorrido virtual 360°. MJV Studio, arquitectura y diseño en Encarnación, Paraguay." data-en-content="Casa DA — renovation and extension: 3D model, survey, plans, diagrams and 360° virtual tour. MJV Studio, architecture and design in Encarnación, Paraguay." data-fr-content="Casa DA — rénovation et agrandissement : modèle 3D, relevé, plans, schémas et visite virtuelle à 360°. MJV Studio, architecture et design à Encarnación, Paraguay." data-pt-content="Casa DA — reforma e ampliação: modelo 3D, levantamento, plantas, esquemas e passeio virtual 360°. MJV Studio, arquitetura e design em Encarnación, Paraguai.">
+    <link rel="canonical" href="https://mjvstudio.com/private/casa_da/">
+    <!-- VISTA PREVIA AL COMPARTIR (WhatsApp, Instagram, etc.): imagen del estudio + título -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="MJV Studio">
+    <meta property="og:locale" content="es_PY">
+    <meta property="og:title" content="Casa DA — MJV Studio">
+    <meta property="og:description" content="Casa DA — reforma y ampliación: modelo 3D, relevamiento, planos, esquemas y recorrido virtual 360°. MJV Studio, arquitectura y diseño en Encarnación, Paraguay.">
+    <meta property="og:url" content="https://mjvstudio.com/private/casa_da/">
+    <meta property="og:image" content="https://mjvstudio.com/assets/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="MJV Studio — arquitectura y diseño">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Casa DA — MJV Studio">
+    <meta name="twitter:description" content="Casa DA — reforma y ampliación: modelo 3D, relevamiento, planos, esquemas y recorrido virtual 360°. MJV Studio, arquitectura y diseño en Encarnación, Paraguay.">
+    <meta name="twitter:image" content="https://mjvstudio.com/assets/og-image.jpg">
+    <link rel="icon" type="image/png" href="../../assets/logo_2.png">
+    <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
+    <link rel="stylesheet" href="../private.css">
+    <link rel="stylesheet" href="../secciones.css">
+    <link rel="stylesheet" href="../../dark-mode.css">
+    <link rel="stylesheet" href="../../swiper-bundle.min.css"/>
+
+    <script src="../../theme.js"></script>
+    <script src="../../sound.js" defer></script>
+    <script src="../../dropdown.js" defer></script>
+    <script src="../../lang.js" defer></script>
+    <script src="../../analytics.js" defer></script>
+    <script src="../../model-loader.js" defer></script>
+    <!-- three.js va dentro del sitio (private/vendor/three), no depende de otra página -->
+    <script type="importmap">{ "imports": { "three": "../vendor/three/three.module.min.js", "three/addons/": "../vendor/three/addons/" } }</script>
+</head>
+<body data-versions="1" data-loop="true">
+    <!-- SECCIONES (en este orden): 1) modelo 3D  2) relevamiento fotográfico  3) planos  4) esquemas  5) recorrido 360.
+         El carrusel es infinito (data-loop="true"). Para cambiar el orden, mover los bloques <div class="swiper-slide"> de abajo.
+         El subtítulo debajo de "Casa DA" es el data-title de la sección que se está viendo (con data-title-en, -fr, -pt para los otros idiomas).
+         Carpetas: modelo/casa_da.glb · images/01.webp, 02.webp... · planos/ · esquemas/ · 360/ -->
+    <div class="title-header-container pg-has-sub">
+        <div class="project-title lang-dropdown" id="pg-version-wrap">
+            <h1><button type="button" class="pg-title-btn" id="pg-title-btn" aria-haspopup="true" aria-expanded="false"><span class="pg-title-text">Casa DA</span><span class="pg-chevron" aria-hidden="true"></span></button></h1>
+            <div class="lang-dropdown-content pg-version-menu" id="pg-version-menu"></div>
+        </div>
+        <p class="pg-subtitle" id="pg-subtitle" aria-live="polite"></p>
+    </div>
+
+    <!-- Logo: lleva a la página principal. La flecha solo aparece con una foto abierta y la cierra -->
+    <a class="pg-home" id="pg-home" href="../../index.html" title="Volver a la página principal" aria-label="Volver a la página principal"><span class="pg-home-logo" aria-hidden="true"></span></a>
+    <a href="#" class="back-to-projects-btn" id="pg-close" title="Cerrar foto">
+        <img src="../../assets/back.svg" alt="Volver">
+    </a>
+
+    <!-- ⚠️ Este bloque de 3 botones se repite igual en cada página de proyecto -->
+    <div class="utility-buttons">
+        <button class="theme-toggle-icon-btn js-theme-toggle" type="button" title="Cambiar a modo oscuro" aria-label="Cambiar a modo oscuro"><span class="pref-icon icon-night" aria-hidden="true"></span><span class="pref-icon icon-light" aria-hidden="true"></span></button>
+        <button class="theme-toggle-icon-btn js-sound-toggle" type="button" title="Silenciar sonido" aria-label="Silenciar sonido"><span class="pref-icon icon-volume-on" aria-hidden="true"></span><span class="pref-icon icon-volume-off" aria-hidden="true"></span></button>
+        <div class="lang-dropdown">
+            <button class="theme-toggle-icon-btn js-lang-toggle" type="button" title="Idioma" aria-label="Idioma" aria-haspopup="true" aria-expanded="false"><span class="pref-icon icon-language" aria-hidden="true"></span></button>
+            <div class="lang-dropdown-content" id="lang-dropdown">
+                <a href="#" data-lang-option="es" lang="es" style="--i: 3;">Español</a>
+                <a href="#" data-lang-option="en" lang="en" style="--i: 2;">English</a>
+                <a href="#" data-lang-option="fr" lang="fr" style="--i: 1;">Français</a>
+                <a href="#" data-lang-option="pt" lang="pt" style="--i: 0;">Português</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOTÓN DE CONTACTO -->
+    <div class="contact-dropdown">
+        <img id="contact-button" src="../../assets/contact.svg" alt="Contacto" class="contact-icon">
+        <div class="contact-dropdown-content" id="contact-dropdown">
+            <a href="mailto:mjvarquitectura.py@gmail.com?subject=Casa%20DA" style="--i: 0;"><img src="../../assets/email.svg" alt="Email"></a>
+            <a href="https://wa.me/595985107042?text=Hola%2C%20quisiera%20consultar%20por%20Casa%20DA" target="_blank" rel="noopener" style="--i: 1;"><img src="../../assets/whatsapp.svg" alt="WhatsApp"></a>
+            <a href="https://www.instagram.com/mjvstudio.py" target="_blank" rel="noopener" style="--i: 2;"><img src="../../assets/instagram.svg" alt="Instagram"></a>
+        </div>
+    </div>
+
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+            <!-- Sección 1: modelo 3D (modelo/casa_da.glb). Se gira, se acerca y tiene el botón de corte para ver la distribución.
+                 La etiqueta <model-viewer> se usa solo para que model-loader.js le ponga el cargador del estudio: lo dibuja secciones-3d.js -->
+            <div class="swiper-slide" data-title="Modelado 3D" data-title-en="3D model" data-title-fr="Modèle 3D" data-title-pt="Modelo 3D">
+                <main>
+                    <div class="pg-model modelo-3d-wrapper swiper-no-swiping" id="pg-model-wrap">
+                        <model-viewer id="pg-model" data-src="modelo/casa_da.glb" data-cut="1.2" aria-label="Modelo 3D de Casa DA"></model-viewer>
+                        <div class="pg-model-bar">
+                            <button type="button" class="pg-chip" id="pg-cut" aria-pressed="false"><span class="pg-chip-ic pg-ic-cut" aria-hidden="true"></span><span data-en="Section cut" data-fr="Coupe" data-pt="Corte">Corte</span></button>
+                            <label class="pg-cut-range" id="pg-cut-range" hidden>
+                                <span class="pg-sr" data-en="Cut height" data-fr="Hauteur de coupe" data-pt="Altura do corte">Altura del corte</span>
+                                <input type="range" id="pg-cut-h" min="0" max="100" step="0.5" value="40">
+                            </label>
+                            <button type="button" class="pg-chip pg-chip-icon" id="pg-reset" title="Vista inicial" aria-label="Vista inicial"><span class="pg-chip-ic pg-ic-reset" aria-hidden="true"></span></button>
+                        </div>
+                    </div>
+                    <p class="pg-empty" id="pg-model-empty" hidden data-en="The 3D model will be available very soon." data-fr="Le modèle 3D sera disponible très bientôt." data-pt="O modelo 3D estará disponível em breve.">El modelo 3D estará disponible muy pronto.</p>
+                </main>
+            </div>
+
+            <!-- Sección 2: relevamiento fotográfico (images/01.webp, 02.webp, 03.webp... se detectan solas) -->
+            <div class="swiper-slide" data-title="Relevamiento fotográfico" data-title-en="Photographic survey" data-title-fr="Relevé photographique" data-title-pt="Levantamento fotográfico">
+                <main>
+                    <div class="pg-gallery" id="pg-gallery"></div>
+                    <p class="pg-empty" id="pg-empty" hidden data-en="The photos will be available very soon." data-fr="Les photos seront disponibles très bientôt." data-pt="As fotos estarão disponíveis em breve.">Las fotos estarán disponibles muy pronto.</p>
+                    <div class="gallery-viewer swiper-no-swiping" id="pg-viewer" role="dialog" aria-hidden="true" tabindex="-1">
+                        <div class="gv-stage">
+                            <img class="gv-img" alt="" draggable="false">
+                            <img class="gv-img" alt="" draggable="false">
+                        </div>
+                        <button type="button" class="gv-btn gv-prev"><span class="gv-icon" aria-hidden="true"></span></button>
+                        <button type="button" class="gv-btn gv-next"><span class="gv-icon" aria-hidden="true"></span></button>
+                    </div>
+                </main>
+            </div>
+
+            <!-- Sección 3: planos de la reforma (carpeta planos/). Cada botón muestra su plano; la nota de abajo aparece con el botón que la nombra -->
+            <div class="swiper-slide" data-title="Planos" data-title-en="Plans" data-title-fr="Plans" data-title-pt="Plantas">
+                <main class="pg-switch">
+                    <div class="pg-tabs" role="tablist" aria-label="Planos">
+                        <button type="button" role="tab" data-src="planos/existente.webp" data-en="Existing" data-fr="Existant" data-pt="Existente">Existente</button>
+                        <button type="button" role="tab" data-src="planos/demolicion.webp" data-note="demolicion" data-en="Demolition" data-fr="Démolition" data-pt="Demolição">Demolición</button>
+                        <button type="button" role="tab" data-src="planos/construccion.webp" data-note="construccion" data-en="Construction" data-fr="Construction" data-pt="Construção">Construcción</button>
+                        <button type="button" role="tab" data-src="planos/final.webp" data-en="Final" data-fr="Final" data-pt="Final">Final</button>
+                    </div>
+                    <div class="pg-zoom" role="tabpanel"></div>
+                    <div class="pg-notes">
+                        <p class="pg-note" data-note="demolicion" hidden><span class="pg-swatch" style="--sw:#f2e600"></span><span data-en="Walls to be demolished" data-fr="Murs à démolir" data-pt="Paredes a demolir">Muros a demoler</span></p>
+                        <p class="pg-note" data-note="construccion" hidden><span class="pg-swatch" style="--sw:#e60000"></span><span data-en="Walls to be built" data-fr="Murs à construire" data-pt="Paredes a construir">Muros a construir</span></p>
+                    </div>
+                </main>
+            </div>
+
+            <!-- Sección 4: esquemas / axonometrías (carpeta esquemas/) -->
+            <div class="swiper-slide" data-title="Esquemas" data-title-en="Diagrams" data-title-fr="Schémas" data-title-pt="Esquemas">
+                <main class="pg-switch">
+                    <div class="pg-tabs" role="tablist" aria-label="Esquemas">
+                        <button type="button" role="tab" data-src="esquemas/existente.webp" data-en="Existing" data-fr="Existant" data-pt="Existente">Existente</button>
+                        <button type="button" role="tab" data-src="esquemas/propuesta.webp" data-en="Proposal" data-fr="Proposition" data-pt="Proposta">Propuesta</button>
+                        <button type="button" role="tab" data-src="esquemas/interior.webp" data-en="Interior" data-fr="Intérieur" data-pt="Interior">Interior</button>
+                    </div>
+                    <div class="pg-zoom pg-zoom-clear" role="tabpanel"></div>
+                </main>
+            </div>
+
+            <!-- Sección 5: recorrido 360 (exportado de Marzipano en la carpeta 360/; fuera del recuadro se puede deslizar para cambiar de sección) -->
+            <div class="swiper-slide" data-title="Recorrido 360°" data-title-en="360° tour" data-title-fr="Visite 360°" data-title-pt="Passeio 360°">
+                <main>
+                    <div class="pg-tour">
+                        <iframe id="pg-tour-frame" title="Recorrido 360" allow="fullscreen; accelerometer; gyroscope" allowfullscreen></iframe>
+                    </div>
+                    <p class="pg-empty" id="pg-tour-empty" hidden data-en="The 360° tour will be available very soon." data-fr="La visite 360° sera disponible très bientôt." data-pt="O passeio 360° estará disponível em breve.">El recorrido 360° estará disponible muy pronto.</p>
+                </main>
+            </div>
+        </div>
+        <div class="swiper-pagination"></div>
+    </div>
+
+    <script src="../../swiper-bundle.min.js"></script>
+    <script src="../private.js"></script>
+    <script src="../secciones.js"></script>
+    <script type="module" src="../secciones-3d.js"></script>
+</body>
+</html>

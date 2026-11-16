@@ -1,0 +1,88 @@
+/* =====================================================================
+   SECCIONES EXTRA de las páginas privadas — MJV Studio
+   Se suma a private.css (no lo reemplaza). Lo usa, por ejemplo, private/casa_da/.
+   - .pg-switch  sección con botones arriba (Existente / Demolición...) y una imagen que se puede ampliar
+   - .pg-zoom    imagen ampliable: doble clic / doble toque, pellizco, Ctrl + ruedita, botones + y −
+   - .pg-model   visor 3D con botón de corte (secciones-3d.js)
+   ===================================================================== */
+
+/* ---------- Subtítulo debajo del título: la sección que se está viendo ---------- */
+.title-header-container.pg-has-sub { flex-direction: column; align-items: flex-start; justify-content: center; gap: 2px; }
+.pg-subtitle { margin: 0; min-height: 1.3em; font-family: 'texto', sans-serif; font-size: max(0.82rem, 0.95vw); line-height: 1.3; letter-spacing: 0.03em; color: #777; transition: opacity 0.22s ease, transform 0.22s ease; }
+.pg-subtitle.is-out { opacity: 0; transform: translateY(-3px); }
+@media (orientation: portrait) { .title-header-container.pg-has-sub { gap: 0; } .pg-subtitle { font-size: 0.75rem; } }
+[data-theme="dark"] .pg-subtitle { color: #b8b8b8; }
+
+/* ---------- Sección con botones + imagen ampliable ---------- */
+.swiper-slide main.pg-switch { flex-direction: column; align-items: stretch; justify-content: flex-start; gap: 10px; }
+/* orden: imagen arriba, botones abajo, nota debajo de los botones */
+.pg-switch .pg-zoom { order: 1; } .pg-switch .pg-tabs { order: 2; } .pg-switch .pg-notes { order: 3; }
+.pg-tabs { flex: 0 0 auto; display: flex; flex-wrap: wrap; justify-content: center; gap: 2px 26px; }
+.pg-tabs button {
+    position: relative; margin: 0; padding: 6px 2px; border: 0; background: none; cursor: pointer;
+    font-family: 'texto', sans-serif; font-size: 1rem; letter-spacing: 0.02em; color: #3a3b3b; opacity: 0.6;
+    transition: opacity 0.3s ease; -webkit-tap-highlight-color: transparent;
+}
+.pg-tabs button::after { content: ''; position: absolute; left: 50%; right: 50%; bottom: 2px; height: 1px; background: currentColor; transition: left 0.3s ease, right 0.3s ease; }
+.pg-tabs button:hover { opacity: 0.9; }
+.pg-tabs button[aria-selected="true"] { opacity: 1; }
+.pg-tabs button[aria-selected="true"]::after { left: 0; right: 0; }
+.pg-tabs button:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; border-radius: 3px; }
+
+.pg-zoom { position: relative; flex: 1 1 auto; min-height: 0; overflow: hidden; touch-action: none; user-select: none; -webkit-user-select: none; cursor: zoom-in; }
+.pg-zoom.is-zoomed { cursor: grab; }
+.pg-zoom.is-panning { cursor: grabbing; }
+.pg-zoom-stage { position: absolute; inset: 0; transform-origin: 50% 50%; will-change: transform; }
+.pg-zoom-stage img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: opacity 0.6s ease; -webkit-user-drag: none; pointer-events: none; }
+.pg-zoom-stage img.on { opacity: 1; }
+.pg-zoom-btns { position: absolute; right: 6px; bottom: 6px; z-index: 2; display: flex; flex-direction: column; gap: 6px; }
+.pg-zoom-btns button {
+    width: 34px; height: 34px; padding: 0; border: 0; border-radius: 50%; cursor: pointer;
+    background: rgba(255,255,255,0.88); color: #3a3b3b; box-shadow: 0 1px 6px rgba(0,0,0,0.18);
+    font: 400 20px/34px 'texto', sans-serif; transition: transform 0.25s ease, opacity 0.25s ease; -webkit-tap-highlight-color: transparent;
+}
+.pg-zoom-btns button:hover { transform: scale(1.1); }
+.pg-zoom-btns button:disabled { opacity: 0.35; cursor: default; transform: none; }
+.pg-zoom-btns button:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+
+.pg-notes { flex: 0 0 auto; min-height: 1.4em; margin-top: -6px; display: flex; justify-content: center; }
+.pg-note { margin: 0; display: inline-flex; align-items: center; gap: 8px; font-family: 'texto', sans-serif; font-size: 0.92rem; color: #555; }
+.pg-note[hidden] { display: none; }
+.pg-swatch { width: 22px; height: 8px; background: var(--sw); border: 1px solid rgba(0,0,0,0.25); }
+
+/* ---------- Visor 3D ---------- */
+.pg-model { position: relative; width: 100%; height: 100%; overflow: hidden; background: #f3f3f2; border-radius: 2px; }
+.pg-model[hidden] { display: none; }
+.pg-model model-viewer { position: absolute; inset: 0; display: block; outline: none; touch-action: none; }
+.pg-model canvas { display: block; width: 100%; height: 100%; outline: none; }
+.pg-model-bar { position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); z-index: 3; display: flex; align-items: center; gap: 8px; max-width: calc(100% - 20px); }
+.pg-chip {
+    display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 16px; border: 0; border-radius: 18px; cursor: pointer;
+    background: rgba(255,255,255,0.92); color: #3a3b3b; box-shadow: 0 1px 8px rgba(0,0,0,0.18);
+    font-family: 'texto', sans-serif; font-size: 0.95rem; letter-spacing: 0.02em; white-space: nowrap;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.25s ease; -webkit-tap-highlight-color: transparent;
+}
+.pg-chip span { font-family: inherit; }
+.pg-chip:hover { transform: scale(1.04); }
+.pg-chip:focus-visible { outline: 2px solid #3a3b3b; outline-offset: 2px; }
+.pg-chip[aria-pressed="true"] { background: #3a3b3b; color: #fff; }
+.pg-chip-icon { width: 36px; padding: 0; justify-content: center; }
+.pg-chip-ic { display: block; width: 18px; height: 18px; background: currentColor; -webkit-mask: center / contain no-repeat; mask: center / contain no-repeat; }
+.pg-ic-cut { -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2 3 7v10l9 5 9-5V7z' fill='none' stroke='%23000' stroke-width='1.8' stroke-linejoin='round'/%3E%3Cpath d='M1 12h22' stroke='%23000' stroke-width='2.4'/%3E%3C/svg%3E"); mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2 3 7v10l9 5 9-5V7z' fill='none' stroke='%23000' stroke-width='1.8' stroke-linejoin='round'/%3E%3Cpath d='M1 12h22' stroke='%23000' stroke-width='2.4'/%3E%3C/svg%3E"); }
+.pg-ic-reset { -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4.5 12a7.5 7.5 0 1 0 2.2-5.3' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round'/%3E%3Cpath d='M4 3v4.5h4.5' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4.5 12a7.5 7.5 0 1 0 2.2-5.3' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round'/%3E%3Cpath d='M4 3v4.5h4.5' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); }
+.pg-cut-range { display: inline-flex; align-items: center; height: 36px; padding: 0 14px; border-radius: 18px; background: rgba(255,255,255,0.92); box-shadow: 0 1px 8px rgba(0,0,0,0.18); }
+.pg-cut-range[hidden] { display: none; }
+.pg-cut-range input { width: clamp(90px, 18vw, 200px); margin: 0; accent-color: #3a3b3b; cursor: pointer; }
+.pg-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+@media (max-width: 600px) { .pg-tabs { gap: 2px 15px; } .pg-tabs button { font-size: 0.9rem; } .pg-chip { height: 34px; padding: 0 13px; font-size: 0.88rem; } .pg-chip-icon { width: 34px; padding: 0; } .pg-cut-range { height: 34px; padding: 0 10px; } .pg-model-bar { bottom: 10px; gap: 6px; } }
+
+/* ---------- Modo oscuro ---------- */
+[data-theme="dark"] .pg-tabs button { color: var(--mjv-dark-text); }
+[data-theme="dark"] .pg-note { color: #c9c9c9; }
+[data-theme="dark"] .pg-zoom:not(.pg-zoom-clear) .pg-zoom-stage img { filter: brightness(0.93); }
+[data-theme="dark"] .pg-zoom-btns button, [data-theme="dark"] .pg-chip, [data-theme="dark"] .pg-cut-range { background: rgba(70,70,70,0.92); color: var(--mjv-dark-text); }
+[data-theme="dark"] .pg-chip[aria-pressed="true"] { background: #ececec; color: #2b2b2b; }
+[data-theme="dark"] .pg-cut-range input { accent-color: #ececec; }
+[data-theme="dark"] .pg-model { background: #3c3c3c; }
+
+@media (prefers-reduced-motion: reduce) { .pg-subtitle, .pg-zoom-stage img, .pg-tabs button::after { transition: none !important; } }

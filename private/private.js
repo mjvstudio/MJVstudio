@@ -11,8 +11,9 @@ document.addEventListener('DOMContentLoaded', () => {
     state.prefix = prefixOf(state.id);
 
     /*-------- CARRUSEL: 1) galería  2) recorrido 360  3) antes y después --------*/
+    // <body data-loop="true">: carrusel infinito (después de la última sección vuelve a la primera). Sin eso, tiene principio y fin.
     const swiper = new Swiper('.swiper-container', {
-        direction: 'horizontal', loop: false, slidesPerView: 1, speed: 800, simulateTouch: true, effect: 'slide',
+        direction: 'horizontal', loop: document.body.dataset.loop === 'true', slidesPerView: 1, speed: 800, simulateTouch: true, effect: 'slide',
         keyboard: { enabled: true, onlyInViewport: false },
         pagination: { el: '.swiper-pagination', clickable: true }
     });
