@@ -44,13 +44,15 @@ function start(host) {
     wrap.addEventListener('keydown', (e) => { if (e.target === range) e.stopPropagation(); });
 
     if (!src) return notAvailable();
-    fetch(src, { method: 'HEAD' }).then((r) => r.ok, () => false).then((ok) => {
+    // El modelo pesa: se empieza a bajar cuando el resto de la página ya cargó (fotos, planos), para no demorarla
+    const whenReady = (fn) => { if (document.readyState === 'complete') setTimeout(fn, 300); else window.addEventListener('load', () => setTimeout(fn, 300)); };
+    whenReady(() => fetch(src, { method: 'HEAD' }).then((r) => r.ok, () => false).then((ok) => {
         if (!ok) return notAvailable();
         let renderer;
         try { renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' }); }
         catch (e) { return notAvailable(); }
         build(renderer);
-    });
+    }));
 
     function build(renderer) {
         renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
@@ -210,7 +212,7 @@ function start(host) {
                 a.fromBufferAttribute(pos, i0).applyMatrix4(o.matrixWorld); b.fromBufferAttribute(pos, i1).applyMatrix4(o.matrixWorld); c.fromBufferAttribute(pos, i2).applyMatrix4(o.matrixWorld);
                 n.subVectors(c, b).cross(a.clone().sub(b));
                 const area = n.length() / 2;
-                if (!area || Math.abs(n.y) / (area * 2) < 0.97) continue;
+                if (!area || n.y / (area * 2) < 0.97) continue;   // solo caras horizontales que miran hacia arriba
                 const y = Math.round((a.y + b.y + c.y) / 3 * 10) / 10;
                 bins.set(y, (bins.get(y) || 0) + area * step);
             }

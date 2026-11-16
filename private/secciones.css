@@ -76,6 +76,23 @@
 .pg-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 @media (max-width: 600px) { .pg-tabs { gap: 2px 15px; } .pg-tabs button { font-size: 0.9rem; } .pg-chip { height: 34px; padding: 0 13px; font-size: 0.88rem; } .pg-chip-icon { width: 34px; padding: 0; } .pg-cut-range { height: 34px; padding: 0 10px; } .pg-model-bar { bottom: 10px; gap: 6px; } }
 
+/* ---------- Presentación: texto a la izquierda, imagen a la derecha (en el celular, solo el texto) ---------- */
+.swiper-slide main.pg-intro { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: clamp(24px, 4vw, 64px); align-items: center; }
+.pg-intro-text { max-height: 100%; overflow-y: auto; -webkit-mask-image: linear-gradient(#000 calc(100% - 28px), transparent); mask-image: linear-gradient(#000 calc(100% - 28px), transparent); padding-bottom: 24px !important; overscroll-behavior: contain; padding: 4px 6px 4px 0; scrollbar-width: none; }
+.pg-intro-text p { margin: 0 0 1em; font-family: 'texto', sans-serif; font-size: clamp(0.86rem, 0.93vw, 1.02rem); line-height: 1.6; color: #3a3b3b; text-wrap: pretty; }
+.pg-intro-text .pg-kicker { margin: 0 0 2px; font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase; color: #8a8a8a; }
+.pg-intro-text .pg-place { margin: 0 0 1.4em; font-size: 0.9rem; color: #8a8a8a; }
+.pg-intro-img { margin: 0; height: 100%; min-height: 0; display: flex; align-items: center; justify-content: center; }
+.pg-intro-img img { max-width: 100%; max-height: 100%; object-fit: contain; display: block; }
+@media (orientation: portrait), (max-width: 760px) {
+    .swiper-slide main.pg-intro { grid-template-columns: 1fr; align-items: start; }
+    .pg-intro-img { display: none; }
+    .pg-intro-text { padding: 6px 0 12px; }
+    .pg-intro-text p { font-size: 0.93rem; line-height: 1.65; }
+}
+[data-theme="dark"] .pg-intro-text p { color: var(--mjv-dark-text); }
+[data-theme="dark"] .pg-intro-text .pg-kicker, [data-theme="dark"] .pg-intro-text .pg-place { color: #a9a9a9; }
+
 /* ---------- Modo oscuro ---------- */
 [data-theme="dark"] .pg-tabs button { color: var(--mjv-dark-text); }
 [data-theme="dark"] .pg-note { color: #c9c9c9; }

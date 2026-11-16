@@ -161,6 +161,15 @@ document.addEventListener('DOMContentLoaded', () => {
         window.addEventListener('load', () => setTimeout(() => tabs.forEach((t) => { new Image().src = t.dataset.src; }), 1500));
     });
 
+    /*-------- TEXTO LARGO (.pg-scroll): la ruedita primero lo recorre; en el borde, pasa de sección como siempre --------*/
+    document.querySelectorAll('.pg-scroll').forEach((el) => {
+        el.addEventListener('wheel', (e) => {
+            if (el.scrollHeight <= el.clientHeight + 1 || Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
+            const atTop = el.scrollTop <= 0, atEnd = el.scrollTop + el.clientHeight >= el.scrollHeight - 1;
+            if ((e.deltaY < 0 && !atTop) || (e.deltaY > 0 && !atEnd)) e.stopPropagation();
+        }, { passive: true });
+    });
+
     /*-------- SUBTÍTULO: nombre de la sección actual --------*/
     const sub = document.getElementById('pg-subtitle');
     const s = sw();

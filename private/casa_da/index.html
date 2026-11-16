@@ -40,7 +40,7 @@
     <script type="importmap">{ "imports": { "three": "../vendor/three/three.module.min.js", "three/addons/": "../vendor/three/addons/" } }</script>
 </head>
 <body data-versions="1" data-loop="true">
-    <!-- SECCIONES (en este orden): 1) modelo 3D  2) relevamiento fotográfico  3) planos  4) esquemas  5) recorrido 360.
+    <!-- SECCIONES (en este orden): 1) presentación  2) relevamiento fotográfico  3) planos  4) esquemas  5) recorrido 360  6) modelo 3D.
          El carrusel es infinito (data-loop="true"). Para cambiar el orden, mover los bloques <div class="swiper-slide"> de abajo.
          El subtítulo debajo de "Casa DA" es el data-title de la sección que se está viendo (con data-title-en, -fr, -pt para los otros idiomas).
          Carpetas: modelo/casa_da.glb · images/01.webp, 02.webp... · planos/ · esquemas/ · 360/ -->
@@ -85,22 +85,18 @@
 
     <div class="swiper-container">
         <div class="swiper-wrapper">
-            <!-- Sección 1: modelo 3D (modelo/casa_da.glb). Se gira, se acerca y tiene el botón de corte para ver la distribución.
-                 La etiqueta <model-viewer> se usa solo para que model-loader.js le ponga el cargador del estudio: lo dibuja secciones-3d.js -->
-            <div class="swiper-slide" data-title="Modelado 3D" data-title-en="3D model" data-title-fr="Modèle 3D" data-title-pt="Modelo 3D">
-                <main>
-                    <div class="pg-model modelo-3d-wrapper swiper-no-swiping" id="pg-model-wrap">
-                        <model-viewer id="pg-model" data-src="modelo/casa_da.glb" data-cut="1.2" aria-label="Modelo 3D de Casa DA"></model-viewer>
-                        <div class="pg-model-bar">
-                            <button type="button" class="pg-chip" id="pg-cut" aria-pressed="false"><span class="pg-chip-ic pg-ic-cut" aria-hidden="true"></span><span data-en="Section cut" data-fr="Coupe" data-pt="Corte">Corte</span></button>
-                            <label class="pg-cut-range" id="pg-cut-range" hidden>
-                                <span class="pg-sr" data-en="Cut height" data-fr="Hauteur de coupe" data-pt="Altura do corte">Altura del corte</span>
-                                <input type="range" id="pg-cut-h" min="0" max="100" step="0.5" value="40">
-                            </label>
-                            <button type="button" class="pg-chip pg-chip-icon" id="pg-reset" title="Vista inicial" aria-label="Vista inicial"><span class="pg-chip-ic pg-ic-reset" aria-hidden="true"></span></button>
-                        </div>
+            <!-- Sección 1: presentación (texto de la "Solicitud del cliente" del PDF). Al costado, la axonometría de la propuesta -->
+            <div class="swiper-slide" data-title="Presentación" data-title-en="Introduction" data-title-fr="Présentation" data-title-pt="Apresentação">
+                <main class="pg-intro">
+                    <div class="pg-intro-text pg-scroll">
+                        <p class="pg-kicker" data-en="Client brief" data-fr="Demande du client" data-pt="Solicitação do cliente">Solicitud del cliente</p>
+                        <p class="pg-place" data-en="San Pedro neighborhood, Encarnación" data-fr="Quartier San Pedro, Encarnación" data-pt="Bairro San Pedro, Encarnación">Barrio San Pedro, Encarnación</p>
+                        <p data-en="The project seeks to extend and renovate the existing house to adapt it to the family's current needs and allow it to keep growing with them. The idea is to give it a more minimalist and modern image, simplifying its forms and achieving a better integration between the current house and the new spaces." data-fr="Le projet vise à agrandir et rénover la maison existante pour l'adapter aux besoins actuels de la famille et lui permettre de continuer à grandir avec elle. L'idée est de lui donner une image plus minimaliste et moderne, en simplifiant ses formes et en intégrant mieux la maison actuelle et les nouveaux espaces." data-pt="O projeto busca ampliar e renovar a casa existente para adaptá-la às necessidades atuais da família e permitir que continue crescendo junto com ela. A ideia é dar-lhe uma imagem mais minimalista e moderna, simplificando suas formas e conseguindo uma melhor integração entre a casa atual e os novos espaços.">El proyecto busca ampliar y renovar la vivienda existente para adaptarla a las necesidades actuales de la familia y permitir que siga creciendo junto con ella. La idea es darle una imagen más minimalista y moderna, simplificando sus formas y logrando una mejor integración entre la casa actual y los nuevos espacios.</p>
+                        <p data-en="The extension adds a bedroom, a kitchen and a laundry room, aiming to improve how the house works and make everyday life more comfortable. It also proposes changing the entrance to make better use of the front area, allowing a more efficient layout of the outdoor spaces." data-fr="L'agrandissement prévoit l'ajout d'une chambre, d'une cuisine et d'une buanderie, afin d'améliorer la fonctionnalité de la maison et de rendre la vie quotidienne plus confortable. Il est aussi proposé de modifier l'accès pour mieux profiter de l'espace à l'avant, avec une distribution plus efficace des espaces extérieurs." data-pt="A ampliação prevê a incorporação de um quarto, uma cozinha e uma lavanderia, buscando melhorar a funcionalidade da casa e tornar o dia a dia mais confortável. Também se propõe modificar o acesso para aproveitar melhor o espaço da área frontal, permitindo uma distribuição mais eficiente dos espaços externos.">La ampliación contempla la incorporación de una habitación, una cocina y un lavadero, buscando mejorar la funcionalidad de la vivienda y hacer más cómoda la vida cotidiana. También se propone modificar el acceso para aprovechar mejor el espacio de la zona delantera, permitiendo una distribución más eficiente de los espacios exteriores.</p>
+                        <p data-en="Another key point of the project is a perimeter concrete eave that wraps around the house and visually connects it with the parking area. Besides unifying the whole, this element will provide shade and protection from sun and rain, creating an outdoor corridor, or jere, that works as a transition space between inside and outside, designed for moving through, resting and spending time together as a family." data-fr="Un autre point essentiel du projet est l'ajout d'un auvent périphérique en béton qui entoure la maison et la relie visuellement au parking. En plus d'unifier l'ensemble, cet élément apportera de l'ombre et une protection contre le soleil et la pluie, créant un couloir extérieur, ou jere, qui sert d'espace de transition entre l'intérieur et l'extérieur, pensé pour circuler, se reposer et partager en famille." data-pt="Outro dos pontos principais do projeto é a incorporação de um beiral perimetral de concreto que envolva a casa e a conecte visualmente com o estacionamento. Além de unificar o conjunto, esse elemento proporcionará sombra e proteção contra o sol e a chuva, criando um corredor externo, ou jere, que funcione como um espaço de transição entre o interior e o exterior, pensado para circular, descansar e compartilhar em família.">Otro de los puntos principales del proyecto es la incorporación de un alero perimetral de hormigón que rodee la vivienda y conecte visualmente la casa con el estacionamiento. Además de unificar el conjunto, este elemento permitirá generar sombra y protección frente al sol y la lluvia, creando un corredor exterior o jere que funcione como un espacio de transición entre el interior y el exterior, pensado para circular, descansar y compartir en familia.</p>
+                        <p data-en="The intention is for the intervention to be not just an extension, but an opportunity to improve the way the house is lived in, making better use of its spaces and creating a simpler, more functional and welcoming architecture that can accompany the family over time." data-fr="L'intention est que l'intervention ne soit pas seulement un agrandissement, mais une occasion d'améliorer la façon d'habiter la maison, en tirant mieux parti des espaces et en créant une architecture plus simple, fonctionnelle et accueillante, capable d'accompagner la famille au fil du temps." data-pt="A intenção é que a intervenção não seja apenas uma ampliação, mas uma oportunidade para melhorar a forma de habitar a casa, aproveitando melhor os espaços e criando uma arquitetura mais simples, funcional e acolhedora, que possa acompanhar a família ao longo do tempo.">La intención es que la intervención no sea solamente una ampliación, sino una oportunidad para mejorar la forma de habitar la casa, aprovechando mejor los espacios y creando una arquitectura más simple, funcional y acogedora, que pueda acompañar a la familia a lo largo del tiempo.</p>
                     </div>
-                    <p class="pg-empty" id="pg-model-empty" hidden data-en="The 3D model will be available very soon." data-fr="Le modèle 3D sera disponible très bientôt." data-pt="O modelo 3D estará disponível em breve.">El modelo 3D estará disponible muy pronto.</p>
+                    <figure class="pg-intro-img"><img src="esquemas/propuesta.webp" alt="Axonometría de la propuesta" decoding="async"></figure>
                 </main>
             </div>
 
@@ -156,6 +152,25 @@
                         <iframe id="pg-tour-frame" title="Recorrido 360" allow="fullscreen; accelerometer; gyroscope" allowfullscreen></iframe>
                     </div>
                     <p class="pg-empty" id="pg-tour-empty" hidden data-en="The 360° tour will be available very soon." data-fr="La visite 360° sera disponible très bientôt." data-pt="O passeio 360° estará disponível em breve.">El recorrido 360° estará disponible muy pronto.</p>
+                </main>
+            </div>
+
+            <!-- Sección 6: modelo 3D (modelo/casa_da.glb). Se gira, se acerca y tiene el botón de corte para ver la distribución.
+                 La etiqueta <model-viewer> se usa solo para que model-loader.js le ponga el cargador del estudio: lo dibuja secciones-3d.js -->
+            <div class="swiper-slide" data-title="Modelado 3D" data-title-en="3D model" data-title-fr="Modèle 3D" data-title-pt="Modelo 3D">
+                <main>
+                    <div class="pg-model modelo-3d-wrapper swiper-no-swiping" id="pg-model-wrap">
+                        <model-viewer id="pg-model" data-src="modelo/casa_da.glb" data-cut="1.2" aria-label="Modelo 3D de Casa DA"></model-viewer>
+                        <div class="pg-model-bar">
+                            <button type="button" class="pg-chip" id="pg-cut" aria-pressed="false"><span class="pg-chip-ic pg-ic-cut" aria-hidden="true"></span><span data-en="Section cut" data-fr="Coupe" data-pt="Corte">Corte</span></button>
+                            <label class="pg-cut-range" id="pg-cut-range" hidden>
+                                <span class="pg-sr" data-en="Cut height" data-fr="Hauteur de coupe" data-pt="Altura do corte">Altura del corte</span>
+                                <input type="range" id="pg-cut-h" min="0" max="100" step="0.5" value="40">
+                            </label>
+                            <button type="button" class="pg-chip pg-chip-icon" id="pg-reset" title="Vista inicial" aria-label="Vista inicial"><span class="pg-chip-ic pg-ic-reset" aria-hidden="true"></span></button>
+                        </div>
+                    </div>
+                    <p class="pg-empty" id="pg-model-empty" hidden data-en="The 3D model will be available very soon." data-fr="Le modèle 3D sera disponible très bientôt." data-pt="O modelo 3D estará disponível em breve.">El modelo 3D estará disponible muy pronto.</p>
                 </main>
             </div>
         </div>
