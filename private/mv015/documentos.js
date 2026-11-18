@@ -1,11 +1,11 @@
 /* =====================================================================
-   MV015 · DOCUMENTOS — carpetas de planos con vista previa y descarga
+   MV015 · DOCUMENTOS — carpetas de planos
    - Las carpetas son los botones de .pg-tabs (Arquitectura, Estructural...).
    - Cada carpeta tiene su grupo .pg-doc-files[data-folder] con un botón por lámina:
-       <button data-pdf="documentos/arquitectura/archivo.pdf">Nombre</button>
-     Para sumar un plano: copiar el PDF a su carpeta y agregar un botón igual.
-   - En computadoras el PDF se ve dentro de la página; en celulares (que no muestran
-     PDF dentro de una página) aparece una tarjeta para abrirlo o descargarlo.
+       <button data-img="documentos/x/img/lamina-1.webp" data-pdf="documentos/x/archivo.pdf">Lámina 1</button>
+   - La lámina se muestra en el visor con zoom de la página (.pg-zoom de secciones.js):
+     doble toque / doble clic, pellizco, Ctrl + ruedita y botones + y −. Funciona igual en el celular.
+   - Los botones de la derecha abren o descargan el PDF original de esa lámina.
    ===================================================================== */
 document.addEventListener('DOMContentLoaded', () => {
     const sec = document.getElementById('pg-docs');
@@ -13,33 +13,31 @@ document.addEventListener('DOMContentLoaded', () => {
     const T = (d) => (window.mjvLang ? window.mjvLang.pick(d) : d.es);
     const tabs = Array.from(sec.querySelectorAll('.pg-tabs [role="tab"]'));
     const groups = Array.from(sec.querySelectorAll('.pg-doc-files'));
-    const frame = document.getElementById('pg-doc-frame');
-    const card = document.getElementById('pg-doc-card');
-    const cardName = document.getElementById('pg-doc-card-name');
+    const view = document.getElementById('pg-doc-view');
+    const emptyEl = document.getElementById('pg-doc-empty');
     const openA = Array.from(sec.querySelectorAll('[data-doc-open]'));
     const dlA = Array.from(sec.querySelectorAll('[data-doc-download]'));
-    const emptyEl = document.getElementById('pg-doc-empty');
-    const view = document.getElementById('pg-doc-view');
-
-    // ¿El navegador muestra PDF dentro de la página? (Android y la mayoría de los celulares no)
-    const touch = matchMedia('(pointer: coarse)').matches;
-    const inlinePdf = navigator.pdfViewerEnabled === true && !(touch && /Android|iPhone|iPad/i.test(navigator.userAgent));
-
     const fileName = (p) => decodeURIComponent(p.split('/').pop());
-    let current = null, loaded = false;
+    let current = null;
 
-    const showFile = (btn) => {
-        groups.forEach((g) => g.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', b === btn ? 'true' : 'false')));
-        current = btn;
-        const url = encodeURI(btn.dataset.pdf);
-        openA.forEach((a) => { a.href = url; });
-        dlA.forEach((a) => { a.href = url; a.setAttribute('download', fileName(btn.dataset.pdf)); });
-        cardName.textContent = btn.textContent.trim();
-        if (inlinePdf && loaded) frame.src = url + '#view=FitH&toolbar=1&navpanes=0';
+    const show = (src, alt) => {
+        if (view.pgZoom) view.pgZoom.show(src, alt);
+        else { view.dataset.pendingSrc = src; }
     };
 
-    const showFolder = (tab) => {
-        tabs.forEach((t) => t.setAttribute('aria-selected', t === tab ? 'true' : 'false'));
+    const showFile = (btn, sound) => {
+        if (btn === current) return;
+        groups.forEach((g) => g.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', b === btn ? 'true' : 'false')));
+        current = btn;
+        const pdf = encodeURI(btn.dataset.pdf);
+        openA.forEach((a) => { a.href = pdf; });
+        dlA.forEach((a) => { a.href = pdf; a.setAttribute('download', fileName(btn.dataset.pdf)); });
+        show(encodeURI(btn.dataset.img), btn.textContent.trim());
+        if (sound && window.mjvSound && window.mjvSound.click) window.mjvSound.click();
+    };
+
+    const showFolder = (tab, sound) => {
+        tabs.forEach((t) => { const on = t === tab; t.setAttribute('aria-selected', on ? 'true' : 'false'); t.tabIndex = on ? 0 : -1; });
         let first = null;
         groups.forEach((g) => {
             const on = g.dataset.folder === tab.dataset.folder;
@@ -47,26 +45,28 @@ document.addEventListener('DOMContentLoaded', () => {
             if (on) first = g.querySelector('button');
         });
         view.hidden = !first; emptyEl.hidden = !!first;
-        if (first) showFile(first);
-        if (window.mjvSound && window.mjvSound.click && loaded) window.mjvSound.click();
+        current = null;
+        if (first) showFile(first, false);
+        if (sound && window.mjvSound && window.mjvSound.click) window.mjvSound.click();
     };
 
-    tabs.forEach((t) => t.addEventListener('click', () => showFolder(t)));
-    groups.forEach((g) => g.querySelectorAll('button').forEach((b) => b.addEventListener('click', () => showFile(b))));
-
-    frame.hidden = !inlinePdf;
-    card.hidden = inlinePdf;
-
-    // La ruedita sobre el PDF lo desplaza; no cambia de sección
-    view.addEventListener('wheel', (e) => e.stopPropagation(), { passive: true });
-
-    if (tabs.length) showFolder(tabs[0]);
-    // Los PDF se piden recién cuando la página terminó de cargar (el modelo 3D va primero)
-    const start = () => { loaded = true; if (current) showFile(current); };
-    if (document.readyState === 'complete') setTimeout(start, 600); else window.addEventListener('load', () => setTimeout(start, 600));
+    tabs.forEach((t) => t.addEventListener('click', (e) => { e.stopPropagation(); if (t.getAttribute('aria-selected') !== 'true') showFolder(t, true); }));
+    groups.forEach((g) => g.querySelectorAll('button').forEach((b) => b.addEventListener('click', (e) => { e.stopPropagation(); showFile(b, true); })));
 
     const labels = () => {
-        cardName.title = T({ es: 'Plano', en: 'Drawing', fr: 'Plan', pt: 'Planta' });
+        const o = T({ es: 'Abrir PDF', en: 'Open PDF', fr: 'Ouvrir le PDF', pt: 'Abrir PDF' });
+        const d = T({ es: 'Descargar PDF', en: 'Download PDF', fr: 'Télécharger le PDF', pt: 'Baixar PDF' });
+        openA.forEach((a) => { a.title = o; a.setAttribute('aria-label', o); });
+        dlA.forEach((a) => { a.title = d; a.setAttribute('aria-label', d); });
     };
     labels(); document.addEventListener('mjvlangchange', labels);
+
+    // secciones.js arma el visor con zoom en su DOMContentLoaded (va antes que este archivo)
+    if (tabs.length) showFolder(tabs[0], false);
+
+    // Las otras láminas de la carpeta se piden de antemano cuando la página ya cargó (el modelo 3D va primero)
+    const preload = () => {
+        sec.querySelectorAll('.pg-doc-files button').forEach((b, i) => setTimeout(() => { const im = new Image(); im.decoding = 'async'; im.src = encodeURI(b.dataset.img); }, 1500 + i * 250));
+    };
+    if (document.readyState === 'complete') preload(); else window.addEventListener('load', preload);
 });

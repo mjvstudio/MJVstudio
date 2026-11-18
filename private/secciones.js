@@ -129,6 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.pg-zoom').forEach((box) => {
         const z = makeZoom(box);
         zooms.set(box, z);
+        box.pgZoom = z;   // otras páginas (p. ej. mv015/documentos.js) pueden cambiar la imagen con box.pgZoom.show(src)
         if (box.dataset.src) z.show(box.dataset.src, box.getAttribute('aria-label') || '');
     });
 

@@ -38,7 +38,7 @@
     <script src="../../model-loader.js" defer></script>
     <script type="importmap">{ "imports": { "three": "../vendor/three/three.module.min.js", "three/addons/": "../vendor/three/addons/" } }</script>
 </head>
-<body data-versions="1" data-loop="false">
+<body data-versions="1" data-loop="true">
     <!-- SECCIONES: 1) modelo 3D con cortes  2) documentos (planos para descargar).
          Carpetas: modelo/mv015.glb · documentos/arquitectura, estructural, sanitaria, electrica -->
     <div class="title-header-container pg-has-sub">
@@ -109,21 +109,13 @@
                 </main>
             </div>
 
-            <!-- Sección 2: documentos. Cada pestaña es una carpeta; cada botón de abajo, una lámina en PDF.
-                 Para sumar un plano: copiar el PDF a documentos/<carpeta>/ y agregar un <button data-pdf="..."> en su grupo. -->
+            <!-- Sección 2: documentos. Cada pestaña es una carpeta; cada botón de abajo, una lámina.
+                 La lámina se ve como imagen (documentos/<carpeta>/img/...webp) con zoom: doble toque, pellizco o + / −.
+                 "PDF" y "Descargar" usan el PDF original (data-pdf).
+                 Para sumar un plano: copiar el PDF y su imagen y agregar un <button data-img="..." data-pdf="..."> en su grupo. -->
             <div class="swiper-slide" data-title="Documentos" data-title-en="Documents" data-title-fr="Documents" data-title-pt="Documentos">
                 <main class="pg-docs" id="pg-docs">
-                    <div class="pg-doc-view swiper-no-swiping" id="pg-doc-view">
-                        <iframe id="pg-doc-frame" title="Vista previa del plano"></iframe>
-                        <div class="pg-doc-card" id="pg-doc-card" hidden>
-                            <span class="pg-doc-card-ic" aria-hidden="true"></span>
-                            <p id="pg-doc-card-name"></p>
-                            <div class="pg-doc-actions">
-                                <a class="pg-chip" data-doc-open target="_blank" rel="noopener"><span class="pg-chip-ic pg-ic-open" aria-hidden="true"></span><span data-en="Open" data-fr="Ouvrir" data-pt="Abrir">Abrir</span></a>
-                                <a class="pg-chip" data-doc-download download><span class="pg-chip-ic pg-ic-down" aria-hidden="true"></span><span data-en="Download" data-fr="Télécharger" data-pt="Baixar">Descargar</span></a>
-                            </div>
-                        </div>
-                    </div>
+                    <div class="pg-zoom pg-doc-view" id="pg-doc-view" role="tabpanel"></div>
                     <p class="pg-empty" id="pg-doc-empty" hidden data-en="The drawings will be available very soon." data-fr="Les plans seront disponibles très bientôt." data-pt="As plantas estarão disponíveis em breve.">Los planos estarán disponibles muy pronto.</p>
 
                     <div class="pg-tabs" role="tablist" aria-label="Carpetas">
@@ -135,25 +127,31 @@
 
                     <div class="pg-doc-row">
                         <div class="pg-doc-files" data-folder="arq">
-                            <button type="button" data-pdf="documentos/arquitectura/A0_3_Copias_Arquitectura.pdf" data-en="Architecture sheets" data-fr="Planches d'architecture" data-pt="Pranchas de arquitetura">Láminas de arquitectura</button>
-                            <button type="button" data-pdf="documentos/arquitectura/A4_3_Copias_Ubicación.pdf" data-en="Site plan" data-fr="Plan de situation" data-pt="Planta de localização">Ubicación</button>
+                            <button type="button" data-img="documentos/arquitectura/img/A0_3_Copias_Arquitectura-1.webp" data-pdf="documentos/arquitectura/A0_3_Copias_Arquitectura.pdf" data-en="Sheet 1" data-fr="Planche 1" data-pt="Prancha 1">Lámina 1</button>
+                            <button type="button" data-img="documentos/arquitectura/img/A0_3_Copias_Arquitectura-2.webp" data-pdf="documentos/arquitectura/A0_3_Copias_Arquitectura.pdf" data-en="Sheet 2" data-fr="Planche 2" data-pt="Prancha 2">Lámina 2</button>
+                            <button type="button" data-img="documentos/arquitectura/img/A4_3_Copias_Ubicación-1.webp" data-pdf="documentos/arquitectura/A4_3_Copias_Ubicación.pdf" data-en="Site plan" data-fr="Situation" data-pt="Localização">Ubicación</button>
                         </div>
                         <div class="pg-doc-files" data-folder="est" hidden>
-                            <button type="button" data-pdf="documentos/estructural/A0_2_Copias_Estructura.pdf" data-en="Structure A0" data-fr="Structure A0" data-pt="Estrutura A0">Estructura A0</button>
-                            <button type="button" data-pdf="documentos/estructural/A1_2_Copias_Estructura.pdf" data-en="Structure A1" data-fr="Structure A1" data-pt="Estrutura A1">Estructura A1</button>
-                            <button type="button" data-pdf="documentos/estructural/A2_2_Copias_Estructura.pdf" data-en="Structure A2" data-fr="Structure A2" data-pt="Estrutura A2">Estructura A2</button>
+                            <button type="button" data-img="documentos/estructural/img/A0_2_Copias_Estructura-1.webp" data-pdf="documentos/estructural/A0_2_Copias_Estructura.pdf" data-en="Sheet 1" data-fr="Planche 1" data-pt="Prancha 1">Lámina 1</button>
+                            <button type="button" data-img="documentos/estructural/img/A0_2_Copias_Estructura-2.webp" data-pdf="documentos/estructural/A0_2_Copias_Estructura.pdf" data-en="Sheet 2" data-fr="Planche 2" data-pt="Prancha 2">Lámina 2</button>
+                            <button type="button" data-img="documentos/estructural/img/A0_2_Copias_Estructura-3.webp" data-pdf="documentos/estructural/A0_2_Copias_Estructura.pdf" data-en="Sheet 3" data-fr="Planche 3" data-pt="Prancha 3">Lámina 3</button>
+                            <button type="button" data-img="documentos/estructural/img/A1_2_Copias_Estructura-1.webp" data-pdf="documentos/estructural/A1_2_Copias_Estructura.pdf" data-en="Sheet 4" data-fr="Planche 4" data-pt="Prancha 4">Lámina 4</button>
+                            <button type="button" data-img="documentos/estructural/img/A1_2_Copias_Estructura-2.webp" data-pdf="documentos/estructural/A1_2_Copias_Estructura.pdf" data-en="Sheet 5" data-fr="Planche 5" data-pt="Prancha 5">Lámina 5</button>
+                            <button type="button" data-img="documentos/estructural/img/A2_2_Copias_Estructura-1.webp" data-pdf="documentos/estructural/A2_2_Copias_Estructura.pdf" data-en="Sheet 6" data-fr="Planche 6" data-pt="Prancha 6">Lámina 6</button>
                         </div>
                         <div class="pg-doc-files" data-folder="san" hidden>
-                            <button type="button" data-pdf="documentos/sanitaria/A0_2_Copias_Insts_Sanitarias.pdf" data-en="Water, sewer and storm drainage" data-fr="Eau, eaux usées et pluviales" data-pt="Água, esgoto e pluvial">Agua, cloacal y pluvial</button>
+                            <button type="button" data-img="documentos/sanitaria/img/A0_2_Copias_Insts_Sanitarias-1.webp" data-pdf="documentos/sanitaria/A0_2_Copias_Insts_Sanitarias.pdf" data-en="Sheet 1" data-fr="Planche 1" data-pt="Prancha 1">Lámina 1</button>
+                            <button type="button" data-img="documentos/sanitaria/img/A0_2_Copias_Insts_Sanitarias-2.webp" data-pdf="documentos/sanitaria/A0_2_Copias_Insts_Sanitarias.pdf" data-en="Sheet 2" data-fr="Planche 2" data-pt="Prancha 2">Lámina 2</button>
+                            <button type="button" data-img="documentos/sanitaria/img/A0_2_Copias_Insts_Sanitarias-3.webp" data-pdf="documentos/sanitaria/A0_2_Copias_Insts_Sanitarias.pdf" data-en="Sheet 3" data-fr="Planche 3" data-pt="Prancha 3">Lámina 3</button>
                         </div>
                         <div class="pg-doc-files" data-folder="ele" hidden>
-                            <button type="button" data-pdf="documentos/electrica/A0_1_Copia_Insts_Eléctricas.pdf" data-en="Electrical, sheet 1" data-fr="Électricité, planche 1" data-pt="Elétrica, prancha 1">Eléctrica, lámina 1</button>
-                            <button type="button" data-pdf="documentos/electrica/A0_2_Copias_Insts_Eléctricas.pdf" data-en="Electrical, sheet 2" data-fr="Électricité, planche 2" data-pt="Elétrica, prancha 2">Eléctrica, lámina 2</button>
+                            <button type="button" data-img="documentos/electrica/img/A0_1_Copia_Insts_Eléctricas-1.webp" data-pdf="documentos/electrica/A0_1_Copia_Insts_Eléctricas.pdf" data-en="Sheet 1" data-fr="Planche 1" data-pt="Prancha 1">Lámina 1</button>
+                            <button type="button" data-img="documentos/electrica/img/A0_2_Copias_Insts_Eléctricas-1.webp" data-pdf="documentos/electrica/A0_2_Copias_Insts_Eléctricas.pdf" data-en="Sheet 2" data-fr="Planche 2" data-pt="Prancha 2">Lámina 2</button>
                         </div>
                         <span class="pg-doc-sep" aria-hidden="true"></span>
                         <div class="pg-doc-actions">
-                            <a class="pg-chip" data-doc-open target="_blank" rel="noopener"><span class="pg-chip-ic pg-ic-open" aria-hidden="true"></span><span data-en="Open" data-fr="Ouvrir" data-pt="Abrir">Abrir</span></a>
-                            <a class="pg-chip" data-doc-download download><span class="pg-chip-ic pg-ic-down" aria-hidden="true"></span><span data-en="Download" data-fr="Télécharger" data-pt="Baixar">Descargar</span></a>
+                            <a class="pg-chip pg-chip-icon" data-doc-open target="_blank" rel="noopener" title="Abrir PDF" aria-label="Abrir PDF"><span class="pg-chip-ic pg-ic-open" aria-hidden="true"></span></a>
+                            <a class="pg-chip pg-chip-icon" data-doc-download download title="Descargar PDF" aria-label="Descargar PDF"><span class="pg-chip-ic pg-ic-down" aria-hidden="true"></span></a>
                         </div>
                     </div>
                 </main>

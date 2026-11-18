@@ -17,8 +17,9 @@ MODELO 3D  ->  modelo/mv015.glb  (visor: mv015-3d.js)
 - Para actualizar el modelo: exportar GLB y reemplazar mv015.glb (mismo nombre).
 
 DOCUMENTOS  ->  carpeta documentos/ (arquitectura, estructural, sanitaria, electrica)
-Para sumar un plano: copiar el PDF a su carpeta y, en index.html, agregar un botón
-en el grupo de esa carpeta:
-  <button type="button" data-pdf="documentos/sanitaria/archivo.pdf">Nombre</button>
-En computadora el PDF se ve dentro de la página; en el celular aparece para
-abrirlo o descargarlo.
+Cada lámina se ve como imagen (documentos/<carpeta>/img/*.webp) con zoom: doble toque,
+pellizco o botones + y −. Así se ve igual en la compu y en el celular.
+Los botones de la derecha abren o descargan el PDF original.
+Para sumar un plano: copiar el PDF a su carpeta, exportar cada hoja como imagen
+(WebP o JPG, unos 4800 px de ancho) a la subcarpeta img/ y, en index.html, agregar:
+  <button type="button" data-img="documentos/sanitaria/img/hoja-1.webp" data-pdf="documentos/sanitaria/archivo.pdf">Lámina 4</button>
