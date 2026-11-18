@@ -1,122 +1,178 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="robots" content="noindex, nofollow">
-  <title>MV015 · Ampliación Mosqueda Villalba</title>
-  <link rel="stylesheet" href="mv015.css">
-  <script src="config.js"></script>
-  <script type="importmap">
-    {
-      "imports": {
-        "three": "./lib/three.module.min.js",
-        "three/addons/": "./lib/addons/"
-      }
-    }
-  </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MV015 · Ampliación Mosqueda Villalba — MJV Studio</title>
+    <!-- PÁGINA PRIVADA: se comparte solo con el link. No aparece en Google (noindex) ni en el mapa del sitio. -->
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="description" content="MV015 · Ampliación Mosqueda Villalba: modelo 3D con cortes y planos de obra. MJV Studio, arquitectura y diseño en Encarnación, Paraguay." data-en-content="MV015 · Mosqueda Villalba extension: 3D model with section cuts and construction drawings. MJV Studio, architecture and design in Encarnación, Paraguay." data-fr-content="MV015 · Agrandissement Mosqueda Villalba : modèle 3D avec coupes et plans de chantier. MJV Studio, architecture et design à Encarnación, Paraguay." data-pt-content="MV015 · Ampliação Mosqueda Villalba: modelo 3D com cortes e plantas da obra. MJV Studio, arquitetura e design em Encarnación, Paraguai.">
+    <link rel="canonical" href="https://mjvstudio.com/private/mv015/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="MJV Studio">
+    <meta property="og:locale" content="es_PY">
+    <meta property="og:title" content="MV015 · Ampliación Mosqueda Villalba — MJV Studio">
+    <meta property="og:description" content="Modelo 3D con cortes y planos de obra para constructores.">
+    <meta property="og:url" content="https://mjvstudio.com/private/mv015/">
+    <meta property="og:image" content="https://mjvstudio.com/assets/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="MJV Studio — arquitectura y diseño">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="MV015 · Ampliación Mosqueda Villalba — MJV Studio">
+    <meta name="twitter:description" content="Modelo 3D con cortes y planos de obra para constructores.">
+    <meta name="twitter:image" content="https://mjvstudio.com/assets/og-image.jpg">
+    <link rel="icon" type="image/png" href="../../assets/logo_2.png">
+    <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
+    <link rel="stylesheet" href="../private.css">
+    <link rel="stylesheet" href="../secciones.css">
+    <link rel="stylesheet" href="../../dark-mode.css">
+    <link rel="stylesheet" href="../../swiper-bundle.min.css"/>
+    <link rel="stylesheet" href="mv015.css">
+
+    <script src="../../theme.js"></script>
+    <script src="../../sound.js" defer></script>
+    <script src="../../dropdown.js" defer></script>
+    <script src="../../lang.js" defer></script>
+    <script src="../../analytics.js" defer></script>
+    <script src="../../model-loader.js" defer></script>
+    <script type="importmap">{ "imports": { "three": "../vendor/three/three.module.min.js", "three/addons/": "../vendor/three/addons/" } }</script>
 </head>
-<body>
-  <header class="top">
-    <div class="marca">
-      <span class="codigo" id="codigo">MV015</span>
-      <h1 id="titulo">Ampliación Mosqueda Villalba</h1>
-    </div>
-    <nav class="pestanas" role="tablist">
-      <button class="pestana activa" role="tab" aria-selected="true" data-vista="modelo">Modelo 3D</button>
-      <button class="pestana" role="tab" aria-selected="false" data-vista="documentos">Documentos</button>
-    </nav>
-  </header>
-
-  <!-- ================= MODELO 3D ================= -->
-  <main id="vista-modelo" class="vista activa">
-    <div class="visor" id="visor">
-      <div class="cargando" id="cargando">
-        <div class="barra"><span id="progreso"></span></div>
-        <p id="estado">Cargando modelo…</p>
-      </div>
-    </div>
-
-    <aside class="panel" id="panel">
-      <button class="panel-toggle" id="panelToggle" aria-expanded="true">Cortes</button>
-      <div class="panel-cuerpo">
-        <section class="grupo">
-          <h2>Cortes</h2>
-
-          <div class="corte" data-corte="h">
-            <div class="corte-cab">
-              <label class="interruptor"><input type="checkbox" data-accion="activar"><span></span></label>
-              <span class="corte-nombre">Horizontal <small>planta</small></span>
-              <button class="espejar" data-accion="espejar" title="Espejar el corte">⇅ Espejar</button>
-            </div>
-            <input type="range" min="0" max="1000" value="500" data-accion="mover" aria-label="Altura del corte horizontal">
-            <div class="corte-valor"><span data-valor>—</span></div>
-          </div>
-
-          <div class="corte" data-corte="v1">
-            <div class="corte-cab">
-              <label class="interruptor"><input type="checkbox" data-accion="activar"><span></span></label>
-              <span class="corte-nombre">Vertical 1 <small>longitudinal</small></span>
-              <button class="espejar" data-accion="espejar" title="Espejar el corte">⇆ Espejar</button>
-            </div>
-            <input type="range" min="0" max="1000" value="500" data-accion="mover" aria-label="Posición del corte vertical 1">
-            <div class="corte-valor"><span data-valor>—</span></div>
-          </div>
-
-          <div class="corte" data-corte="v2">
-            <div class="corte-cab">
-              <label class="interruptor"><input type="checkbox" data-accion="activar"><span></span></label>
-              <span class="corte-nombre">Vertical 2 <small>transversal</small></span>
-              <button class="espejar" data-accion="espejar" title="Espejar el corte">⇆ Espejar</button>
-            </div>
-            <input type="range" min="0" max="1000" value="500" data-accion="mover" aria-label="Posición del corte vertical 2">
-            <div class="corte-valor"><span data-valor>—</span></div>
-          </div>
-
-          <label class="opcion"><input type="checkbox" id="verPlanos" checked> Mostrar planos de corte</label>
-        </section>
-
-        <section class="grupo">
-          <h2>Vistas</h2>
-          <div class="vistas">
-            <button data-camara="3d">3D</button>
-            <button data-camara="planta">Planta</button>
-            <button data-camara="frente">Frente</button>
-            <button data-camara="lateral">Lateral</button>
-          </div>
-          <button class="reset" id="reset">Restablecer todo</button>
-        </section>
-      </div>
-    </aside>
-  </main>
-
-  <!-- ================= DOCUMENTOS ================= -->
-  <main id="vista-documentos" class="vista">
-    <div class="docs">
-      <div class="carpetas" id="carpetas"></div>
-      <section class="lista" id="lista" hidden>
-        <div class="lista-cab">
-          <button class="volver" id="volver">← Carpetas</button>
-          <h2 id="listaTitulo"></h2>
+<body data-versions="1" data-loop="false">
+    <!-- SECCIONES: 1) modelo 3D con cortes  2) documentos (planos para descargar).
+         Carpetas: modelo/mv015.glb · documentos/arquitectura, estructural, sanitaria, electrica -->
+    <div class="title-header-container pg-has-sub">
+        <div class="project-title lang-dropdown" id="pg-version-wrap">
+            <h1><button type="button" class="pg-title-btn" id="pg-title-btn" aria-haspopup="true" aria-expanded="false"><span class="pg-title-text">MV015</span><span class="pg-chevron" aria-hidden="true"></span></button></h1>
+            <div class="lang-dropdown-content pg-version-menu" id="pg-version-menu"></div>
         </div>
-        <ul id="archivos"></ul>
-      </section>
+        <p class="pg-subtitle" id="pg-subtitle" aria-live="polite"></p>
     </div>
 
-    <div class="preview" id="preview" hidden>
-      <div class="preview-cab">
-        <strong id="previewTitulo"></strong>
-        <div class="preview-acciones">
-          <a id="previewAbrir" target="_blank" rel="noopener">Abrir en pestaña</a>
-          <a id="previewBajar" download class="primario">Descargar</a>
-          <button id="previewCerrar" aria-label="Cerrar">✕</button>
+    <a class="pg-home" id="pg-home" href="../../index.html" title="Volver a la página principal" aria-label="Volver a la página principal"><span class="pg-home-logo" aria-hidden="true"></span></a>
+    <a href="#" class="back-to-projects-btn" id="pg-close" title="Cerrar foto">
+        <img src="../../assets/back.svg" alt="Volver">
+    </a>
+
+    <!-- ⚠️ Este bloque de 3 botones se repite igual en cada página de proyecto -->
+    <div class="utility-buttons">
+        <button class="theme-toggle-icon-btn js-theme-toggle" type="button" title="Cambiar a modo oscuro" aria-label="Cambiar a modo oscuro"><span class="pref-icon icon-night" aria-hidden="true"></span><span class="pref-icon icon-light" aria-hidden="true"></span></button>
+        <button class="theme-toggle-icon-btn js-sound-toggle" type="button" title="Silenciar sonido" aria-label="Silenciar sonido"><span class="pref-icon icon-volume-on" aria-hidden="true"></span><span class="pref-icon icon-volume-off" aria-hidden="true"></span></button>
+        <div class="lang-dropdown">
+            <button class="theme-toggle-icon-btn js-lang-toggle" type="button" title="Idioma" aria-label="Idioma" aria-haspopup="true" aria-expanded="false"><span class="pref-icon icon-language" aria-hidden="true"></span></button>
+            <div class="lang-dropdown-content" id="lang-dropdown">
+                <a href="#" data-lang-option="es" lang="es" style="--i: 3;">Español</a>
+                <a href="#" data-lang-option="en" lang="en" style="--i: 2;">English</a>
+                <a href="#" data-lang-option="fr" lang="fr" style="--i: 1;">Français</a>
+                <a href="#" data-lang-option="pt" lang="pt" style="--i: 0;">Português</a>
+            </div>
         </div>
-      </div>
-      <iframe id="previewFrame" title="Vista previa del plano"></iframe>
     </div>
-  </main>
 
-  <script src="documentos.js"></script>
-  <script type="module" src="mv015.js"></script>
+    <!-- BOTÓN DE CONTACTO -->
+    <div class="contact-dropdown">
+        <img id="contact-button" src="../../assets/contact.svg" alt="Contacto" class="contact-icon">
+        <div class="contact-dropdown-content" id="contact-dropdown">
+            <a href="mailto:mjvarquitectura.py@gmail.com?subject=MV015%20-%20Ampliaci%C3%B3n%20Mosqueda%20Villalba" style="--i: 0;"><img src="../../assets/email.svg" alt="Email"></a>
+            <a href="https://wa.me/595985107042?text=Hola%2C%20consulta%20por%20la%20obra%20MV015" target="_blank" rel="noopener" style="--i: 1;"><img src="../../assets/whatsapp.svg" alt="WhatsApp"></a>
+            <a href="https://www.instagram.com/mjvstudio.py" target="_blank" rel="noopener" style="--i: 2;"><img src="../../assets/instagram.svg" alt="Instagram"></a>
+        </div>
+    </div>
+
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+            <!-- Sección 1: modelo 3D (modelo/mv015.glb) con tres cortes.
+                 data-floor: piso de planta baja (m sobre la base del terreno) · data-cut: altura del corte de planta sobre ese piso
+                 data-exclude: material del terreno, para que la cámara se centre en la casa -->
+            <div class="swiper-slide" data-title="Modelado 3D" data-title-en="3D model" data-title-fr="Modèle 3D" data-title-pt="Modelo 3D">
+                <main>
+                    <div class="pg-model modelo-3d-wrapper swiper-no-swiping" id="pg-model-wrap">
+                        <model-viewer id="pg-model" data-src="modelo/mv015.glb" data-floor="3.45" data-cut="1.2" data-exclude="Groundcover_Sand_Smooth" aria-label="Modelo 3D de MV015"></model-viewer>
+                        <div class="pg-model-bar mv-bar">
+                            <div class="mv-row" id="pg-cut-tools" hidden>
+                                <label class="pg-cut-range">
+                                    <span class="pg-sr" data-en="Cut position" data-fr="Position de la coupe" data-pt="Posição do corte">Posición del corte</span>
+                                    <input type="range" id="pg-cut-h" min="0" max="100" step="0.25" value="50">
+                                    <span class="mv-val" id="pg-cut-val"></span>
+                                </label>
+                                <button type="button" class="pg-chip" id="pg-flip" aria-pressed="false"><span class="pg-chip-ic pg-ic-flip" aria-hidden="true"></span><span data-en="Flip" data-fr="Inverser" data-pt="Espelhar">Espejar</span></button>
+                            </div>
+                            <div class="mv-row">
+                                <button type="button" class="pg-chip" data-cut-id="h" aria-pressed="false"><span class="pg-chip-ic pg-ic-plan" aria-hidden="true"></span><span data-en="Plan" data-fr="Plan" data-pt="Planta">Planta</span></button>
+                                <button type="button" class="pg-chip" data-cut-id="a" aria-pressed="false"><span class="pg-chip-ic pg-ic-secA" aria-hidden="true"></span><span data-en="Section A" data-fr="Coupe A" data-pt="Corte A">Corte A</span></button>
+                                <button type="button" class="pg-chip" data-cut-id="b" aria-pressed="false"><span class="pg-chip-ic pg-ic-secB" aria-hidden="true"></span><span data-en="Section B" data-fr="Coupe B" data-pt="Corte B">Corte B</span></button>
+                                <button type="button" class="pg-chip pg-chip-icon" id="pg-reset" title="Vista inicial" aria-label="Vista inicial"><span class="pg-chip-ic pg-ic-reset" aria-hidden="true"></span></button>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="pg-empty" id="pg-model-empty" hidden data-en="The 3D model will be available very soon." data-fr="Le modèle 3D sera disponible très bientôt." data-pt="O modelo 3D estará disponível em breve.">El modelo 3D estará disponible muy pronto.</p>
+                </main>
+            </div>
+
+            <!-- Sección 2: documentos. Cada pestaña es una carpeta; cada botón de abajo, una lámina en PDF.
+                 Para sumar un plano: copiar el PDF a documentos/<carpeta>/ y agregar un <button data-pdf="..."> en su grupo. -->
+            <div class="swiper-slide" data-title="Documentos" data-title-en="Documents" data-title-fr="Documents" data-title-pt="Documentos">
+                <main class="pg-docs" id="pg-docs">
+                    <div class="pg-doc-view swiper-no-swiping" id="pg-doc-view">
+                        <iframe id="pg-doc-frame" title="Vista previa del plano"></iframe>
+                        <div class="pg-doc-card" id="pg-doc-card" hidden>
+                            <span class="pg-doc-card-ic" aria-hidden="true"></span>
+                            <p id="pg-doc-card-name"></p>
+                            <div class="pg-doc-actions">
+                                <a class="pg-chip" data-doc-open target="_blank" rel="noopener"><span class="pg-chip-ic pg-ic-open" aria-hidden="true"></span><span data-en="Open" data-fr="Ouvrir" data-pt="Abrir">Abrir</span></a>
+                                <a class="pg-chip" data-doc-download download><span class="pg-chip-ic pg-ic-down" aria-hidden="true"></span><span data-en="Download" data-fr="Télécharger" data-pt="Baixar">Descargar</span></a>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="pg-empty" id="pg-doc-empty" hidden data-en="The drawings will be available very soon." data-fr="Les plans seront disponibles très bientôt." data-pt="As plantas estarão disponíveis em breve.">Los planos estarán disponibles muy pronto.</p>
+
+                    <div class="pg-tabs" role="tablist" aria-label="Carpetas">
+                        <button type="button" role="tab" data-folder="arq" data-en="Architecture" data-fr="Architecture" data-pt="Arquitetura">Arquitectura</button>
+                        <button type="button" role="tab" data-folder="est" data-en="Structure" data-fr="Structure" data-pt="Estrutura">Estructural</button>
+                        <button type="button" role="tab" data-folder="san" data-en="Plumbing" data-fr="Sanitaire" data-pt="Hidrossanitária">Sanitaria</button>
+                        <button type="button" role="tab" data-folder="ele" data-en="Electrical" data-fr="Électricité" data-pt="Elétrica">Eléctrica</button>
+                    </div>
+
+                    <div class="pg-doc-row">
+                        <div class="pg-doc-files" data-folder="arq">
+                            <button type="button" data-pdf="documentos/arquitectura/A0_3_Copias_Arquitectura.pdf" data-en="Architecture sheets" data-fr="Planches d'architecture" data-pt="Pranchas de arquitetura">Láminas de arquitectura</button>
+                            <button type="button" data-pdf="documentos/arquitectura/A4_3_Copias_Ubicación.pdf" data-en="Site plan" data-fr="Plan de situation" data-pt="Planta de localização">Ubicación</button>
+                        </div>
+                        <div class="pg-doc-files" data-folder="est" hidden>
+                            <button type="button" data-pdf="documentos/estructural/A0_2_Copias_Estructura.pdf" data-en="Structure A0" data-fr="Structure A0" data-pt="Estrutura A0">Estructura A0</button>
+                            <button type="button" data-pdf="documentos/estructural/A1_2_Copias_Estructura.pdf" data-en="Structure A1" data-fr="Structure A1" data-pt="Estrutura A1">Estructura A1</button>
+                            <button type="button" data-pdf="documentos/estructural/A2_2_Copias_Estructura.pdf" data-en="Structure A2" data-fr="Structure A2" data-pt="Estrutura A2">Estructura A2</button>
+                        </div>
+                        <div class="pg-doc-files" data-folder="san" hidden>
+                            <button type="button" data-pdf="documentos/sanitaria/A0_2_Copias_Insts_Sanitarias.pdf" data-en="Water, sewer and storm drainage" data-fr="Eau, eaux usées et pluviales" data-pt="Água, esgoto e pluvial">Agua, cloacal y pluvial</button>
+                        </div>
+                        <div class="pg-doc-files" data-folder="ele" hidden>
+                            <button type="button" data-pdf="documentos/electrica/A0_1_Copia_Insts_Eléctricas.pdf" data-en="Electrical, sheet 1" data-fr="Électricité, planche 1" data-pt="Elétrica, prancha 1">Eléctrica, lámina 1</button>
+                            <button type="button" data-pdf="documentos/electrica/A0_2_Copias_Insts_Eléctricas.pdf" data-en="Electrical, sheet 2" data-fr="Électricité, planche 2" data-pt="Elétrica, prancha 2">Eléctrica, lámina 2</button>
+                        </div>
+                        <span class="pg-doc-sep" aria-hidden="true"></span>
+                        <div class="pg-doc-actions">
+                            <a class="pg-chip" data-doc-open target="_blank" rel="noopener"><span class="pg-chip-ic pg-ic-open" aria-hidden="true"></span><span data-en="Open" data-fr="Ouvrir" data-pt="Abrir">Abrir</span></a>
+                            <a class="pg-chip" data-doc-download download><span class="pg-chip-ic pg-ic-down" aria-hidden="true"></span><span data-en="Download" data-fr="Télécharger" data-pt="Baixar">Descargar</span></a>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+        <div class="swiper-pagination"></div>
+    </div>
+
+    <!-- Piezas que private.js necesita aunque esta página no tenga galería de fotos -->
+    <div hidden aria-hidden="true">
+        <div class="pg-gallery" id="pg-gallery"></div>
+        <p id="pg-empty"></p>
+        <div class="gallery-viewer" id="pg-viewer"><div class="gv-stage"><img class="gv-img" alt=""><img class="gv-img" alt=""></div><button type="button" class="gv-btn gv-prev"></button><button type="button" class="gv-btn gv-next"></button></div>
+    </div>
+
+    <script src="../../swiper-bundle.min.js"></script>
+    <script src="../private.js"></script>
+    <script src="../secciones.js"></script>
+    <script src="documentos.js"></script>
+    <script type="module" src="mv015-3d.js"></script>
 </body>
 </html>

@@ -1,96 +1,72 @@
-/* Sección Documentos: carpetas, lista de planos y vista previa */
-(function () {
-  const cfg = window.MV015;
-  const $ = (id) => document.getElementById(id);
+/* =====================================================================
+   MV015 · DOCUMENTOS — carpetas de planos con vista previa y descarga
+   - Las carpetas son los botones de .pg-tabs (Arquitectura, Estructural...).
+   - Cada carpeta tiene su grupo .pg-doc-files[data-folder] con un botón por lámina:
+       <button data-pdf="documentos/arquitectura/archivo.pdf">Nombre</button>
+     Para sumar un plano: copiar el PDF a su carpeta y agregar un botón igual.
+   - En computadoras el PDF se ve dentro de la página; en celulares (que no muestran
+     PDF dentro de una página) aparece una tarjeta para abrirlo o descargarlo.
+   ===================================================================== */
+document.addEventListener('DOMContentLoaded', () => {
+    const sec = document.getElementById('pg-docs');
+    if (!sec) return;
+    const T = (d) => (window.mjvLang ? window.mjvLang.pick(d) : d.es);
+    const tabs = Array.from(sec.querySelectorAll('.pg-tabs [role="tab"]'));
+    const groups = Array.from(sec.querySelectorAll('.pg-doc-files'));
+    const frame = document.getElementById('pg-doc-frame');
+    const card = document.getElementById('pg-doc-card');
+    const cardName = document.getElementById('pg-doc-card-name');
+    const openA = Array.from(sec.querySelectorAll('[data-doc-open]'));
+    const dlA = Array.from(sec.querySelectorAll('[data-doc-download]'));
+    const emptyEl = document.getElementById('pg-doc-empty');
+    const view = document.getElementById('pg-doc-view');
 
-  document.getElementById('codigo').textContent = cfg.codigo;
-  document.getElementById('titulo').textContent = cfg.titulo;
-  document.title = cfg.codigo + ' · ' + cfg.titulo;
+    // ¿El navegador muestra PDF dentro de la página? (Android y la mayoría de los celulares no)
+    const touch = matchMedia('(pointer: coarse)').matches;
+    const inlinePdf = navigator.pdfViewerEnabled === true && !(touch && /Android|iPhone|iPad/i.test(navigator.userAgent));
 
-  // ----- Pestañas -----
-  document.querySelectorAll('.pestana').forEach((b) => {
-    b.addEventListener('click', () => {
-      document.querySelectorAll('.pestana').forEach((x) => {
-        x.classList.toggle('activa', x === b);
-        x.setAttribute('aria-selected', x === b);
-      });
-      document.querySelectorAll('.vista').forEach((v) => v.classList.remove('activa'));
-      $('vista-' + b.dataset.vista).classList.add('activa');
-      window.dispatchEvent(new Event('resize'));
-    });
-  });
+    const fileName = (p) => decodeURIComponent(p.split('/').pop());
+    let current = null, loaded = false;
 
-  const icono =
-    '<svg viewBox="0 0 40 32" fill="none" stroke="currentColor" stroke-width="1.6">' +
-    '<path d="M2 6a2 2 0 0 1 2-2h10l4 4h18a2 2 0 0 1 2 2v18a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z"/></svg>';
+    const showFile = (btn) => {
+        groups.forEach((g) => g.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', b === btn ? 'true' : 'false')));
+        current = btn;
+        const url = encodeURI(btn.dataset.pdf);
+        openA.forEach((a) => { a.href = url; });
+        dlA.forEach((a) => { a.href = url; a.setAttribute('download', fileName(btn.dataset.pdf)); });
+        cardName.textContent = btn.textContent.trim();
+        if (inlinePdf && loaded) frame.src = url + '#view=FitH&toolbar=1&navpanes=0';
+    };
 
-  const nombreArchivo = (ruta) => decodeURIComponent(ruta.split('/').pop());
-  const url = (ruta) => encodeURI(ruta);
+    const showFolder = (tab) => {
+        tabs.forEach((t) => t.setAttribute('aria-selected', t === tab ? 'true' : 'false'));
+        let first = null;
+        groups.forEach((g) => {
+            const on = g.dataset.folder === tab.dataset.folder;
+            g.hidden = !on;
+            if (on) first = g.querySelector('button');
+        });
+        view.hidden = !first; emptyEl.hidden = !!first;
+        if (first) showFile(first);
+        if (window.mjvSound && window.mjvSound.click && loaded) window.mjvSound.click();
+    };
 
-  // ----- Carpetas -----
-  const cont = $('carpetas');
-  cfg.carpetas.forEach((c) => {
-    const n = c.archivos.length;
-    const b = document.createElement('button');
-    b.className = 'carpeta' + (n ? '' : ' vacia');
-    b.innerHTML =
-      icono +
-      '<strong></strong><span></span><em>' +
-      (n ? n + (n === 1 ? ' documento' : ' documentos') : 'Próximamente') +
-      '</em>';
-    b.querySelector('strong').textContent = c.nombre;
-    b.querySelector('span').textContent = c.detalle || '';
-    b.addEventListener('click', () => abrirCarpeta(c));
-    cont.appendChild(b);
-  });
+    tabs.forEach((t) => t.addEventListener('click', () => showFolder(t)));
+    groups.forEach((g) => g.querySelectorAll('button').forEach((b) => b.addEventListener('click', () => showFile(b))));
 
-  function abrirCarpeta(c) {
-    cont.hidden = true;
-    $('lista').hidden = false;
-    $('listaTitulo').textContent = c.nombre;
-    const ul = $('archivos');
-    ul.innerHTML = '';
-    if (!c.archivos.length) {
-      ul.innerHTML = '<li class="sin-archivos">Todavía no hay planos cargados en esta carpeta.</li>';
-      return;
-    }
-    c.archivos.forEach((a) => {
-      const li = document.createElement('li');
-      li.className = 'archivo';
-      li.innerHTML =
-        '<span class="pdf">PDF</span>' +
-        '<div class="nombre"><strong></strong><small></small></div>' +
-        '<button class="ver">Ver</button>' +
-        '<a download>Descargar</a>';
-      li.querySelector('strong').textContent = a.titulo;
-      li.querySelector('small').textContent = nombreArchivo(a.archivo);
-      li.querySelector('a').href = url(a.archivo);
-      li.querySelector('a').setAttribute('download', nombreArchivo(a.archivo));
-      li.querySelector('.ver').addEventListener('click', () => verPdf(a));
-      ul.appendChild(li);
-    });
-  }
+    frame.hidden = !inlinePdf;
+    card.hidden = inlinePdf;
 
-  $('volver').addEventListener('click', () => {
-    $('lista').hidden = true;
-    cont.hidden = false;
-  });
+    // La ruedita sobre el PDF lo desplaza; no cambia de sección
+    view.addEventListener('wheel', (e) => e.stopPropagation(), { passive: true });
 
-  // ----- Vista previa -----
-  function verPdf(a) {
-    const u = url(a.archivo);
-    $('previewTitulo').textContent = a.titulo;
-    $('previewAbrir').href = u;
-    $('previewBajar').href = u;
-    $('previewBajar').setAttribute('download', nombreArchivo(a.archivo));
-    $('previewFrame').src = u + '#view=FitH';
-    $('preview').hidden = false;
-  }
-  $('previewCerrar').addEventListener('click', () => {
-    $('preview').hidden = true;
-    $('previewFrame').src = 'about:blank';
-  });
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && !$('preview').hidden) $('previewCerrar').click();
-  });
-})();
+    if (tabs.length) showFolder(tabs[0]);
+    // Los PDF se piden recién cuando la página terminó de cargar (el modelo 3D va primero)
+    const start = () => { loaded = true; if (current) showFile(current); };
+    if (document.readyState === 'complete') setTimeout(start, 600); else window.addEventListener('load', () => setTimeout(start, 600));
+
+    const labels = () => {
+        cardName.title = T({ es: 'Plano', en: 'Drawing', fr: 'Plan', pt: 'Planta' });
+    };
+    labels(); document.addEventListener('mjvlangchange', labels);
+});
