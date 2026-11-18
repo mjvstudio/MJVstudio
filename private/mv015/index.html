@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>MV015 · Ampliación Mosqueda Villalba</title>
+  <link rel="stylesheet" href="mv015.css">
+  <script src="config.js"></script>
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "./lib/three.module.min.js",
+        "three/addons/": "./lib/addons/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <header class="top">
+    <div class="marca">
+      <span class="codigo" id="codigo">MV015</span>
+      <h1 id="titulo">Ampliación Mosqueda Villalba</h1>
+    </div>
+    <nav class="pestanas" role="tablist">
+      <button class="pestana activa" role="tab" aria-selected="true" data-vista="modelo">Modelo 3D</button>
+      <button class="pestana" role="tab" aria-selected="false" data-vista="documentos">Documentos</button>
+    </nav>
+  </header>
+
+  <!-- ================= MODELO 3D ================= -->
+  <main id="vista-modelo" class="vista activa">
+    <div class="visor" id="visor">
+      <div class="cargando" id="cargando">
+        <div class="barra"><span id="progreso"></span></div>
+        <p id="estado">Cargando modelo…</p>
+      </div>
+    </div>
+
+    <aside class="panel" id="panel">
+      <button class="panel-toggle" id="panelToggle" aria-expanded="true">Cortes</button>
+      <div class="panel-cuerpo">
+        <section class="grupo">
+          <h2>Cortes</h2>
+
+          <div class="corte" data-corte="h">
+            <div class="corte-cab">
+              <label class="interruptor"><input type="checkbox" data-accion="activar"><span></span></label>
+              <span class="corte-nombre">Horizontal <small>planta</small></span>
+              <button class="espejar" data-accion="espejar" title="Espejar el corte">⇅ Espejar</button>
+            </div>
+            <input type="range" min="0" max="1000" value="500" data-accion="mover" aria-label="Altura del corte horizontal">
+            <div class="corte-valor"><span data-valor>—</span></div>
+          </div>
+
+          <div class="corte" data-corte="v1">
+            <div class="corte-cab">
+              <label class="interruptor"><input type="checkbox" data-accion="activar"><span></span></label>
+              <span class="corte-nombre">Vertical 1 <small>longitudinal</small></span>
+              <button class="espejar" data-accion="espejar" title="Espejar el corte">⇆ Espejar</button>
+            </div>
+            <input type="range" min="0" max="1000" value="500" data-accion="mover" aria-label="Posición del corte vertical 1">
+            <div class="corte-valor"><span data-valor>—</span></div>
+          </div>
+
+          <div class="corte" data-corte="v2">
+            <div class="corte-cab">
+              <label class="interruptor"><input type="checkbox" data-accion="activar"><span></span></label>
+              <span class="corte-nombre">Vertical 2 <small>transversal</small></span>
+              <button class="espejar" data-accion="espejar" title="Espejar el corte">⇆ Espejar</button>
+            </div>
+            <input type="range" min="0" max="1000" value="500" data-accion="mover" aria-label="Posición del corte vertical 2">
+            <div class="corte-valor"><span data-valor>—</span></div>
+          </div>
+
+          <label class="opcion"><input type="checkbox" id="verPlanos" checked> Mostrar planos de corte</label>
+        </section>
+
+        <section class="grupo">
+          <h2>Vistas</h2>
+          <div class="vistas">
+            <button data-camara="3d">3D</button>
+            <button data-camara="planta">Planta</button>
+            <button data-camara="frente">Frente</button>
+            <button data-camara="lateral">Lateral</button>
+          </div>
+          <button class="reset" id="reset">Restablecer todo</button>
+        </section>
+      </div>
+    </aside>
+  </main>
+
+  <!-- ================= DOCUMENTOS ================= -->
+  <main id="vista-documentos" class="vista">
+    <div class="docs">
+      <div class="carpetas" id="carpetas"></div>
+      <section class="lista" id="lista" hidden>
+        <div class="lista-cab">
+          <button class="volver" id="volver">← Carpetas</button>
+          <h2 id="listaTitulo"></h2>
+        </div>
+        <ul id="archivos"></ul>
+      </section>
+    </div>
+
+    <div class="preview" id="preview" hidden>
+      <div class="preview-cab">
+        <strong id="previewTitulo"></strong>
+        <div class="preview-acciones">
+          <a id="previewAbrir" target="_blank" rel="noopener">Abrir en pestaña</a>
+          <a id="previewBajar" download class="primario">Descargar</a>
+          <button id="previewCerrar" aria-label="Cerrar">✕</button>
+        </div>
+      </div>
+      <iframe id="previewFrame" title="Vista previa del plano"></iframe>
+    </div>
+  </main>
+
+  <script src="documentos.js"></script>
+  <script type="module" src="mv015.js"></script>
+</body>
+</html>

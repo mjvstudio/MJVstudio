@@ -1,0 +1,23 @@
+MV015 · Ampliación Mosqueda Villalba
+=====================================
+
+DÓNDE VA
+Copiar la carpeta "mv015" entera dentro de:
+  MJVstudio web\MJVstudio\private\
+Queda como private\mv015\index.html (igual que casa_da).
+
+MODELO 3D  ->  modelo/mv015.glb
+Convertido desde el OBJ de SketchUp (texturas comprimidas, 4,4 MB).
+Para actualizarlo: exportar GLB y reemplazar mv015.glb con el mismo nombre.
+En config.js: nivelPiso = NPT de planta baja medido desde la base del
+terreno (3,45 m); el corte horizontal arranca 1,20 m arriba de ese nivel.
+
+PLANOS  ->  carpeta "documentos" (arquitectura, estructural, sanitaria, electrica)
+Para sumar un plano: copiarlo a su carpeta y agregar una línea en
+config.js, dentro de "archivos" de esa carpeta:
+  { titulo: 'Nombre visible', archivo: 'documentos/sanitaria/archivo.pdf' }
+
+PROBAR EN LA COMPU
+Abrir index.html con doble clic NO funciona (el navegador bloquea
+la carga del modelo). Probar con Live Server de VS Code o ya subido
+a la web.
